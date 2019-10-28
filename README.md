@@ -1,9 +1,9 @@
 # GitHub Actions Template
 
-[![Build Status](https://github.com/technote-space/gh-actions-template/workflows/Build/badge.svg)](https://github.com/technote-space/gh-actions-template/actions)
-[![codecov](https://codecov.io/gh/technote-space/gh-actions-template/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/gh-actions-template)
-[![CodeFactor](https://www.codefactor.io/repository/github/technote-space/gh-actions-template/badge)](https://www.codefactor.io/repository/github/technote-space/gh-actions-template)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/gh-actions-template/blob/master/LICENSE)
+[![Build Status](https://github.com/technote-space/upgrade-packages-action/workflows/Build/badge.svg)](https://github.com/technote-space/upgrade-packages-action/actions)
+[![codecov](https://codecov.io/gh/technote-space/upgrade-packages-action/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/upgrade-packages-action)
+[![CodeFactor](https://www.codefactor.io/repository/github/technote-space/upgrade-packages-action/badge)](https://www.codefactor.io/repository/github/technote-space/upgrade-packages-action)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/upgrade-packages-action/blob/master/LICENSE)
 
 Template for GitHub actions.
 
