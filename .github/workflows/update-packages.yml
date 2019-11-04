@@ -1,0 +1,22 @@
+on:
+  schedule:
+    - cron: 0 17 * * *
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+name: Update packages
+jobs:
+  release:
+    name: Update js packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release GitHub Actions
+        uses: technote-space/release-github-actions@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EXECUTE_COMMANDS: ncu -u && yarn install && yarn upgrade && yarn audit
+          COMMIT_MESSAGE: 'chore: update npm dependencies'
+          COMMIT_NAME: 'GitHub Actions'
+          COMMIT_EMAIL: 'example@example.com'
+          PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
+          PR_TITLE: 'chore: update npm dependencies'
