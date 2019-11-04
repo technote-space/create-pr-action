@@ -40,7 +40,9 @@ const getInstallPackagesCommands = async(workDir: string): Promise<string[]> => 
 	return [];
 };
 
-const getExecuteCommands = async(): Promise<string[]> => getArrayInput('EXECUTE_COMMANDS');
+const normalizeCommand = (command: string): string => command.trim().replace(/\s{2,}/g, ' ');
+
+const getExecuteCommands = async(): Promise<string[]> => getArrayInput('EXECUTE_COMMANDS', true, '&&').map(normalizeCommand);
 
 export const getCommitCommands = async(): Promise<string[]> => (['git add --all']);
 
@@ -74,8 +76,12 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 		await getCommitCommands(),
 	]);
 
+	logger.startProcess('Running commands...');
+	const output = await helper.runCommand(getWorkspace(), commands);
+	const files  = await getDiff(logger);
+
 	return {
-		files: await getDiff(logger),
-		output: await helper.runCommand(getWorkspace(), commands),
+		files,
+		output,
 	};
 };
