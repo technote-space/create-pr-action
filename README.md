@@ -11,9 +11,14 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [Setup](#setup)
-  - [yarn](#yarn)
-  - [npm](#npm)
+- [Screenshots](#screenshots)
+- [Installation](#installation)
+- [Options](#options)
+- [Action event details](#action-event-details)
+  - [Target events](#target-events)
+  - [condition](#condition)
+- [Addition](#addition)
+- [Sample GitHub Actions using this Action](#sample-github-actions-using-this-action)
 - [Author](#author)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
