@@ -31,7 +31,6 @@ describe('clone', () => {
 	it('should run clone command', async() => {
 		process.env.GITHUB_WORKSPACE     = path.resolve('test-dir');
 		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
-		process.env.INPUT_PR_BRANCH_NAME = 'test-branch';
 		const mockExec                   = spyOnExec();
 		const mockStdout                 = spyOnStdout();
 
@@ -50,11 +49,11 @@ describe('clone', () => {
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} clone --branch=create-pr-action/test-branch --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} clone --branch=head-test --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
 		]);
 		stdoutCalledWith(mockStdout, [
 			'::group::Cloning from the remote repo...',
-			'[command]git clone --branch=create-pr-action/test-branch --depth=3',
+			'[command]git clone --branch=head-test --depth=3',
 		]);
 	});
 });
