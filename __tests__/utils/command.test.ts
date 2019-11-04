@@ -29,10 +29,10 @@ describe('clone', () => {
 	testChildProcess();
 
 	it('should run clone command', async() => {
-		process.env.GITHUB_WORKSPACE     = path.resolve('test-dir');
-		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
-		const mockExec                   = spyOnExec();
-		const mockStdout                 = spyOnStdout();
+		process.env.GITHUB_WORKSPACE   = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN = 'test-token';
+		const mockExec                 = spyOnExec();
+		const mockStdout               = spyOnStdout();
 
 		await clone(logger, getContext({
 			payload: {
@@ -92,8 +92,9 @@ describe('getChangedFiles', () => {
 	});
 
 	it('should get changed files 1', async() => {
-		process.env.INPUT_GITHUB_TOKEN = 'test-token';
-		process.env.GITHUB_WORKSPACE   = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
 		setExists([true]);
 
@@ -105,6 +106,10 @@ describe('getChangedFiles', () => {
 			],
 			output: [
 				{
+					command: 'yarn upgrade',
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+				},
+				{
 					command: 'git add --all',
 					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
 				},
@@ -114,6 +119,7 @@ describe('getChangedFiles', () => {
 
 	it('should get changed files 2', async() => {
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
 		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
@@ -131,6 +137,10 @@ describe('getChangedFiles', () => {
 					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
 				},
 				{
+					command: 'yarn upgrade',
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+				},
+				{
 					command: 'git add --all',
 					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
 				},
@@ -140,6 +150,7 @@ describe('getChangedFiles', () => {
 
 	it('should return empty', async() => {
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_DELETE_PACKAGE   = '1';
 		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
 		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
@@ -163,6 +174,10 @@ describe('getChangedFiles', () => {
 				},
 				{
 					command: 'npm install --save test1 test2',
+					stdout: ['test'],
+				},
+				{
+					command: 'yarn upgrade',
 					stdout: ['test'],
 				},
 				{

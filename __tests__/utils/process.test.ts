@@ -77,11 +77,12 @@ describe('execute', () => {
 	});
 
 	it('should do nothing', async() => {
-		process.env.GITHUB_WORKSPACE     = path.resolve('test');
-		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
-		process.env.INPUT_COMMIT_NAME    = 'GitHub Actions';
-		process.env.INPUT_COMMIT_EMAIL   = 'example@example.com';
-		const mockStdout                 = spyOnStdout();
+		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
+		const mockStdout                   = spyOnStdout();
 		setExists(true);
 
 		await execute(context('synchronize'));
@@ -94,24 +95,29 @@ describe('execute', () => {
 			'::group::Cloning from the remote repo...',
 			'[command]git clone --branch=change --depth=3',
 			'::endgroup::',
-			'::group::Checking diff...',
-			'[command]git status --short -uno',
+			'::group::Running commands...',
+			'[command]yarn upgrade',
+			'  >> stdout',
 			'[command]git add --all',
 			'  >> stdout',
+			'::endgroup::',
+			'::group::Checking diff...',
+			'[command]git status --short -uno',
 			'::endgroup::',
 		]);
 	});
 
 	it('should create pull request', async() => {
-		process.env.GITHUB_WORKSPACE     = path.resolve('test');
-		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
-		process.env.INPUT_COMMIT_NAME    = 'GitHub Actions';
-		process.env.INPUT_COMMIT_EMAIL   = 'example@example.com';
-		process.env.INPUT_PR_BRANCH_NAME = 'create/test';
-		process.env.INPUT_COMMIT_MESSAGE = 'test: create pull request';
-		process.env.INPUT_PR_TITLE       = 'test: create pull request (${PR_NUMBER})';
-		process.env.INPUT_PR_BODY        = 'pull request body';
-		const mockStdout                 = spyOnStdout();
+		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
+		process.env.INPUT_PR_BRANCH_NAME   = 'create/test';
+		process.env.INPUT_COMMIT_MESSAGE   = 'test: create pull request';
+		process.env.INPUT_PR_TITLE         = 'test: create pull request (${PR_NUMBER})';
+		process.env.INPUT_PR_BODY          = 'pull request body';
+		const mockStdout                   = spyOnStdout();
 		setChildProcessParams({stdout: 'M  __tests__/fixtures/test.md'});
 		setExists(true);
 
@@ -135,16 +141,17 @@ describe('execute', () => {
 	});
 
 	it('should do schedule', async() => {
-		process.env.GITHUB_WORKSPACE     = path.resolve('test');
-		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
-		process.env.INPUT_PR_BRANCH_NAME = 'test-branch';
-		process.env.INPUT_COMMIT_NAME    = 'GitHub Actions';
-		process.env.INPUT_COMMIT_EMAIL   = 'example@example.com';
-		process.env.INPUT_PR_BRANCH_NAME = 'create/test';
-		process.env.INPUT_COMMIT_MESSAGE = 'test: create pull request';
-		process.env.INPUT_PR_TITLE       = 'test: create pull request (${PR_NUMBER})';
-		process.env.INPUT_PR_BODY        = 'pull request body';
-		const mockStdout                 = spyOnStdout();
+		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
+		process.env.INPUT_PR_BRANCH_NAME   = 'create/test';
+		process.env.INPUT_COMMIT_MESSAGE   = 'test: create pull request';
+		process.env.INPUT_PR_TITLE         = 'test: create pull request (${PR_NUMBER})';
+		process.env.INPUT_PR_BODY          = 'pull request body';
+		const mockStdout                   = spyOnStdout();
 		setChildProcessParams({stdout: 'M  __tests__/fixtures/test.md'});
 		setExists(true);
 		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
