@@ -13,7 +13,7 @@ import {
 	getPrTitle,
 	isClosePR,
 	getPrHeadRef,
-	getBranch,
+	getCreateBranch,
 } from './misc';
 import { INTERVAL_MS } from '../constant';
 
@@ -23,6 +23,12 @@ const commonLogger                        = new Logger(replaceDirectory);
 const getGitHelper = (logger: Logger): GitHelper => new GitHelper(logger);
 
 const getApiHelper = (logger: Logger): ApiHelper => new ApiHelper(logger);
+
+const config = async(helper: GitHelper): Promise<void> => {
+	const name  = getCommitName();
+	const email = getCommitEmail();
+	await helper.config(getWorkspace(), name, email);
+};
 
 const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promise<void> => {
 	if (isCron(context)) {
@@ -35,8 +41,9 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	}
 
 	const helper     = getGitHelper(logger);
-	const branchName = getBranch(context);
+	const branchName = getCreateBranch(context);
 
+	await config(helper);
 	await helper.makeCommit(getWorkspace(), getCommitMessage());
 	await helper.push(getWorkspace(), branchName, context);
 	await getApiHelper(logger).pullsCreateOrUpdate(branchName, {
@@ -49,12 +56,6 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	}
 };
 
-const config = async(helper: GitHelper): Promise<void> => {
-	const name  = getCommitName();
-	const email = getCommitEmail();
-	await helper.config(getWorkspace(), name, email);
-};
-
 export const execute = async(context: Context): Promise<void> => {
 	const octokit = new GitHub(getInput('GITHUB_TOKEN', {required: true}));
 	if (isClosePR(context)) {
@@ -63,11 +64,9 @@ export const execute = async(context: Context): Promise<void> => {
 	}
 
 	if (isPr(context)) {
-		await config(getGitHelper(commonLogger));
 		await createPr(commonLogger, octokit, context);
 	} else {
 		const logger = new Logger(replaceDirectory, true);
-		await config(getGitHelper(logger));
 		for await (const pull of getApiHelper(logger).pullsList({}, octokit, context)) {
 			await createPr(logger, octokit, Object.assign({}, context, {
 				payload: {

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { Logger, GitHelper, Utils } from '@technote-space/github-action-helper';
 import { Context } from '@actions/github/lib/context';
-import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getBranch } from './misc';
+import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getPrHeadRef } from './misc';
 
 const {getWorkspace, getArrayInput, useNpm} = Utils;
 
@@ -10,7 +10,7 @@ const helper = new GitHelper(new Logger(replaceDirectory), {filter: (line: strin
 export const clone = async(logger: Logger, context: Context): Promise<void> => {
 	logger.startProcess('Cloning from the remote repo...');
 
-	await helper.cloneBranch(getWorkspace(), getBranch(context), context);
+	await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
 };
 
 const getClearPackageCommands = async(): Promise<string[]> => {

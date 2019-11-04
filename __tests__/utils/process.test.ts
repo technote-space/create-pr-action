@@ -79,7 +79,6 @@ describe('execute', () => {
 	it('should do nothing', async() => {
 		process.env.GITHUB_WORKSPACE     = path.resolve('test');
 		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
-		process.env.INPUT_PR_BRANCH_NAME = 'test-branch';
 		process.env.INPUT_COMMIT_NAME    = 'GitHub Actions';
 		process.env.INPUT_COMMIT_EMAIL   = 'example@example.com';
 		const mockStdout                 = spyOnStdout();
@@ -88,16 +87,12 @@ describe('execute', () => {
 		await execute(context('synchronize'));
 
 		stdoutCalledWith(mockStdout, [
-			'[command]git config user.name "GitHub Actions"',
-			'  >> stdout',
-			'[command]git config user.email "example@example.com"',
-			'  >> stdout',
 			'::group::Running commands and getting changed files',
 			'[command]rm -rdf ./*',
 			'  >> stdout',
 			'::endgroup::',
 			'::group::Cloning from the remote repo...',
-			'[command]git clone --branch=create-pr-action/test-branch --depth=3',
+			'[command]git clone --branch=change --depth=3',
 			'::endgroup::',
 			'::group::Checking diff...',
 			'[command]git status --short -uno',
