@@ -11,6 +11,7 @@ export const clone = async(logger: Logger, context: Context): Promise<void> => {
 	logger.startProcess('Cloning from the remote repo...');
 
 	await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
+	await helper.runCommand(getWorkspace(), ['ls -la']);
 };
 
 const getClearPackageCommands = (): string[] => {
