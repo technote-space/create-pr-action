@@ -50,10 +50,13 @@ describe('clone', () => {
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} clone --branch=head-test --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
+			'ls -la',
 		]);
 		stdoutCalledWith(mockStdout, [
 			'::group::Cloning from the remote repo...',
 			'[command]git clone --branch=head-test --depth=3',
+			'[command]ls -la',
+			'  >> stdout',
 		]);
 	});
 });

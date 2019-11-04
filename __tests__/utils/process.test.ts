@@ -94,6 +94,8 @@ describe('execute', () => {
 			'::endgroup::',
 			'::group::Cloning from the remote repo...',
 			'[command]git clone --branch=change --depth=3',
+			'[command]ls -la',
+			'  >> stdout',
 			'::endgroup::',
 			'::group::Running commands...',
 			'[command]yarn upgrade',
