@@ -1,0 +1,65 @@
+# https://help.github.com/ja/articles/metadata-syntax-for-github-actions
+name: Create PR Action
+description: Run command and create Pull Request.
+author: technote-space
+inputs:
+  GITHUB_TOKEN:
+    description: Secret GitHub API token to use for making API requests.
+    required: true
+  INCLUDE_LABELS:
+    description: Labels used to check if the PullRequest has it.
+    default: ''
+  DELETE_PACKAGE:
+    description: Whether to delete package file before install packages for performance.
+    default: ''
+  INSTALL_PACKAGES:
+    description: Packages to be installed.
+    default: ''
+  EXECUTE_COMMANDS:
+    description: Commands to be executed.
+    required: true
+  COMMIT_MESSAGE:
+    description: Commit message.
+    required: true
+  COMMIT_NAME:
+    description: Git commit name.
+    required: true
+    default: 'GitHub Actions'
+  COMMIT_EMAIL:
+    description: Git commit email.
+    required: true
+    default: 'example@example.com'
+  PR_BRANCH_PREFIX:
+    description: PullRequest branch prefix.
+    default: 'create-pr-action/'
+  PR_BRANCH_NAME:
+    description: PullRequest branch name.
+    required: true
+  PR_TITLE:
+    description: PullRequest title.
+    required: true
+  PR_BODY:
+    description: PullRequest body.
+    required: true
+    default: |
+      [${ACTION_NAME}](${ACTION_URL})
+      ${PR_LINK}
+      <details>
+        <summary>Output:</summary>
+
+        ${COMMANDS_STDOUT}
+
+      </details>
+      <details>
+        <summary>${FILES_SUMMARY}</summary>
+
+        ${FILES}
+
+      </details>
+branding:
+  # https://feathericons.com/
+  icon: 'package'
+  color: 'orange'
+runs:
+  using: node12
+  main: lib/main.js
