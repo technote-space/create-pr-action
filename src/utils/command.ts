@@ -13,7 +13,7 @@ export const clone = async(logger: Logger, context: Context): Promise<void> => {
 	await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
 };
 
-const getClearPackageCommands = async(): Promise<string[]> => {
+const getClearPackageCommands = (): string[] => {
 	if (isDisabledDeletePackage()) {
 		return [];
 	}
@@ -24,7 +24,7 @@ const getClearPackageCommands = async(): Promise<string[]> => {
 	];
 };
 
-const getInstallPackagesCommands = async(workDir: string): Promise<string[]> => {
+const getInstallPackagesCommands = (workDir: string): string[] => {
 	const packages = getArrayInput('INSTALL_PACKAGES');
 	if (packages.length) {
 		if (useNpm(workDir)) {
@@ -42,9 +42,9 @@ const getInstallPackagesCommands = async(workDir: string): Promise<string[]> => 
 
 const normalizeCommand = (command: string): string => command.trim().replace(/\s{2,}/g, ' ');
 
-const getExecuteCommands = async(): Promise<string[]> => getArrayInput('EXECUTE_COMMANDS', true, '&&').map(normalizeCommand);
+const getExecuteCommands = (): string[] => getArrayInput('EXECUTE_COMMANDS', true, '&&').map(normalizeCommand);
 
-export const getCommitCommands = async(): Promise<string[]> => (['git add --all']);
+export const getCommitCommands = (): string[] => (['git add --all']);
 
 export const getDiff = async(logger: Logger): Promise<string[]> => {
 	logger.startProcess('Checking diff...');
@@ -70,10 +70,10 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 	await clone(logger, context);
 
 	const commands: string[] = new Array<string>().concat.apply([], [
-		await getClearPackageCommands(),
-		await getInstallPackagesCommands(getWorkspace()),
-		await getExecuteCommands(),
-		await getCommitCommands(),
+		getClearPackageCommands(),
+		getInstallPackagesCommands(getWorkspace()),
+		getExecuteCommands(),
+		getCommitCommands(),
 	]);
 
 	logger.startProcess('Running commands...');
