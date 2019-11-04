@@ -43,7 +43,7 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
        runs-on: ubuntu-latest
        steps:
          - name: Release GitHub Actions
-           uses: technote-space/release-github-actions@v1
+           uses: technote-space/create-pr-action@v1
            with:
              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              EXECUTE_COMMANDS: ncu -u && yarn install && yarn upgrade && yarn audit
