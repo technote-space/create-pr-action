@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { Logger, GitHelper, Utils } from '@technote-space/github-action-helper';
 import { Context } from '@actions/github/lib/context';
+import { getInput } from '@actions/core' ;
 import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getPrHeadRef } from './misc';
 
 const {getWorkspace, getArrayInput, useNpm} = Utils;
@@ -28,7 +29,7 @@ const getClearPackageCommands = (): string[] => {
 const getInstallPackagesCommands = (workDir: string): string[] => {
 	const packages = getArrayInput('INSTALL_PACKAGES');
 	if (packages.length) {
-		if (useNpm(workDir)) {
+		if (useNpm(workDir, getInput('PACKAGE_MANAGER'))) {
 			return [
 				'npm install --save ' + packages.join(' '),
 			];

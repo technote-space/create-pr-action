@@ -3,7 +3,6 @@ import path from 'path';
 import {
 	getContext,
 	testEnv,
-	testFs,
 	spyOnExec,
 	execCalledWith,
 	spyOnStdout,
@@ -18,7 +17,6 @@ import {
 	getChangedFiles,
 } from '../../src/utils/command';
 
-const setExists = testFs();
 beforeEach(() => {
 	Logger.resetForTesting();
 });
@@ -99,7 +97,6 @@ describe('getChangedFiles', () => {
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
-		setExists([true]);
 
 		expect(await getChangedFiles(logger, context)).toEqual({
 			files: [
@@ -122,11 +119,11 @@ describe('getChangedFiles', () => {
 
 	it('should get changed files 2', async() => {
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_PACKAGE_MANAGER  = 'yarn';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
 		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
-		setExists([true]);
 
 		expect(await getChangedFiles(logger, context)).toEqual({
 			files: [
@@ -153,12 +150,11 @@ describe('getChangedFiles', () => {
 
 	it('should return empty', async() => {
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
-		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_EXECUTE_COMMANDS = 'npm update';
 		process.env.INPUT_DELETE_PACKAGE   = '1';
 		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
 		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'test'});
-		setExists([false, true]);
 
 		expect(await getChangedFiles(logger, context)).toEqual({
 			files: [],
@@ -180,7 +176,7 @@ describe('getChangedFiles', () => {
 					stdout: ['test'],
 				},
 				{
-					command: 'yarn upgrade',
+					command: 'npm update',
 					stdout: ['test'],
 				},
 				{
