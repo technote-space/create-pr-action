@@ -6,6 +6,9 @@ inputs:
   GITHUB_TOKEN:
     description: Secret GitHub API token to use for making API requests.
     required: true
+  PACKAGE_MANAGER:
+    description: Package manager to use to install dependencies.
+    default: ''
   INCLUDE_LABELS:
     description: Labels used to check if the PullRequest has it.
     default: ''
