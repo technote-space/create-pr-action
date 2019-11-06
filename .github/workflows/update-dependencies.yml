@@ -10,16 +10,16 @@ jobs:
     name: Update npm dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Install ncu
-        run: |
-          yarn global add npm-check-updates
-          ncu -v
-          which ncu
       - name: Update dependencies
         uses: technote-space/create-pr-action@test/v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EXECUTE_COMMANDS: ncu -u && yarn install && yarn upgrade && yarn audit
+          EXECUTE_COMMANDS: |
+            sudo yarn global add npm-check-updates
+            ncu -u --packageFile package.json
+            yarn install
+            yarn upgrade
+            yarn audit
           COMMIT_MESSAGE: 'chore: update npm dependencies'
           COMMIT_NAME: Technote
           COMMIT_EMAIL: technote.space@gmail.com
