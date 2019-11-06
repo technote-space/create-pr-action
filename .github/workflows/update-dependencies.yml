@@ -11,7 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install ncu
-        run: yarn global add npm-check-updates
+        run: |
+          yarn global add npm-check-updates
+          ncu -v
+          which ncu
       - name: Update dependencies
         uses: technote-space/create-pr-action@test/v1
         with:
