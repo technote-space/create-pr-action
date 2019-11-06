@@ -4,19 +4,21 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, closed]
 
-name: Update packages
+name: Update dependencies
 jobs:
   release:
-    name: Update js packages
+    name: Update npm dependencies
     runs-on: ubuntu-latest
     steps:
-      - name: Release GitHub Actions
+      - name: Install ncu
+        run: yarn global add npm-check-updates
+      - name: Update dependencies
         uses: technote-space/create-pr-action@test/v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EXECUTE_COMMANDS: npm install -g npm-check-updates && ncu -u && yarn install && yarn upgrade && yarn audit
+          EXECUTE_COMMANDS: ncu -u && yarn install && yarn upgrade && yarn audit
           COMMIT_MESSAGE: 'chore: update npm dependencies'
-          COMMIT_NAME: 'GitHub Actions'
-          COMMIT_EMAIL: 'example@example.com'
+          COMMIT_NAME: Technote
+          COMMIT_EMAIL: technote.space@gmail.com
           PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
           PR_TITLE: 'chore: update npm dependencies'
