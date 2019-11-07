@@ -18,6 +18,9 @@ inputs:
   INSTALL_PACKAGES:
     description: Packages to be installed.
     default: ''
+  GLOBAL_INSTALL_PACKAGES:
+    description: Packages to be global installed.
+    default: ''
   EXECUTE_COMMANDS:
     description: Commands to be executed.
     required: true
