@@ -26,6 +26,22 @@ const getClearPackageCommands = (): string[] => {
 	];
 };
 
+const getGlobalInstallPackagesCommands = (workDir: string): string[] => {
+	const packages = getArrayInput('GLOBAL_INSTALL_PACKAGES');
+	if (packages.length) {
+		if (useNpm(workDir, getInput('PACKAGE_MANAGER'))) {
+			return [
+				'sudo npm install -g ' + packages.join(' '),
+			];
+		} else {
+			return [
+				'sudo yarn global add ' + packages.join(' '),
+			];
+		}
+	}
+	return [];
+};
+
 const getInstallPackagesCommands = (workDir: string): string[] => {
 	const packages = getArrayInput('INSTALL_PACKAGES');
 	if (packages.length) {
@@ -73,6 +89,7 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 
 	const commands: string[] = new Array<string>().concat.apply([], [
 		getClearPackageCommands(),
+		getGlobalInstallPackagesCommands(getWorkspace()),
 		getInstallPackagesCommands(getWorkspace()),
 		getExecuteCommands(),
 		getCommitCommands(),

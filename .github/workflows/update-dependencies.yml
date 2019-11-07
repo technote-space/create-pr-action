@@ -14,8 +14,8 @@ jobs:
         uses: technote-space/create-pr-action@test/v1
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GLOBAL_INSTALL_PACKAGES: npm-check-updates
           EXECUTE_COMMANDS: |
-            sudo yarn global add npm-check-updates
             ncu -u --packageFile package.json
             yarn install
             yarn upgrade
