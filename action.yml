@@ -6,6 +6,9 @@ inputs:
   GITHUB_TOKEN:
     description: Secret GitHub API token to use for making API requests.
     required: true
+  PACKAGE_MANAGER:
+    description: Package manager to use to install dependencies.
+    default: ''
   INCLUDE_LABELS:
     description: Labels used to check if the PullRequest has it.
     default: ''
@@ -14,6 +17,9 @@ inputs:
     default: ''
   INSTALL_PACKAGES:
     description: Packages to be installed.
+    default: ''
+  GLOBAL_INSTALL_PACKAGES:
+    description: Packages to be global installed.
     default: ''
   EXECUTE_COMMANDS:
     description: Commands to be executed.
