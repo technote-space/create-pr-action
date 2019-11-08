@@ -88,7 +88,7 @@ describe('execute', () => {
 		await execute(context('synchronize'));
 
 		stdoutCalledWith(mockStdout, [
-			'::group::Running commands and getting changed files',
+			'::group::Running commands and getting changed files...',
 			'[command]rm -rdf ./*',
 			'  >> stdout',
 			'::endgroup::',
@@ -105,6 +105,7 @@ describe('execute', () => {
 			'::endgroup::',
 			'::group::Checking diff...',
 			'[command]git status --short -uno',
+			'> There is no diff.',
 			'::endgroup::',
 		]);
 	});
@@ -138,6 +139,9 @@ describe('execute', () => {
 			'[command]rm -rdf ./*',
 			'[command]git status --short -uno',
 			'[command]git add --all',
+			'[command]git commit -qm "test: create pull request"',
+			'[command]git show --stat-count=10 HEAD',
+			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'::group::Updating PullRequest... [create-pr-action/create/test] -> [heads/test]',
 		]);
 	});
@@ -166,9 +170,9 @@ describe('execute', () => {
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=2')
 			.reply(200, () => ([]))
-			.get('/repos/hello/world/pulls?head=hello%3Acreate-pr-action%2Fnew-topic')
+			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fnew-topic')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
-			.patch('/repos/hello/world/pulls/1347')
+			.patch('/repos/octocat/Hello-World/pulls/1347')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
 
 		await execute(context('', 'schedule'));
@@ -181,7 +185,7 @@ describe('execute', () => {
 			'[command]git add --all',
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
-			'[command]git push --tags "create-pr-action/new-topic":"refs/heads/create-pr-action/new-topic"',
+			'[command]git push "create-pr-action/new-topic":"refs/heads/create-pr-action/new-topic"',
 			'> Updating PullRequest... [create-pr-action/new-topic] -> [heads/test]',
 			'> Cloning from the remote repo...',
 			'[command]git clone --branch=create-pr-action/new-topic --depth=3',

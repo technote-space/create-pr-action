@@ -82,7 +82,7 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 		stdout: string[];
 	}[];
 }> => {
-	logger.startProcess('Running commands and getting changed files');
+	logger.startProcess('Running commands and getting changed files...');
 
 	await initDirectory();
 	await clone(logger, context);
