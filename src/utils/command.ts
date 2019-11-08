@@ -15,6 +15,18 @@ export const clone = async(logger: Logger, context: Context): Promise<void> => {
 	await helper.runCommand(getWorkspace(), ['ls -la']);
 };
 
+export const checkBranch = async(logger: Logger, context: Context): Promise<void> => {
+	const branchName   = getPrHeadRef(context);
+	const clonedBranch = await helper.getCurrentBranchName(getWorkspace());
+	if (branchName !== clonedBranch) {
+		logger.info('remote branch [%s] not found.', branchName);
+		logger.info('now branch: %s', clonedBranch);
+
+		logger.startProcess('Initializing local git repo [%s]', branchName);
+		await helper.gitInit(getWorkspace(), branchName);
+	}
+};
+
 const getClearPackageCommands = (): string[] => {
 	if (isDisabledDeletePackage()) {
 		return [];
@@ -62,11 +74,9 @@ const normalizeCommand = (command: string): string => command.trim().replace(/\s
 
 const getExecuteCommands = (): string[] => getArrayInput('EXECUTE_COMMANDS', true, '&&').map(normalizeCommand);
 
-export const getCommitCommands = (): string[] => (['git add --all']);
-
 export const getDiff = async(logger: Logger): Promise<string[]> => {
 	logger.startProcess('Checking diff...');
-
+	await helper.runCommand(getWorkspace(), ['git add --all']);
 	return await helper.getDiff(getWorkspace());
 };
 
@@ -86,13 +96,13 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 
 	await initDirectory();
 	await clone(logger, context);
+	await checkBranch(logger, context);
 
 	const commands: string[] = new Array<string>().concat.apply([], [
 		getClearPackageCommands(),
 		getGlobalInstallPackagesCommands(getWorkspace()),
 		getInstallPackagesCommands(getWorkspace()),
 		getExecuteCommands(),
-		getCommitCommands(),
 	]);
 
 	logger.startProcess('Running commands...');
