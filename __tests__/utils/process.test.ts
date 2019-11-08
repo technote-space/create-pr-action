@@ -170,9 +170,9 @@ describe('execute', () => {
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=2')
 			.reply(200, () => ([]))
-			.get('/repos/hello/world/pulls?head=hello%3Acreate-pr-action%2Fnew-topic')
+			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fnew-topic')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
-			.patch('/repos/hello/world/pulls/1347')
+			.patch('/repos/octocat/Hello-World/pulls/1347')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
 
 		await execute(context('', 'schedule'));
