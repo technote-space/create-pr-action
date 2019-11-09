@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import path from 'path';
+import { Context } from '@actions/github/lib/context';
 import {
 	getContext,
 	testEnv,
@@ -24,40 +25,50 @@ beforeEach(() => {
 });
 const logger    = new Logger();
 const setExists = testFs();
+const context   = (pr: object): Context => getContext({
+	payload: {
+		'pull_request': Object.assign({
+			number: 11,
+			id: 21031067,
+			head: {
+				ref: 'change',
+			},
+			base: {
+				ref: 'master',
+			},
+			title: 'title',
+			'html_url': 'url',
+		}, pr),
+	},
+});
 
 describe('clone', () => {
 	testEnv();
 	testChildProcess();
 
 	it('should run clone command', async() => {
-		process.env.GITHUB_WORKSPACE   = path.resolve('test-dir');
-		process.env.INPUT_GITHUB_TOKEN = 'test-token';
-		const mockExec                 = spyOnExec();
-		const mockStdout               = spyOnStdout();
+		process.env.GITHUB_WORKSPACE     = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
+		process.env.INPUT_PR_BRANCH_NAME = 'test-branch';
+		const mockExec                   = spyOnExec();
+		const mockStdout                 = spyOnStdout();
 
-		await clone(logger, getContext({
-			payload: {
-				'pull_request': {
-					head: {
-						ref: 'head-test',
-					},
-					base: {
-						ref: 'base-test',
-					},
-				},
+		await clone(logger, context({
+			head: {
+				ref: 'head-test',
+			},
+			base: {
+				ref: 'base-test',
 			},
 		}));
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} clone --branch=head-test --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
-			'ls -la',
+			`git -C ${dir} clone --branch=create-pr-action/test-branch --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
 		]);
 		stdoutCalledWith(mockStdout, [
-			'::group::Cloning from the remote repo...',
-			'[command]git clone --branch=head-test --depth=3',
-			'[command]ls -la',
-			'  >> stdout',
+			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
+			'[command]git clone --branch=create-pr-action/test-branch --depth=3',
 		]);
 	});
 });
@@ -67,47 +78,46 @@ describe('checkBranch', () => {
 	testChildProcess();
 
 	it('should do nothing', async() => {
-		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
-		setChildProcessParams({stdout: 'test-branch'});
+		process.env.GITHUB_WORKSPACE     = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
+		process.env.INPUT_PR_BRANCH_NAME = 'test-branch';
+		setChildProcessParams({stdout: 'create-pr-action/test-branch'});
 		const mockExec = spyOnExec();
 		setExists(true);
 
-		await checkBranch(logger, getContext({
-			payload: {
-				'pull_request': {
-					head: {
-						ref: 'test-branch',
-					},
-				},
+		await checkBranch(logger, context({
+			head: {
+				ref: 'test-branch',
 			},
 		}));
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
+			'ls -la',
 		]);
 	});
 
 	it('should checkout new branch', async() => {
-		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
+		process.env.GITHUB_WORKSPACE     = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN   = 'test-token';
+		process.env.INPUT_PR_BRANCH_NAME = 'test-branch';
 		setChildProcessParams({stdout: 'test-branch2'});
 		const mockExec = spyOnExec();
 		setExists(true);
 
-		await checkBranch(logger, getContext({
-			payload: {
-				'pull_request': {
-					head: {
-						ref: 'test-branch',
-					},
-				},
+		await checkBranch(logger, context({
+			head: {
+				ref: 'test-branch',
 			},
 		}));
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
-			`git -C ${dir} checkout -b "test-branch"`,
+			`git -C ${dir} clone --branch=test-branch --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} checkout -b "create-pr-action/test-branch"`,
+			'ls -la',
 		]);
 	});
 });
@@ -136,23 +146,20 @@ describe('getDiff', () => {
 describe('getChangedFiles', () => {
 	testEnv();
 	testChildProcess();
-	const context = getContext({
-		payload: {
-			'pull_request': {
-				head: {
-					ref: 'create-pr-action/test-branch',
-				},
-			},
+	const _context = context({
+		head: {
+			ref: 'create-pr-action/test-branch',
 		},
 	});
 
 	it('should get changed files 1', async() => {
+		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
-		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
 
-		expect(await getChangedFiles(logger, context)).toEqual({
+		expect(await getChangedFiles(logger, _context)).toEqual({
 			files: [
 				'file1',
 				'file2',
@@ -168,15 +175,16 @@ describe('getChangedFiles', () => {
 	});
 
 	it('should get changed files 2', async() => {
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
 		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
 		process.env.INPUT_PACKAGE_MANAGER         = 'yarn';
 		process.env.INPUT_EXECUTE_COMMANDS        = 'yarn upgrade';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
 		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
-		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
 
-		expect(await getChangedFiles(logger, context)).toEqual({
+		expect(await getChangedFiles(logger, _context)).toEqual({
 			files: [
 				'file1',
 				'file2',
@@ -200,15 +208,16 @@ describe('getChangedFiles', () => {
 	});
 
 	it('should return empty', async() => {
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
 		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
 		process.env.INPUT_DELETE_PACKAGE          = '1';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
 		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
-		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
 		setChildProcessParams({stdout: 'test'});
 
-		expect(await getChangedFiles(logger, context)).toEqual({
+		expect(await getChangedFiles(logger, _context)).toEqual({
 			files: [],
 			output: [
 				{

@@ -55,8 +55,6 @@ export const getPrHeadRef = (context: Context): string => context.payload.pull_r
 
 export const isActionPr = (context: Context): boolean => (new RegExp('^' + escapeRegExp(getPrBranchPrefix()))).test(getPrHeadRef(context));
 
-export const getCreateBranch = (context: Context): string => isActionPr(context) ? getPrHeadRef(context) : getPrBranchName(context);
-
 export const getPrTitle = (context: Context): string => replaceContextVariables(getInput('PR_TITLE', {required: true}), context);
 
 export const getPrLink = (context: Context): string => context.payload.pull_request ? `[${context.payload.pull_request.title}](${context.payload.pull_request.html_url})` : '';
