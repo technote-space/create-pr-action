@@ -9,10 +9,12 @@ import {
 	stdoutCalledWith,
 	setChildProcessParams,
 	testChildProcess,
+	testFs,
 } from '@technote-space/github-action-test-helper';
 import { Logger } from '@technote-space/github-action-helper';
 import {
 	clone,
+	checkBranch,
 	getDiff,
 	getChangedFiles,
 } from '../../src/utils/command';
@@ -20,7 +22,8 @@ import {
 beforeEach(() => {
 	Logger.resetForTesting();
 });
-const logger = new Logger();
+const logger    = new Logger();
+const setExists = testFs();
 
 describe('clone', () => {
 	testEnv();
@@ -59,6 +62,56 @@ describe('clone', () => {
 	});
 });
 
+describe('checkBranch', () => {
+	testEnv();
+	testChildProcess();
+
+	it('should do nothing', async() => {
+		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
+		setChildProcessParams({stdout: 'test-branch'});
+		const mockExec = spyOnExec();
+		setExists(true);
+
+		await checkBranch(logger, getContext({
+			payload: {
+				'pull_request': {
+					head: {
+						ref: 'test-branch',
+					},
+				},
+			},
+		}));
+
+		const dir = path.resolve('test-dir');
+		execCalledWith(mockExec, [
+			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
+		]);
+	});
+
+	it('should checkout new branch', async() => {
+		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
+		setChildProcessParams({stdout: 'test-branch2'});
+		const mockExec = spyOnExec();
+		setExists(true);
+
+		await checkBranch(logger, getContext({
+			payload: {
+				'pull_request': {
+					head: {
+						ref: 'test-branch',
+					},
+				},
+			},
+		}));
+
+		const dir = path.resolve('test-dir');
+		execCalledWith(mockExec, [
+			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
+			`git -C ${dir} checkout -b "test-branch"`,
+		]);
+	});
+});
+
 describe('getDiff', () => {
 	testEnv();
 	testChildProcess();
@@ -74,6 +127,7 @@ describe('getDiff', () => {
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
+			'git add --all',
 			`git -C ${dir} status --short -uno`,
 		]);
 	});
@@ -107,23 +161,19 @@ describe('getChangedFiles', () => {
 			output: [
 				{
 					command: 'yarn upgrade',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
-				},
-				{
-					command: 'git add --all',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 			],
 		});
 	});
 
 	it('should get changed files 2', async() => {
-		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
-		process.env.INPUT_PACKAGE_MANAGER  = 'yarn';
-		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
+		process.env.INPUT_PACKAGE_MANAGER         = 'yarn';
+		process.env.INPUT_EXECUTE_COMMANDS        = 'yarn upgrade';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
-		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
-		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
+		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
 
 		expect(await getChangedFiles(logger, context)).toEqual({
@@ -135,31 +185,27 @@ describe('getChangedFiles', () => {
 			output: [
 				{
 					command: 'sudo yarn global add npm-check-updates',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 				{
 					command: 'yarn add test1 test2',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 				{
 					command: 'yarn upgrade',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
-				},
-				{
-					command: 'git add --all',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 			],
 		});
 	});
 
 	it('should return empty', async() => {
-		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
-		process.env.INPUT_EXECUTE_COMMANDS = 'npm update';
-		process.env.INPUT_DELETE_PACKAGE   = '1';
+		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
+		process.env.INPUT_DELETE_PACKAGE          = '1';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
-		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
-		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
+		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'test'});
 
 		expect(await getChangedFiles(logger, context)).toEqual({
@@ -187,10 +233,6 @@ describe('getChangedFiles', () => {
 				},
 				{
 					command: 'npm update',
-					stdout: ['test'],
-				},
-				{
-					command: 'git add --all',
 					stdout: ['test'],
 				},
 			],

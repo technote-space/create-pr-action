@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/upgrade-packages-action",
-  "version": "1.0.0.7",
+  "version": "1.0.0.9",
   "description": "Template for GitHub actions.",
   "author": "Technote <technote.space@gmail.com> (https://technote.space)",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "@actions/core": "^1.2.0",
     "@actions/github": "^1.1.0",
     "@technote-space/filter-github-action": "^0.1.8",
-    "@technote-space/github-action-helper": "^0.2.20"
+    "@technote-space/github-action-helper": "^0.2.22"
   },
   "devDependencies": {
     "@technote-space/github-action-test-helper": "^0.0.18",
