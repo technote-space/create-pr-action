@@ -88,7 +88,7 @@ describe('checkBranch', () => {
 		]);
 	});
 
-	it('should run git init command', async() => {
+	it('should checkout new branch', async() => {
 		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
 		setChildProcessParams({stdout: 'test-branch2'});
 		const mockExec = spyOnExec();
@@ -107,9 +107,7 @@ describe('checkBranch', () => {
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
-			`rm -rdf ${dir}`,
-			`git -C ${dir} init .`,
-			`git -C ${dir} checkout --orphan "test-branch"`,
+			`git -C ${dir} checkout -b "test-branch"`,
 		]);
 	});
 });
@@ -163,7 +161,7 @@ describe('getChangedFiles', () => {
 			output: [
 				{
 					command: 'yarn upgrade',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 			],
 		});
@@ -187,15 +185,15 @@ describe('getChangedFiles', () => {
 			output: [
 				{
 					command: 'sudo yarn global add npm-check-updates',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 				{
 					command: 'yarn add test1 test2',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 				{
 					command: 'yarn upgrade',
-					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5', ''],
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 			],
 		});

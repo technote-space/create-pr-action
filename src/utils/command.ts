@@ -23,7 +23,7 @@ export const checkBranch = async(logger: Logger, context: Context): Promise<void
 		logger.info('now branch: %s', clonedBranch);
 
 		logger.startProcess('Initializing local git repo [%s]', branchName);
-		await helper.gitInit(getWorkspace(), branchName);
+		await helper.createBranch(getWorkspace(), branchName);
 	}
 };
 
