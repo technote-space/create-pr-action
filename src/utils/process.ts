@@ -13,7 +13,6 @@ import {
 	getPrTitle,
 	isClosePR,
 	getPrHeadRef,
-	getCreateBranch,
 } from './misc';
 import { INTERVAL_MS } from '../constant';
 
@@ -53,7 +52,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	}
 
 	const helper     = getGitHelper(logger);
-	const branchName = getCreateBranch(context);
+	const branchName = getPrBranchName(context);
 
 	await config(logger, helper);
 	await commit(logger, helper);

@@ -82,27 +82,29 @@ describe('execute', () => {
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
 		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
 		const mockStdout                   = spyOnStdout();
 		setExists(true);
 
 		await execute(context('synchronize'));
 
 		stdoutCalledWith(mockStdout, [
-			'::group::Running commands and getting changed files...',
+			'::group::Initializing working directory...',
 			'[command]rm -rdf ./*',
 			'  >> stdout',
 			'::endgroup::',
-			'::group::Cloning from the remote repo...',
-			'[command]git clone --branch=change --depth=3',
-			'[command]ls -la',
-			'  >> stdout',
+			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
+			'[command]git clone --branch=create-pr-action/test-branch --depth=3',
 			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
 			'  >> stdout',
-			'> remote branch [change] not found.',
+			'> remote branch [create-pr-action/test-branch] not found.',
 			'> now branch: stdout',
 			'::endgroup::',
-			'::group::Initializing local git repo [change]',
-			'[command]git checkout -b "change"',
+			'::group::Cloning [change] from the remote repo...',
+			'[command]git clone --branch=change --depth=3',
+			'[command]git checkout -b "create-pr-action/test-branch"',
+			'  >> stdout',
+			'[command]ls -la',
 			'  >> stdout',
 			'::endgroup::',
 			'::group::Running commands...',
@@ -178,7 +180,7 @@ describe('execute', () => {
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=2')
 			.reply(200, () => ([]))
-			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fnew-topic')
+			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fcreate%2Ftest')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.patch('/repos/octocat/Hello-World/pulls/1347')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
@@ -187,16 +189,17 @@ describe('execute', () => {
 
 		stdoutContains(mockStdout, [
 			'::group::Target PullRequest Ref [create-pr-action/new-topic]',
-			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
+			'[command]git clone --branch=create-pr-action/create/test --depth=3',
 			'> Checking diff...',
 			'[command]git status --short -uno',
 			'[command]git add --all',
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
-			'[command]git push "create-pr-action/new-topic":"refs/heads/create-pr-action/new-topic"',
-			'> Updating PullRequest... [create-pr-action/new-topic] -> [heads/test]',
-			'> Cloning from the remote repo...',
+			'> Cloning [create-pr-action/new-topic] from the remote repo...',
 			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
+			'[command]git checkout -b "create-pr-action/create/test"',
+			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
+			'> Updating PullRequest... [create-pr-action/create/test] -> [heads/test]',
 		]);
 	});
 });

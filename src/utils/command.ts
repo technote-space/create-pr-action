@@ -2,29 +2,29 @@ import fs from 'fs';
 import { Logger, GitHelper, Utils } from '@technote-space/github-action-helper';
 import { Context } from '@actions/github/lib/context';
 import { getInput } from '@actions/core' ;
-import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getPrHeadRef } from './misc';
+import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getPrHeadRef, getPrBranchName } from './misc';
 
 const {getWorkspace, getArrayInput, useNpm} = Utils;
 
 const helper = new GitHelper(new Logger(replaceDirectory), {filter: (line: string): boolean => filterGitStatus(line) && filterExtension(line)});
 
 export const clone = async(logger: Logger, context: Context): Promise<void> => {
-	logger.startProcess('Cloning from the remote repo...');
+	logger.startProcess('Cloning [%s] branch from the remote repo...', getPrBranchName(context));
 
-	await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
-	await helper.runCommand(getWorkspace(), ['ls -la']);
+	await helper.cloneBranch(getWorkspace(), getPrBranchName(context), context);
 };
 
 export const checkBranch = async(logger: Logger, context: Context): Promise<void> => {
-	const branchName   = getPrHeadRef(context);
 	const clonedBranch = await helper.getCurrentBranchName(getWorkspace());
-	if (branchName !== clonedBranch) {
-		logger.info('remote branch [%s] not found.', branchName);
+	if (getPrBranchName(context) !== clonedBranch) {
+		logger.info('remote branch [%s] not found.', getPrBranchName(context));
 		logger.info('now branch: %s', clonedBranch);
 
-		logger.startProcess('Initializing local git repo [%s]', branchName);
-		await helper.createBranch(getWorkspace(), branchName);
+		logger.startProcess('Cloning [%s] from the remote repo...', getPrHeadRef(context));
+		await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
+		await helper.createBranch(getWorkspace(), getPrBranchName(context));
 	}
+	await helper.runCommand(getWorkspace(), ['ls -la']);
 };
 
 const getClearPackageCommands = (): string[] => {
@@ -80,7 +80,9 @@ export const getDiff = async(logger: Logger): Promise<string[]> => {
 	return await helper.getDiff(getWorkspace());
 };
 
-const initDirectory = async(): Promise<void> => {
+const initDirectory = async(logger: Logger): Promise<void> => {
+	logger.startProcess('Initializing working directory...');
+
 	await helper.runCommand(getWorkspace(), ['rm -rdf ./*']);
 	fs.mkdirSync(getWorkspace(), {recursive: true});
 };
@@ -92,9 +94,7 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 		stdout: string[];
 	}[];
 }> => {
-	logger.startProcess('Running commands and getting changed files...');
-
-	await initDirectory();
+	await initDirectory(logger);
 	await clone(logger, context);
 	await checkBranch(logger, context);
 
