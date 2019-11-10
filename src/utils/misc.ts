@@ -5,7 +5,7 @@ import { getInput } from '@actions/core' ;
 import moment from 'moment';
 import { TARGET_EVENTS, DEFAULT_PR_BRANCH_PREFIX, ACTION_URL, ACTION_NAME, ACTION_OWNER, ACTION_REPO, ACTION_MARKETPLACE_URL } from '../constant';
 
-const {getWorkspace, getArrayInput, getBoolValue, isPr, escapeRegExp} = Utils;
+const {getWorkspace, getArrayInput, getBoolValue, isPr, escapeRegExp, replaceAll} = Utils;
 
 export const getCommitMessage = (): string => getInput('COMMIT_MESSAGE', {required: true});
 
@@ -46,11 +46,19 @@ const contextVariables = (): { key: string; replace: (Context) => string }[] => 
 };
 
 /**
- * @param {string} variable variable
+ * @param {string} string string
+ * @param {object[]} variables variables
  * @param {Context} context context
  * @return {string} replaced
  */
-const replaceContextVariables = (variable: string, context: Context): string => contextVariables().reduce((acc, value) => acc.replace(`\${${value.key}}`, value.replace(context)), variable);
+const replaceVariables = (string: string, variables: { key: string; replace: (Context) => string }[], context: Context): string => variables.reduce((acc, value) => replaceAll(acc, `\${${value.key}}`, value.replace(context)), string);
+
+/**
+ * @param {string} string string
+ * @param {Context} context context
+ * @return {string} replaced
+ */
+const replaceContextVariables = (string: string, context: Context): string => replaceVariables(string, contextVariables(), context);
 
 export const getPrBranchPrefix = (): string => getInput('PR_BRANCH_PREFIX') || DEFAULT_PR_BRANCH_PREFIX;
 
@@ -129,7 +137,7 @@ const prBodyVariables = (files: string[], output: {
 const replacePrBodyVariables = (prBody: string, files: string[], output: {
 	command: string;
 	stdout: string[];
-}[], context: Context): string => prBodyVariables(files, output).reduce((acc, value) => acc.replace(`\${${value.key}}`, value.replace(context)), prBody);
+}[], context: Context): string => replaceVariables(prBody, prBodyVariables(files, output), context);
 
 export const getPrBody = (files: string[], output: {
 	command: string;
