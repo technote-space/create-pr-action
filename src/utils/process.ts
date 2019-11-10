@@ -36,7 +36,6 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	const branchName = getPrBranchName(context);
 	const helper     = getGitHelper(logger);
 
-	await config(logger, helper);
 	const {files, output} = await getChangedFiles(logger, context);
 	if (!files.length) {
 		logger.info('There is no diff.');
@@ -48,6 +47,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 		mergeable = await isMergeable(pr.number, octokit, context);
 	} else {
 		// Commit local diffs
+		await config(logger, helper);
 		await commit(logger, helper);
 		await push(branchName, logger, helper, context);
 	}

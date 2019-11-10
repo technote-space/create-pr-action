@@ -216,6 +216,7 @@ export const resolveConflicts = async(branchName: string, logger: Logger, helper
 			await getApiHelper(logger).closePR(branchName, octokit, context);
 			return;
 		}
+		await config(logger, helper);
 		await commit(logger, helper);
 		await push(branchName, logger, helper, context);
 		await getApiHelper(logger).pullsCreateOrUpdate(branchName, {
