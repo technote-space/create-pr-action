@@ -59,7 +59,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	await commit(logger, helper);
 	await push(branchName, logger, helper, context);
 
-	if ((await getRefDiff(getPrBaseRef(context), branchName, logger)).length) {
+	if ((await getRefDiff(getPrBaseRef(context), branchName, logger, context)).length) {
 		await getApiHelper(logger).pullsCreateOrComment(branchName, {
 			title: getPrTitle(context),
 			body: getPrBody(files, output, context),

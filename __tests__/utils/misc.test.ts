@@ -470,7 +470,7 @@ describe('getPrBody', () => {
 			'',
 			'<hr>',
 			'',
-			'[:octocat: Repo](https://github.com/technote-space/create-pr-action) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](https://github.com/marketplace/actions/create-pr-action)',
+			'[:octocat: Repo](https://github.com/technote-space/create-pr-action) | [:memo: Issues](https://github.com/technote-space/create-pr-action/issues) | [:department_store: Marketplace](https://github.com/marketplace/actions/create-pr-action)',
 		].join('\n'));
 	});
 
