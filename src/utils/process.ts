@@ -2,7 +2,7 @@ import { getInput } from '@actions/core';
 import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
 import { Logger, ApiHelper, GitHelper, Utils } from '@technote-space/github-action-helper';
-import { getChangedFiles } from './command';
+import { getChangedFiles, getRefDiff } from './command';
 import {
 	replaceDirectory,
 	getCommitMessage,
@@ -12,6 +12,7 @@ import {
 	getPrBranchName,
 	getPrTitle,
 	isClosePR,
+	getPrBaseRef,
 	getPrHeadRef,
 } from './misc';
 import { INTERVAL_MS } from '../constant';
@@ -57,10 +58,15 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	await config(logger, helper);
 	await commit(logger, helper);
 	await push(branchName, logger, helper, context);
-	await getApiHelper(logger).pullsCreateOrUpdate(branchName, {
-		title: getPrTitle(context),
-		body: getPrBody(files, output, context),
-	}, octokit, context);
+
+	if ((await getRefDiff(getPrBaseRef(context), branchName, logger)).length) {
+		await getApiHelper(logger).pullsCreateOrComment(branchName, {
+			title: getPrTitle(context),
+			body: getPrBody(files, output, context),
+		}, octokit, context);
+	} else {
+		await getApiHelper(logger).closePR(branchName, octokit, context);
+	}
 
 	if (isCron(context)) {
 		await sleep(INTERVAL_MS);
