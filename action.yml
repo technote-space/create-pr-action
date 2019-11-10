@@ -48,20 +48,37 @@ inputs:
     description: PullRequest body.
     required: true
     default: |
-      [${ACTION_NAME}](${ACTION_URL})
-      ${PR_LINK}
+      ## Base PullRequest
+
+      ${PR_TITLE} (#${PR_NUMBER})
+
+      ## Command results
       <details>
-        <summary>Output:</summary>
+        <summary>Details: </summary>
 
         ${COMMANDS_STDOUT}
 
       </details>
+
+      ## Changed files
       <details>
-        <summary>${FILES_SUMMARY}</summary>
+        <summary>${FILES_SUMMARY}: </summary>
 
         ${FILES}
 
       </details>
+
+      <hr>
+
+      [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
+
+      created at ${DATE1}
+  DATE_FORMAT1:
+    description: Date format.
+    default: 'YYYY-MM-DD HH:mm:ss'
+  DATE_FORMAT2:
+    description: Date format.
+    default: 'YYYY-MM-DD'
   FILTER_GIT_STATUS:
     description: Filter by git status. (M or D or A)
     default: ''
