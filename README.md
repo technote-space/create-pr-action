@@ -56,7 +56,7 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
 [More details of target event](#action-event-details)
 
 ## Options
-........
+.........
 
 ## Action event details
 ### Target events
