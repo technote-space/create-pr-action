@@ -1,74 +1,75 @@
 import { getInput } from '@actions/core';
 import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
-import { Logger, ApiHelper, GitHelper, Utils } from '@technote-space/github-action-helper';
-import { getChangedFiles, getRefDiff } from './command';
+import { Logger, GitHelper, Utils } from '@technote-space/github-action-helper';
+import {
+	getApiHelper,
+	getChangedFiles,
+	getRefDiff,
+	config,
+	commit,
+	push,
+	isMergeable,
+	updatePr,
+	resolveConflicts,
+} from './command';
 import {
 	replaceDirectory,
-	getCommitMessage,
-	getCommitName,
-	getCommitEmail,
-	getPrBody,
 	getPrBranchName,
-	getPrTitle,
 	isClosePR,
 	getPrBaseRef,
 	getPrHeadRef,
 } from './misc';
 import { INTERVAL_MS } from '../constant';
 
-const {getWorkspace, getRepository, isPr, isCron, sleep} = Utils;
-const commonLogger                                       = new Logger(replaceDirectory);
+const {isPr, isCron, sleep} = Utils;
+const commonLogger          = new Logger(replaceDirectory);
 
 const getGitHelper = (logger: Logger): GitHelper => new GitHelper(logger);
-
-const getApiHelper = (logger: Logger): ApiHelper => new ApiHelper(logger);
-
-const config = async(logger: Logger, helper: GitHelper): Promise<void> => {
-	const name  = getCommitName();
-	const email = getCommitEmail();
-	logger.startProcess('Configuring git committer to be %s <%s>', name, email);
-	await helper.config(getWorkspace(), name, email);
-};
-
-const commit = async(logger: Logger, helper: GitHelper): Promise<void> => {
-	logger.startProcess('Committing...');
-	await helper.makeCommit(getWorkspace(), getCommitMessage());
-};
-
-const push = async(branchName: string, logger: Logger, helper: GitHelper, context: Context): Promise<void> => {
-	logger.startProcess('Pushing to %s@%s...', getRepository(context), branchName);
-	await helper.push(getWorkspace(), branchName, false, context);
-};
 
 const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promise<void> => {
 	if (isCron(context)) {
 		commonLogger.startProcess('Target PullRequest Ref [%s]', getPrHeadRef(context));
 	}
 
+	let mergeable    = false;
+	const branchName = getPrBranchName(context);
+	const helper     = getGitHelper(logger);
+
+	await config(logger, helper);
 	const {files, output} = await getChangedFiles(logger, context);
 	if (!files.length) {
 		logger.info('There is no diff.');
+		const pr = await getApiHelper(logger).findPullRequest(branchName, octokit, context);
+		if (!pr) {
+			// There is no PR
+			return;
+		}
+		mergeable = await isMergeable(pr.number, octokit, context);
+	} else {
+		// Commit local diffs
+		await commit(logger, helper);
+		await push(branchName, logger, helper, context);
+	}
+
+	if (!(await getRefDiff(getPrBaseRef(context), branchName, logger, context)).length) {
+		// Close if there is no diff
+		await getApiHelper(logger).closePR(branchName, octokit, context);
 		return;
 	}
 
-	const helper     = getGitHelper(logger);
-	const branchName = getPrBranchName(context);
+	if (files.length) {
+		// Update PR if there is at least one change
+		mergeable = await updatePr(branchName, files, output, logger, octokit, context);
+	}
 
-	await config(logger, helper);
-	await commit(logger, helper);
-	await push(branchName, logger, helper, context);
-
-	if ((await getRefDiff(getPrBaseRef(context), branchName, logger, context)).length) {
-		await getApiHelper(logger).pullsCreateOrComment(branchName, {
-			title: getPrTitle(context),
-			body: getPrBody(files, output, context),
-		}, octokit, context);
-	} else {
-		await getApiHelper(logger).closePR(branchName, octokit, context);
+	if (!mergeable) {
+		// Resolve conflicts if PR is not mergeable
+		await resolveConflicts(branchName, logger, helper, octokit, context);
 	}
 
 	if (isCron(context)) {
+		// Sleep
 		await sleep(INTERVAL_MS);
 	}
 };
