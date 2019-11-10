@@ -1,5 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import path from 'path';
+import nock from 'nock';
+import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
 import {
 	getContext,
@@ -11,13 +13,17 @@ import {
 	setChildProcessParams,
 	testChildProcess,
 	testFs,
+	disableNetConnect,
+	getApiFixture,
 } from '@technote-space/github-action-test-helper';
-import { Logger } from '@technote-space/github-action-helper';
+import { Logger, GitHelper } from '@technote-space/github-action-helper';
 import {
 	clone,
 	checkBranch,
 	getDiff,
 	getChangedFiles,
+	updatePr,
+	resolveConflicts,
 } from '../../src/utils/command';
 
 beforeEach(() => {
@@ -25,7 +31,13 @@ beforeEach(() => {
 });
 const logger    = new Logger();
 const setExists = testFs();
+const rootDir   = path.resolve(__dirname, '..', 'fixtures');
+const octokit   = new GitHub('');
 const context   = (pr: object): Context => getContext({
+	repo: {
+		owner: 'hello',
+		repo: 'world',
+	},
 	payload: {
 		'pull_request': Object.assign({
 			number: 11,
@@ -64,7 +76,7 @@ describe('clone', () => {
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} clone --branch=create-pr-action/test-branch --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} clone --branch=create-pr-action/test-branch --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 		]);
 		stdoutCalledWith(mockStdout, [
 			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
@@ -115,7 +127,7 @@ describe('checkBranch', () => {
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
-			`git -C ${dir} clone --branch=test-branch --depth=3 https://octocat:test-token@github.com//.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} clone --branch=test-branch --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${dir} checkout -b "create-pr-action/test-branch"`,
 			'ls -la',
 		]);
@@ -246,5 +258,161 @@ describe('getChangedFiles', () => {
 				},
 			],
 		});
+	});
+});
+
+describe('updatePr', () => {
+	disableNetConnect(nock);
+	testEnv();
+
+	it('should return true 1', async() => {
+		process.env.INPUT_PR_TITLE = 'test title';
+		process.env.INPUT_PR_BODY  = 'test body';
+
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?head=hello%3Atest')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
+			.post('/repos/hello/world/issues/1347/comments')
+			.reply(201, () => getApiFixture(rootDir, 'issues.comment.create'))
+			.get('/repos/hello/world/pulls/1347')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.get.mergeable.true'));
+
+		expect(await updatePr('test', [], [], logger, octokit, context({}))).toBe(true);
+	});
+
+	it('should return true 2', async() => {
+		process.env.INPUT_PR_TITLE = 'test title';
+		process.env.INPUT_PR_BODY  = 'test body';
+
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?head=hello%3Atest')
+			.reply(200, () => [])
+			.post('/repos/hello/world/pulls')
+			.reply(201, () => getApiFixture(rootDir, 'pulls.create'));
+
+		expect(await updatePr('test', [], [], logger, octokit, context({}))).toBe(true);
+	});
+
+	it('should return false', async() => {
+		process.env.INPUT_PR_TITLE = 'test title';
+		process.env.INPUT_PR_BODY  = 'test body';
+
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?head=hello%3Atest')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
+			.post('/repos/hello/world/issues/1347/comments')
+			.reply(201, () => getApiFixture(rootDir, 'issues.comment.create'))
+			.get('/repos/hello/world/pulls/1347')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.get.mergeable.false'));
+
+		expect(await updatePr('test', [], [], logger, octokit, context({}))).toBe(false);
+	});
+});
+
+describe('resolveConflicts', () => {
+	disableNetConnect(nock);
+	testEnv();
+	testChildProcess();
+	const helper = new GitHelper(logger);
+
+	it('should merge', async() => {
+		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.startsWith('git merge')) {
+					return 'Already up to date.';
+				}
+				return '';
+			},
+		});
+		const mockExec = spyOnExec();
+
+		await resolveConflicts('test', logger, helper, octokit, context({}));
+
+		execCalledWith(mockExec, [
+			'git merge --no-edit master',
+			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
+		]);
+	});
+
+	it('should close pull request', async() => {
+		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.startsWith('git merge')) {
+					return 'Auto-merging merge.txt\nCONFLICT (content): Merge conflict in merge.txt\nAutomatic merge failed; fix conflicts and then commit the result.';
+				}
+				return '';
+			},
+		});
+		const mockExec = spyOnExec();
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?head=hello%3Atest')
+			.reply(200, () => []);
+
+		await resolveConflicts('test', logger, helper, octokit, context({}));
+
+		execCalledWith(mockExec, [
+			'git merge --no-edit master',
+			'rm -rdf ./*',
+			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
+			'yarn upgrade',
+			'git add --all',
+			`git -C ${process.env.GITHUB_WORKSPACE} status --short -uno`,
+		]);
+	});
+
+	it('should rebase', async() => {
+		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_COMMIT_MESSAGE   = 'commit message';
+		process.env.INPUT_PR_TITLE         = 'pr title';
+		process.env.INPUT_PR_BODY          = 'pr body';
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.startsWith('git merge')) {
+					return 'Auto-merging merge.txt\nCONFLICT (content): Merge conflict in merge.txt\nAutomatic merge failed; fix conflicts and then commit the result.';
+				}
+				if (command.endsWith('status --short -uno')) {
+					return 'M  __tests__/fixtures/test.md';
+				}
+				return '';
+			},
+		});
+		const mockExec = spyOnExec();
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?head=hello%3Atest')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
+			.patch('/repos/hello/world/pulls/1347')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
+
+		await resolveConflicts('test', logger, helper, octokit, context({}));
+
+		execCalledWith(mockExec, [
+			'git merge --no-edit master',
+			'rm -rdf ./*',
+			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
+			'yarn upgrade',
+			'git add --all',
+			`git -C ${process.env.GITHUB_WORKSPACE} status --short -uno`,
+			`git -C ${process.env.GITHUB_WORKSPACE} commit -qm "commit message"`,
+			`git -C ${process.env.GITHUB_WORKSPACE} show --stat-count=10 HEAD`,
+			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
+		]);
 	});
 });

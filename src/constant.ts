@@ -15,4 +15,4 @@ export const ACTION_OWNER             = 'technote-space';
 export const ACTION_REPO              = 'create-pr-action';
 export const ACTION_URL               = `https://github.com/${ACTION_OWNER}/${ACTION_REPO}`;
 export const ACTION_MARKETPLACE_URL   = `https://github.com/marketplace/actions/${ACTION_REPO}`;
-export const INTERVAL_MS              = 500;
+export const INTERVAL_MS              = 1000;
