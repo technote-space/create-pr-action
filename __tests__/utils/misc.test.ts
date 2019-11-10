@@ -461,7 +461,7 @@ describe('getPrBody', () => {
 			'',
 			'## Changed files',
 			'<details>',
-			'<summary>Changed files: </summary>',
+			'<summary>Changed 2 files: </summary>',
 			'',
 			'- README.md',
 			'- CHANGELOG.md',

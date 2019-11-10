@@ -109,7 +109,7 @@ const prBodyVariables = (files: string[], output: {
 		{
 			key: 'FILES_SUMMARY',
 			// eslint-disable-next-line no-magic-numbers
-			replace: (): string => 'Changed ' + (files.length > 1 ? 'files' : 'file'),
+			replace: (): string => 'Changed ' + (files.length > 1 ? `${files.length} files` : 'file'),
 		},
 		{
 			key: 'ACTION_NAME',
