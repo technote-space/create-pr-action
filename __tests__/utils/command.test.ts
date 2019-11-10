@@ -336,7 +336,7 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, helper, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			'git merge --no-edit master',
+			'git merge --no-edit origin/master',
 			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
 		]);
 	});
@@ -363,7 +363,7 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, helper, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			'git merge --no-edit master',
+			'git merge --no-edit origin/master',
 			'rm -rdf ./*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
@@ -381,6 +381,8 @@ describe('resolveConflicts', () => {
 		process.env.INPUT_COMMIT_MESSAGE   = 'commit message';
 		process.env.INPUT_PR_TITLE         = 'pr title';
 		process.env.INPUT_PR_BODY          = 'pr body';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
 		setChildProcessParams({
 			stdout: (command: string): string => {
 				if (command.startsWith('git merge')) {
@@ -403,13 +405,15 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, helper, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			'git merge --no-edit master',
+			'git merge --no-edit origin/master',
 			'rm -rdf ./*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
 			'yarn upgrade',
 			'git add --all',
 			`git -C ${process.env.GITHUB_WORKSPACE} status --short -uno`,
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
 			`git -C ${process.env.GITHUB_WORKSPACE} commit -qm "commit message"`,
 			`git -C ${process.env.GITHUB_WORKSPACE} show --stat-count=10 HEAD`,
 			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,

@@ -146,12 +146,6 @@ describe('execute', () => {
 		await execute(context('synchronize'));
 
 		stdoutCalledWith(mockStdout, [
-			'::group::Configuring git committer to be GitHub Actions <example@example.com>',
-			'[command]git config user.name "GitHub Actions"',
-			'  >> stdout',
-			'[command]git config user.email "example@example.com"',
-			'  >> stdout',
-			'::endgroup::',
 			'::group::Initializing working directory...',
 			'[command]rm -rdf ./*',
 			'  >> stdout',
@@ -326,7 +320,7 @@ describe('execute', () => {
 			'[command]git status --short -uno',
 			'[command]git fetch --prune --no-recurse-submodules --depth=3 origin +refs/heads/master:refs/remotes/origin/master',
 			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
-			'[command]git merge --no-edit master',
+			'[command]git merge --no-edit origin/master',
 			'::group::Pushing to hello/world@create-pr-action/create/test...',
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 		]);
