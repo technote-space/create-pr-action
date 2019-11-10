@@ -158,6 +158,7 @@ describe('execute', () => {
 			'[command]git show --stat-count=10 HEAD',
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules --depth=3 origin +refs/heads/master:refs/remotes/origin/master',
 			'::group::Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
 		]);
 	});
@@ -209,6 +210,7 @@ describe('execute', () => {
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'> Checking references diff...',
 			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules --depth=3 origin +refs/heads/master:refs/remotes/origin/master',
 			'> Deleting reference... [refs/heads/create-pr-action/create/test]',
 		]);
 	});
