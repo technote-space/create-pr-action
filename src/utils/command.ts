@@ -2,7 +2,7 @@ import fs from 'fs';
 import { Logger, GitHelper, Utils } from '@technote-space/github-action-helper';
 import { Context } from '@actions/github/lib/context';
 import { getInput } from '@actions/core' ;
-import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getPrHeadRef, getPrBranchName } from './misc';
+import { replaceDirectory, isDisabledDeletePackage, filterGitStatus, filterExtension, getPrHeadRef, getPrBranchName, getGitFilterStatus } from './misc';
 
 const {getWorkspace, getArrayInput, useNpm} = Utils;
 
@@ -80,6 +80,11 @@ export const getDiff = async(logger: Logger): Promise<string[]> => {
 	return await helper.getDiff(getWorkspace());
 };
 
+export const getRefDiff = async(base: string, compare: string, logger: Logger): Promise<string[]> => {
+	logger.startProcess('Checking references diff...');
+	return (await helper.getRefDiff(getWorkspace(), base, compare, getGitFilterStatus())).filter(filterExtension);
+};
+
 const initDirectory = async(logger: Logger): Promise<void> => {
 	logger.startProcess('Initializing working directory...');
 
@@ -107,10 +112,9 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 
 	logger.startProcess('Running commands...');
 	const output = await helper.runCommand(getWorkspace(), commands);
-	const files  = await getDiff(logger);
 
 	return {
-		files,
+		files: await getDiff(logger),
 		output,
 	};
 };

@@ -2,7 +2,8 @@ import { Context } from '@actions/github/lib/context';
 import { Utils } from '@technote-space/github-action-helper';
 import { isTargetEvent, isTargetLabels } from '@technote-space/filter-github-action';
 import { getInput } from '@actions/core' ;
-import { TARGET_EVENTS, DEFAULT_PR_BRANCH_PREFIX, ACTION_URL, ACTION_NAME } from '../constant';
+import moment from 'moment';
+import { TARGET_EVENTS, DEFAULT_PR_BRANCH_PREFIX, ACTION_URL, ACTION_NAME, ACTION_OWNER, ACTION_REPO, ACTION_MARKETPLACE_URL } from '../constant';
 
 const {getWorkspace, getArrayInput, getBoolValue, isPr, escapeRegExp} = Utils;
 
@@ -18,6 +19,8 @@ export const replaceDirectory = (message: string): string => {
 		.split(` -C ${workDir}`).join('')
 		.split(workDir).join('<Working Directory>');
 };
+
+const getDate = (suffix: string): string => moment().format(getInput(`DATE_FORMAT${suffix}`));
 
 /**
  * @return {{string, Function}[]} replacer
@@ -37,6 +40,8 @@ const contextVariables = (): { key: string; replace: (Context) => string }[] => 
 		{key: 'PR_BASE_REF', replace: (context: Context): string => getPrParam(context, pr => pr.base.ref)},
 		{key: 'PR_TITLE', replace: (context: Context): string => getPrParam(context, pr => pr.title)},
 		{key: 'PR_URL', replace: (context: Context): string => getPrParam(context, pr => pr.html_url)},
+		{key: 'DATE1', replace: (): string => getDate('1')},
+		{key: 'DATE2', replace: (): string => getDate('2')},
 	];
 };
 
@@ -50,6 +55,8 @@ const replaceContextVariables = (variable: string, context: Context): string => 
 export const getPrBranchPrefix = (): string => getInput('PR_BRANCH_PREFIX') || DEFAULT_PR_BRANCH_PREFIX;
 
 export const getPrBranchName = (context: Context): string => getPrBranchPrefix() + replaceContextVariables(getInput('PR_BRANCH_NAME', {required: true}), context);
+
+export const getPrBaseRef = (context: Context): string => context.payload.pull_request ? context.payload.pull_request.base.ref : '';
 
 export const getPrHeadRef = (context: Context): string => context.payload.pull_request ? context.payload.pull_request.head.ref : '';
 
@@ -71,13 +78,21 @@ const prBodyVariables = (files: string[], output: {
 		},
 		{
 			key: 'COMMANDS',
-			replace: (): string => toCode(output.map(item => `$ ${item.command}`).join('\n')),
+			replace: (): string => output.length ? toCode(output.map(item => `$ ${item.command}`).join('\n')) : '',
 		},
 		{
 			key: 'COMMANDS_STDOUT',
-			replace: (): string => toCode(output.map(item => [
-				`$ ${item.command}`,
-			].concat(item.stdout).join('\n')).join('\n')),
+			replace: (): string => output.length ? '<details>\n' + output.map(item => [
+				`<summary><em>${item.command}</em></summary>`,
+				toCode(item.stdout.join('\n')),
+			].join('\n')).join('\n</details>\n<details>\n') + '\n</details>' : '',
+		},
+		{
+			key: 'COMMANDS_STDOUT_OPEN',
+			replace: (): string => output.length ? '<details open>\n' + output.map(item => [
+				`<summary><em>${item.command}</em></summary>`,
+				toCode(item.stdout.join('\n')),
+			].join('\n')).join('\n</details>\n<details open>\n') + '\n</details>' : '',
 		},
 		{
 			key: 'FILES',
@@ -93,8 +108,20 @@ const prBodyVariables = (files: string[], output: {
 			replace: (): string => ACTION_NAME,
 		},
 		{
+			key: 'ACTION_OWNER',
+			replace: (): string => ACTION_OWNER,
+		},
+		{
+			key: 'ACTION_REPO',
+			replace: (): string => ACTION_REPO,
+		},
+		{
 			key: 'ACTION_URL',
 			replace: (): string => ACTION_URL,
+		},
+		{
+			key: 'ACTION_MARKETPLACE_URL',
+			replace: (): string => ACTION_MARKETPLACE_URL,
 		},
 	].concat(contextVariables());
 };
@@ -130,8 +157,10 @@ export const isTargetContext = (context: Context): boolean => {
 	return isTargetLabels(getArrayInput('INCLUDE_LABELS'), [], context);
 };
 
+export const getGitFilterStatus = (): string => getInput('FILTER_GIT_STATUS');
+
 export const filterGitStatus = (line: string): boolean => {
-	const filter = getInput('FILTER_GIT_STATUS');
+	const filter = getGitFilterStatus();
 	if (filter) {
 		const targets = filter.toUpperCase().replace(/[^MDA]/g, '');
 		if (!targets) {

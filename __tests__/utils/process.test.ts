@@ -138,21 +138,27 @@ describe('execute', () => {
 			.persist()
 			.get('/repos/hello/world/pulls?head=hello%3Acreate-pr-action%2Fcreate%2Ftest')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
-			.patch('/repos/hello/world/pulls/1347')
-			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
+			.post('/repos/hello/world/issues/1347/comments')
+			.reply(201);
 
 		await execute(context('synchronize'));
 
 		stdoutContains(mockStdout, [
+			'[command]rm -rdf ./*',
+			'[command]git clone --branch=create-pr-action/create/test --depth=3',
+			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
+			'> remote branch [create-pr-action/create/test] not found.',
+			'[command]git clone --branch=change --depth=3',
+			'[command]git checkout -b "create-pr-action/create/test"',
+			'[command]git add --all',
+			'[command]git status --short -uno',
 			'[command]git config user.name "GitHub Actions"',
 			'[command]git config user.email "example@example.com"',
-			'[command]rm -rdf ./*',
-			'[command]git status --short -uno',
-			'[command]git add --all',
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
-			'::group::Updating PullRequest... [create-pr-action/create/test] -> [heads/test]',
+			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
+			'::group::Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
 		]);
 	});
 
@@ -168,7 +174,7 @@ describe('execute', () => {
 		process.env.INPUT_PR_TITLE         = 'test: create pull request (${PR_NUMBER})';
 		process.env.INPUT_PR_BODY          = 'pull request body';
 		const mockStdout                   = spyOnStdout();
-		setChildProcessParams({stdout: 'M  __tests__/fixtures/test.md'});
+		setChildProcessParams({stdout: (command: string): string => command.endsWith('status --short -uno') ? 'M  __tests__/fixtures/test.md' : ''});
 		setExists(true);
 		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
 		// @ts-ignore
@@ -183,7 +189,9 @@ describe('execute', () => {
 			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fcreate%2Ftest')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.patch('/repos/octocat/Hello-World/pulls/1347')
-			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
+			.reply(200, () => getApiFixture(rootDir, 'pulls.update'))
+			.delete('/repos/octocat/Hello-World/git/refs/heads/create-pr-action/create/test')
+			.reply(204);
 
 		await execute(context('', 'schedule'));
 
@@ -191,15 +199,17 @@ describe('execute', () => {
 			'::group::Target PullRequest Ref [create-pr-action/new-topic]',
 			'[command]git clone --branch=create-pr-action/create/test --depth=3',
 			'> Checking diff...',
-			'[command]git status --short -uno',
 			'[command]git add --all',
+			'[command]git status --short -uno',
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
 			'> Cloning [create-pr-action/new-topic] from the remote repo...',
 			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
 			'[command]git checkout -b "create-pr-action/create/test"',
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
-			'> Updating PullRequest... [create-pr-action/create/test] -> [heads/test]',
+			'> Checking references diff...',
+			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
+			'> Deleting reference... [refs/heads/create-pr-action/create/test]',
 		]);
 	});
 });

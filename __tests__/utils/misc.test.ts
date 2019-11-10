@@ -8,6 +8,7 @@ import {
 	replaceDirectory,
 	getPrBranchPrefix,
 	getPrBranchName,
+	getPrBaseRef,
 	getPrHeadRef,
 	isActionPr,
 	getPrTitle,
@@ -272,6 +273,24 @@ describe('getPrHeadRef', () => {
 	});
 });
 
+describe('getPrBaseRef', () => {
+	it('should get pr base ref', () => {
+		expect(getPrBaseRef(getContext({
+			payload: {
+				'pull_request': {
+					base: {
+						ref: 'master',
+					},
+				},
+			},
+		}))).toBe('master');
+	});
+
+	it('should return empty', () => {
+		expect(getPrBaseRef(getContext({}))).toBe('');
+	});
+});
+
 describe('isActionPr', () => {
 	testEnv();
 
@@ -382,50 +401,76 @@ describe('getPrBody', () => {
 
 	it('should get PR Body', () => {
 		process.env.INPUT_PR_BODY = `
-      [\${ACTION_NAME}](\${ACTION_URL})
-      \${PR_LINK}
+      ## Base PullRequest
+
+      \${PR_TITLE} (#\${PR_NUMBER})
+
+      ## Command results
       <details>
-        <summary>Output:</summary>
+        <summary>Details: </summary>
 
         \${COMMANDS_STDOUT}
 
       </details>
+
+      ## Changed files
       <details>
-        <summary>\${FILES_SUMMARY}</summary>
+        <summary>\${FILES_SUMMARY}: </summary>
 
         \${FILES}
 
       </details>
+
+      <hr>
+
+      [:octocat: Repo](\${ACTION_URL}) | [:memo: Issues](\${ACTION_URL}/issues) | [:department_store: Marketplace](\${ACTION_MARKETPLACE_URL})
 `;
 
 		expect(getPrBody(['README.md', 'CHANGELOG.md'], [
 			{command: 'test1', stdout: ['test1-1', 'test1-2']},
 			{command: 'test2', stdout: ['test2-1', 'test2-2']},
 		], context)).toBe([
-			'[Create PR Action](https://github.com/technote-space/create-pr-action)',
-			'[test title](http://example.com)',
-			'<details>',
-			'<summary>Output:</summary>',
+			'## Base PullRequest',
 			'',
+			'test title (#11)',
+			'',
+			'## Command results',
+			'<details>',
+			'<summary>Details: </summary>',
+			'',
+			'<details>',
+			'<summary><em>test1</em></summary>',
 			'',
 			'```',
-			'$ test1',
 			'test1-1',
 			'test1-2',
-			'$ test2',
+			'```',
+			'',
+			'</details>',
+			'<details>',
+			'<summary><em>test2</em></summary>',
+			'',
+			'```',
 			'test2-1',
 			'test2-2',
 			'```',
 			'',
+			'</details>',
 			'',
 			'</details>',
+			'',
+			'## Changed files',
 			'<details>',
-			'<summary>Changed files</summary>',
+			'<summary>Changed files: </summary>',
 			'',
 			'- README.md',
 			'- CHANGELOG.md',
 			'',
 			'</details>',
+			'',
+			'<hr>',
+			'',
+			'[:octocat: Repo](https://github.com/technote-space/create-pr-action) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](https://github.com/marketplace/actions/create-pr-action)',
 		].join('\n'));
 	});
 
@@ -434,15 +479,19 @@ describe('getPrBody', () => {
 		\${PR_LINK}
 		\${COMMANDS}
 		\${COMMANDS_STDOUT}
+		\${COMMANDS_STDOUT_OPEN}
 		\${FILES}
 		\${FILES_SUMMARY}
 		\${ACTION_NAME}
+		\${ACTION_OWNER}
+		\${ACTION_REPO}
 		\${ACTION_URL}
+		\${ACTION_MARKETPLACE_URL}
 `;
 
 		expect(getPrBody(['README.md'], [
 			{command: 'test1', stdout: ['test1-1', 'test1-2']},
-			{command: 'test2', stdout: ['test2-1', 'test2-2']},
+			{command: 'test2', stdout: []},
 		], context)).toBe([
 			'[test title](http://example.com)',
 			'',
@@ -451,20 +500,39 @@ describe('getPrBody', () => {
 			'$ test2',
 			'```',
 			'',
+			'<details>',
+			'<summary><em>test1</em></summary>',
 			'',
 			'```',
-			'$ test1',
 			'test1-1',
 			'test1-2',
-			'$ test2',
-			'test2-1',
-			'test2-2',
 			'```',
 			'',
+			'</details>',
+			'<details>',
+			'<summary><em>test2</em></summary>',
+			'',
+			'</details>',
+			'<details open>',
+			'<summary><em>test1</em></summary>',
+			'',
+			'```',
+			'test1-1',
+			'test1-2',
+			'```',
+			'',
+			'</details>',
+			'<details open>',
+			'<summary><em>test2</em></summary>',
+			'',
+			'</details>',
 			'- README.md',
 			'Changed file',
 			'Create PR Action',
+			'technote-space',
+			'create-pr-action',
 			'https://github.com/technote-space/create-pr-action',
+			'https://github.com/marketplace/actions/create-pr-action',
 		].join('\n'));
 	});
 
