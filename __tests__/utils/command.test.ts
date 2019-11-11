@@ -336,7 +336,7 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, helper, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			'git merge --no-edit origin/master',
+			'git merge --no-edit origin/master || :',
 			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
 		]);
 	});
@@ -363,7 +363,7 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, helper, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			'git merge --no-edit origin/master',
+			'git merge --no-edit origin/master || :',
 			'rm -rdf ./*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
@@ -405,7 +405,7 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, helper, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			'git merge --no-edit origin/master',
+			'git merge --no-edit origin/master || :',
 			'rm -rdf ./*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,

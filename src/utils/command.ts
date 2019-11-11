@@ -109,7 +109,7 @@ const initDirectory = async(logger: Logger): Promise<void> => {
 export const merge = async(branch: string, logger: Logger): Promise<boolean> => {
 	logger.startProcess('Merging [%s] branch...', branch.replace(/^(refs\/)?heads/, ''));
 	const results = await helper.runCommand(getWorkspace(), [
-		`git merge --no-edit origin/${branch.replace(/^(refs\/)?heads/, '')}`,
+		`git merge --no-edit origin/${branch.replace(/^(refs\/)?heads/, '')} || :`,
 	]);
 
 	return !results[0].stdout.some(RegExp.prototype.test, /^CONFLICT /);

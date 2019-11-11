@@ -320,7 +320,7 @@ describe('execute', () => {
 			'[command]git status --short -uno',
 			'[command]git fetch --prune --no-recurse-submodules --depth=3 origin +refs/heads/master:refs/remotes/origin/master',
 			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
-			'[command]git merge --no-edit origin/master',
+			'[command]git merge --no-edit origin/master || :',
 			'::group::Pushing to hello/world@create-pr-action/create/test...',
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 		]);
