@@ -161,7 +161,7 @@ const runCommands = async(logger: Logger): Promise<{
 		stdout: string[];
 	}[];
 }> => {
-	const commands: string[] = [].concat.apply([], [
+	const commands: string[] = ([] as string[]).concat.apply([], [
 		getClearPackageCommands(),
 		getGlobalInstallPackagesCommands(getWorkspace()),
 		getInstallPackagesCommands(getWorkspace()),
