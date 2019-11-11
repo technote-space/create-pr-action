@@ -239,7 +239,20 @@ describe('execute', () => {
 		process.env.INPUT_PR_TITLE         = 'test: create pull request (${PR_NUMBER})';
 		process.env.INPUT_PR_BODY          = 'pull request body';
 		const mockStdout                   = spyOnStdout();
-		setChildProcessParams({stdout: 'M  __tests__/fixtures/test.md'});
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.endsWith('status --short -uno')) {
+					return 'M  __tests__/fixtures/test.md';
+				}
+				if (command.includes(' diff ')) {
+					return '__tests__/fixtures/test.md';
+				}
+				if (command.includes(' branch -a ')) {
+					return 'test';
+				}
+				return '';
+			},
+		});
 		setExists(true);
 
 		nock('https://api.github.com')
@@ -256,42 +269,33 @@ describe('execute', () => {
 		stdoutCalledWith(mockStdout, [
 			'::group::Initializing working directory...',
 			'[command]rm -rdf ./*',
-			'  >> M  __tests__/fixtures/test.md',
 			'::endgroup::',
 			'::group::Cloning [create-pr-action/create/test] branch from the remote repo...',
 			'[command]git clone --branch=create-pr-action/create/test --depth=3',
 			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
-			'  >> M  __tests__/fixtures/test.md',
+			'  >> test',
 			'> remote branch [create-pr-action/create/test] not found.',
-			'> now branch: M  __tests__/fixtures/test.md',
+			'> now branch: test',
 			'::endgroup::',
 			'::group::Cloning [change] from the remote repo...',
 			'[command]git clone --branch=change --depth=3',
 			'[command]git checkout -b "create-pr-action/create/test"',
-			'  >> M  __tests__/fixtures/test.md',
 			'[command]ls -la',
-			'  >> M  __tests__/fixtures/test.md',
 			'::endgroup::',
 			'::group::Running commands...',
 			'[command]yarn upgrade',
-			'  >> M  __tests__/fixtures/test.md',
 			'::endgroup::',
 			'::group::Checking diff...',
 			'[command]git add --all',
-			'  >> M  __tests__/fixtures/test.md',
 			'[command]git status --short -uno',
 			'::endgroup::',
 			'::group::Configuring git committer to be GitHub Actions <example@example.com>',
 			'[command]git config user.name "GitHub Actions"',
-			'  >> M  __tests__/fixtures/test.md',
 			'[command]git config user.email "example@example.com"',
-			'  >> M  __tests__/fixtures/test.md',
 			'::endgroup::',
 			'::group::Committing...',
 			'[command]git commit -qm "test: create pull request"',
-			'  >> M  __tests__/fixtures/test.md',
 			'[command]git show --stat-count=10 HEAD',
-			'  >> M  __tests__/fixtures/test.md',
 			'::endgroup::',
 			'::group::Pushing to hello/world@create-pr-action/create/test...',
 			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
