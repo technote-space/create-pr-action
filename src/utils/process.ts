@@ -29,6 +29,9 @@ const commonLogger          = new Logger(replaceDirectory);
 const getGitHelper = (logger: Logger): GitHelper => new GitHelper(logger);
 
 const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promise<void> => {
+	if (isActionPr(context)) {
+		return;
+	}
 	if (isCron(context)) {
 		commonLogger.startProcess('Target PullRequest Ref [%s]', getPrHeadRef(context));
 	}
@@ -87,9 +90,6 @@ export const execute = async(context: Context): Promise<void> => {
 	} else {
 		const logger = new Logger(replaceDirectory, true);
 		for await (const pull of getApiHelper(logger).pullsList({}, octokit, context)) {
-			if (isActionPr(context)) {
-				continue;
-			}
 			await createPr(logger, octokit, Object.assign({}, context, {
 				payload: {
 					'pull_request': {
