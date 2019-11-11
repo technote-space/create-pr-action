@@ -100,18 +100,18 @@ describe('execute', () => {
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=2')
 			.reply(200, () => ([]))
-			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fcreate%2Ftest')
+			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fnew-topic')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.patch('/repos/octocat/Hello-World/pulls/1347')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.update'))
-			.delete('/repos/octocat/Hello-World/git/refs/heads/create-pr-action/create/test')
+			.delete('/repos/octocat/Hello-World/git/refs/heads/create-pr-action/new-topic')
 			.reply(204);
 
 		await execute(context('', 'schedule'));
 
 		stdoutContains(mockStdout, [
 			'::group::Target PullRequest Ref [create-pr-action/new-topic]',
-			'[command]git clone --branch=create-pr-action/create/test --depth=3',
+			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
 			'> Checking diff...',
 			'[command]git add --all',
 			'[command]git status --short -uno',
@@ -119,12 +119,12 @@ describe('execute', () => {
 			'[command]git show --stat-count=10 HEAD',
 			'> Cloning [create-pr-action/new-topic] from the remote repo...',
 			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
-			'[command]git checkout -b "create-pr-action/create/test"',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
+			'[command]git checkout -b "create-pr-action/new-topic"',
+			'[command]git push "create-pr-action/new-topic":"refs/heads/create-pr-action/new-topic"',
 			'> Checking references diff...',
-			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
+			'[command]git diff origin/master...origin/create-pr-action/new-topic --name-only',
 			'[command]git fetch --prune --no-recurse-submodules --depth=3 origin +refs/heads/master:refs/remotes/origin/master',
-			'> Deleting reference... [refs/heads/create-pr-action/create/test]',
+			'> Deleting reference... [refs/heads/create-pr-action/new-topic]',
 		]);
 	});
 
@@ -246,7 +246,7 @@ describe('execute', () => {
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=2')
 			.reply(200, () => ([]))
-			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fcreate%2Ftest')
+			.get('/repos/octocat/Hello-World/pulls?head=octocat%3Acreate-pr-action%2Fnew-topic')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
 			.patch('/repos/octocat/Hello-World/pulls/1347')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.update'))
@@ -259,7 +259,7 @@ describe('execute', () => {
 
 		stdoutContains(mockStdout, [
 			'::group::Target PullRequest Ref [create-pr-action/new-topic]',
-			'[command]git clone --branch=create-pr-action/create/test --depth=3',
+			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
 			'> Checking diff...',
 			'[command]git add --all',
 			'[command]git status --short -uno',
@@ -267,12 +267,12 @@ describe('execute', () => {
 			'[command]git show --stat-count=10 HEAD',
 			'> Cloning [create-pr-action/new-topic] from the remote repo...',
 			'[command]git clone --branch=create-pr-action/new-topic --depth=3',
-			'[command]git checkout -b "create-pr-action/create/test"',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
+			'[command]git checkout -b "create-pr-action/new-topic"',
+			'[command]git push "create-pr-action/new-topic":"refs/heads/create-pr-action/new-topic"',
 			'> Checking references diff...',
-			'[command]git diff origin/master...origin/create-pr-action/create/test --name-only',
+			'[command]git diff origin/master...origin/create-pr-action/new-topic --name-only',
 			'[command]git fetch --prune --no-recurse-submodules --depth=3 origin +refs/heads/master:refs/remotes/origin/master',
-			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
+			'> Creating comment to PullRequest... [create-pr-action/new-topic] -> [heads/test]',
 		]);
 	});
 
