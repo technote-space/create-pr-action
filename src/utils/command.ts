@@ -20,7 +20,10 @@ import {
 
 const {getWorkspace, getRepository, getArrayInput, useNpm} = Utils;
 
-const helper = new GitHelper(new Logger(replaceDirectory), {filter: (line: string): boolean => filterGitStatus(line) && filterExtension(line)});
+const helper = new GitHelper(new Logger(replaceDirectory), {
+	depth: -1,
+	filter: (line: string): boolean => filterGitStatus(line) && filterExtension(line),
+});
 
 export const getApiHelper = (logger: Logger): ApiHelper => new ApiHelper(logger);
 
@@ -118,19 +121,19 @@ export const merge = async(branch: string, logger: Logger): Promise<boolean> => 
 	return !results[0].stdout.some(RegExp.prototype.test, /^CONFLICT /);
 };
 
-export const config = async(logger: Logger, helper: GitHelper): Promise<void> => {
+export const config = async(logger: Logger): Promise<void> => {
 	const name  = getCommitName();
 	const email = getCommitEmail();
 	logger.startProcess('Configuring git committer to be %s <%s>', name, email);
 	await helper.config(getWorkspace(), name, email);
 };
 
-export const commit = async(logger: Logger, helper: GitHelper): Promise<void> => {
+export const commit = async(logger: Logger): Promise<void> => {
 	logger.startProcess('Committing...');
 	await helper.makeCommit(getWorkspace(), getCommitMessage());
 };
 
-export const push = async(branchName: string, logger: Logger, helper: GitHelper, context: Context): Promise<void> => {
+export const push = async(branchName: string, logger: Logger, context: Context): Promise<void> => {
 	logger.startProcess('Pushing to %s@%s...', getRepository(context), branchName);
 	await helper.push(getWorkspace(), branchName, false, context);
 };
@@ -208,10 +211,10 @@ export const getChangedFilesForRebase = async(logger: Logger, context: Context):
 	return runCommands(logger);
 };
 
-export const resolveConflicts = async(branchName: string, logger: Logger, helper: GitHelper, octokit: GitHub, context: Context): Promise<void> => {
+export const resolveConflicts = async(branchName: string, logger: Logger, octokit: GitHub, context: Context): Promise<void> => {
 	if (await merge(getPrHeadRef(context), logger)) {
 		// succeeded to merge
-		await push(branchName, logger, helper, context);
+		await push(branchName, logger, context);
 	} else {
 		// failed to merge
 		const {files, output} = await getChangedFilesForRebase(logger, context);
@@ -219,9 +222,9 @@ export const resolveConflicts = async(branchName: string, logger: Logger, helper
 			await getApiHelper(logger).closePR(branchName, octokit, context);
 			return;
 		}
-		await config(logger, helper);
-		await commit(logger, helper);
-		await push(branchName, logger, helper, context);
+		await config(logger);
+		await commit(logger);
+		await push(branchName, logger, context);
 		await getApiHelper(logger).pullsCreateOrUpdate(branchName, {
 			title: getPrTitle(context),
 			body: getPrBody(files, output, context),

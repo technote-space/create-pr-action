@@ -16,7 +16,7 @@ import {
 	disableNetConnect,
 	getApiFixture,
 } from '@technote-space/github-action-test-helper';
-import { Logger, GitHelper } from '@technote-space/github-action-helper';
+import { Logger } from '@technote-space/github-action-helper';
 import {
 	clone,
 	checkBranch,
@@ -76,11 +76,11 @@ describe('clone', () => {
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} clone --branch=create-pr-action/test-branch --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} clone --branch=create-pr-action/test-branch https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 		]);
 		stdoutCalledWith(mockStdout, [
 			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
-			'[command]git clone --branch=create-pr-action/test-branch --depth=3',
+			'[command]git clone --branch=create-pr-action/test-branch',
 		]);
 	});
 });
@@ -127,7 +127,7 @@ describe('checkBranch', () => {
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
-			`git -C ${dir} clone --branch=test-branch --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} clone --branch=test-branch https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${dir} checkout -b "create-pr-action/test-branch"`,
 			'ls -la',
 		]);
@@ -316,7 +316,6 @@ describe('resolveConflicts', () => {
 	disableNetConnect(nock);
 	testEnv();
 	testChildProcess();
-	const helper = new GitHelper(logger);
 
 	it('should merge', async() => {
 		process.env.GITHUB_WORKSPACE       = path.resolve('test-dir');
@@ -333,7 +332,7 @@ describe('resolveConflicts', () => {
 		});
 		const mockExec = spyOnExec();
 
-		await resolveConflicts('test', logger, helper, octokit, context({}));
+		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
 			'git merge --no-edit origin/change || :',
@@ -360,12 +359,12 @@ describe('resolveConflicts', () => {
 			.get('/repos/hello/world/pulls?head=hello%3Atest')
 			.reply(200, () => []);
 
-		await resolveConflicts('test', logger, helper, octokit, context({}));
+		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
 			'git merge --no-edit origin/change || :',
 			'rm -rdf ./*',
-			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
 			'yarn upgrade',
 			'git add --all',
@@ -402,12 +401,12 @@ describe('resolveConflicts', () => {
 			.patch('/repos/hello/world/pulls/1347')
 			.reply(200, () => getApiFixture(rootDir, 'pulls.update'));
 
-		await resolveConflicts('test', logger, helper, octokit, context({}));
+		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
 			'git merge --no-edit origin/change || :',
 			'rm -rdf ./*',
-			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change --depth=3 https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
 			'yarn upgrade',
 			'git add --all',

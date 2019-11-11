@@ -1,7 +1,7 @@
 import { getInput } from '@actions/core';
 import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
-import { Logger, GitHelper, Utils } from '@technote-space/github-action-helper';
+import { Logger, Utils } from '@technote-space/github-action-helper';
 import {
 	getApiHelper,
 	getChangedFiles,
@@ -25,8 +25,6 @@ import { INTERVAL_MS } from '../constant';
 const {isPr, isCron, sleep} = Utils;
 const commonLogger          = new Logger(replaceDirectory);
 
-const getGitHelper = (logger: Logger): GitHelper => new GitHelper(logger);
-
 const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promise<void> => {
 	if (isActionPr(context)) {
 		return;
@@ -37,7 +35,6 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 
 	let mergeable    = false;
 	const branchName = getPrBranchName(context);
-	const helper     = getGitHelper(logger);
 
 	const {files, output} = await getChangedFiles(logger, context);
 	if (!files.length) {
@@ -50,9 +47,9 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 		mergeable = await isMergeable(pr.number, octokit, context);
 	} else {
 		// Commit local diffs
-		await config(logger, helper);
-		await commit(logger, helper);
-		await push(branchName, logger, helper, context);
+		await config(logger);
+		await commit(logger);
+		await push(branchName, logger, context);
 	}
 
 	if (!(await getRefDiff(getPrHeadRef(context), branchName, logger, context)).length) {
@@ -68,7 +65,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 
 	if (!mergeable) {
 		// Resolve conflicts if PR is not mergeable
-		await resolveConflicts(branchName, logger, helper, octokit, context);
+		await resolveConflicts(branchName, logger, octokit, context);
 	}
 
 	if (isCron(context)) {
