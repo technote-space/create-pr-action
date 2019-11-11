@@ -16,6 +16,7 @@ import {
 import {
 	replaceDirectory,
 	getPrBranchName,
+	isActionPr,
 	isClosePR,
 	getPrBaseRef,
 	getPrHeadRef,
@@ -86,6 +87,9 @@ export const execute = async(context: Context): Promise<void> => {
 	} else {
 		const logger = new Logger(replaceDirectory, true);
 		for await (const pull of getApiHelper(logger).pullsList({}, octokit, context)) {
+			if (isActionPr(context)) {
+				continue;
+			}
 			await createPr(logger, octokit, Object.assign({}, context, {
 				payload: {
 					'pull_request': {
