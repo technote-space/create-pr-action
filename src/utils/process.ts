@@ -18,7 +18,6 @@ import {
 	getPrBranchName,
 	isActionPr,
 	isClosePR,
-	getPrBaseRef,
 	getPrHeadRef,
 } from './misc';
 import { INTERVAL_MS } from '../constant';
@@ -56,7 +55,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 		await push(branchName, logger, helper, context);
 	}
 
-	if (!(await getRefDiff(getPrBaseRef(context), branchName, logger, context)).length) {
+	if (!(await getRefDiff(getPrHeadRef(context), branchName, logger, context)).length) {
 		// Close if there is no diff
 		await getApiHelper(logger).closePR(branchName, octokit, context);
 		return;

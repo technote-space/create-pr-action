@@ -8,7 +8,6 @@ import {
 	replaceDirectory,
 	getPrBranchPrefix,
 	getPrBranchName,
-	getPrBaseRef,
 	getPrHeadRef,
 	isActionPr,
 	getPrTitle,
@@ -270,24 +269,6 @@ describe('getPrHeadRef', () => {
 
 	it('should return empty', () => {
 		expect(getPrHeadRef(getContext({}))).toBe('');
-	});
-});
-
-describe('getPrBaseRef', () => {
-	it('should get pr base ref', () => {
-		expect(getPrBaseRef(getContext({
-			payload: {
-				'pull_request': {
-					base: {
-						ref: 'master',
-					},
-				},
-			},
-		}))).toBe('master');
-	});
-
-	it('should return empty', () => {
-		expect(getPrBaseRef(getContext({}))).toBe('');
 	});
 });
 

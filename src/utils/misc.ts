@@ -62,8 +62,6 @@ const replaceContextVariables = (string: string, context: Context): string => re
 
 export const getPrBranchPrefix = (): string => getInput('PR_BRANCH_PREFIX') || DEFAULT_PR_BRANCH_PREFIX;
 
-export const getPrBaseRef = (context: Context): string => context.payload.pull_request ? context.payload.pull_request.base.ref : '';
-
 export const getPrHeadRef = (context: Context): string => context.payload.pull_request ? context.payload.pull_request.head.ref : '';
 
 export const isActionPr = (context: Context): boolean => (new RegExp('^' + escapeRegExp(getPrBranchPrefix()))).test(getPrHeadRef(context));
