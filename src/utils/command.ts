@@ -12,7 +12,10 @@ import {
 	getPrBranchName,
 	getGitFilterStatus,
 	getCommitName,
-	getCommitEmail, getCommitMessage, getPrTitle, getPrBody, getPrBaseRef,
+	getCommitEmail,
+	getCommitMessage,
+	getPrTitle,
+	getPrBody,
 } from './misc';
 
 const {getWorkspace, getRepository, getArrayInput, useNpm} = Utils;
@@ -206,7 +209,7 @@ export const getChangedFilesForRebase = async(logger: Logger, context: Context):
 };
 
 export const resolveConflicts = async(branchName: string, logger: Logger, helper: GitHelper, octokit: GitHub, context: Context): Promise<void> => {
-	if (await merge(getPrBaseRef(context), logger)) {
+	if (await merge(getPrHeadRef(context), logger)) {
 		// succeeded to merge
 		await push(branchName, logger, helper, context);
 	} else {
