@@ -97,6 +97,8 @@ export const execute = async(context: Context): Promise<void> => {
 						id: pull.id,
 						head: pull.head,
 						base: pull.base,
+						title: pull.title,
+						'html_url': pull.html_url,
 					},
 				},
 				repo: {
