@@ -33,17 +33,20 @@ export const clone = async(logger: Logger, context: Context): Promise<void> => {
 	await helper.cloneBranch(getWorkspace(), getPrBranchName(context), context);
 };
 
-export const checkBranch = async(logger: Logger, context: Context): Promise<void> => {
+export const checkBranch = async(logger: Logger, context: Context): Promise<boolean> => {
 	const clonedBranch = await helper.getCurrentBranchName(getWorkspace());
-	if (getPrBranchName(context) !== clonedBranch) {
-		logger.info('remote branch [%s] not found.', getPrBranchName(context));
-		logger.info('now branch: %s', clonedBranch);
-
-		logger.startProcess('Cloning [%s] from the remote repo...', getPrHeadRef(context));
-		await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
-		await helper.createBranch(getWorkspace(), getPrBranchName(context));
+	if (getPrBranchName(context) === clonedBranch) {
+		await helper.runCommand(getWorkspace(), ['ls -la']);
+		return true;
 	}
+
+	logger.info('remote branch [%s] not found.', getPrBranchName(context));
+	logger.info('now branch: %s', clonedBranch);
+	logger.startProcess('Cloning [%s] from the remote repo...', getPrHeadRef(context));
+	await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
+	await helper.createBranch(getWorkspace(), getPrBranchName(context));
 	await helper.runCommand(getWorkspace(), ['ls -la']);
+	return false;
 };
 
 const getClearPackageCommands = (): string[] => {
@@ -201,7 +204,9 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 }> => {
 	await initDirectory(logger);
 	await clone(logger, context);
-	await checkBranch(logger, context);
+	if (await checkBranch(logger, context)) {
+		await merge(getPrHeadRef(context), logger);
+	}
 
 	return runCommands(logger);
 };
