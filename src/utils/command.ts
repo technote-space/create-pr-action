@@ -142,6 +142,11 @@ export const push = async(branchName: string, logger: Logger, context: Context):
 	await helper.push(getWorkspace(), branchName, false, context);
 };
 
+const forcePush = async(branchName: string, logger: Logger, context: Context): Promise<void> => {
+	logger.startProcess('Pushing to %s@%s...', getRepository(context), branchName);
+	await helper.forcePush(getWorkspace(), branchName, context);
+};
+
 export const isMergeable = async(number: number, octokit: GitHub, context: Context): Promise<boolean> => (await octokit.pulls.get({
 	owner: context.repo.owner,
 	repo: context.repo.repo,
@@ -227,7 +232,7 @@ export const resolveConflicts = async(branchName: string, logger: Logger, octoki
 			return;
 		}
 		await commit(logger);
-		await push(branchName, logger, context);
+		await forcePush(branchName, logger, context);
 		await getApiHelper(logger).pullsCreateOrUpdate(branchName, {
 			title: getPrTitle(context),
 			body: getPrBody(files, output, context),

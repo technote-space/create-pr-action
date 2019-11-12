@@ -425,7 +425,7 @@ describe('resolveConflicts', () => {
 			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
 			`git -C ${process.env.GITHUB_WORKSPACE} commit -qm "commit message"`,
 			`git -C ${process.env.GITHUB_WORKSPACE} show --stat-count=10 HEAD`,
-			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
+			`git -C ${process.env.GITHUB_WORKSPACE} push --force "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
 		]);
 	});
 });
