@@ -108,7 +108,7 @@ export const getRefDiff = async(base: string, compare: string, logger: Logger, c
 const initDirectory = async(logger: Logger): Promise<void> => {
 	logger.startProcess('Initializing working directory...');
 
-	await helper.runCommand(getWorkspace(), ['rm -rdf ./*']);
+	await helper.runCommand(getWorkspace(), ['rm -rdf ./* ./.[!.]*']);
 	fs.mkdirSync(getWorkspace(), {recursive: true});
 };
 

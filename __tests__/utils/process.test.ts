@@ -120,7 +120,7 @@ describe('execute', () => {
 
 		stdoutCalledWith(mockStdout, [
 			'::group::Initializing working directory...',
-			'[command]rm -rdf ./*',
+			'[command]rm -rdf ./* ./.[!.]*',
 			'::endgroup::',
 			'::group::Cloning [create-pr-action/create/test] branch from the remote repo...',
 			'[command]git clone --branch=create-pr-action/create/test',
@@ -198,7 +198,7 @@ describe('execute', () => {
 
 		stdoutCalledWith(mockStdout, [
 			'::group::Initializing working directory...',
-			'[command]rm -rdf ./*',
+			'[command]rm -rdf ./* ./.[!.]*',
 			'  >> stdout',
 			'::endgroup::',
 			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
@@ -268,7 +268,7 @@ describe('execute', () => {
 
 		stdoutCalledWith(mockStdout, [
 			'::group::Initializing working directory...',
-			'[command]rm -rdf ./*',
+			'[command]rm -rdf ./* ./.[!.]*',
 			'::endgroup::',
 			'::group::Cloning [create-pr-action/create/test] branch from the remote repo...',
 			'[command]git clone --branch=create-pr-action/create/test',
@@ -360,7 +360,7 @@ describe('execute', () => {
 		stdoutCalledWith(mockStdout, [
 			'::group::Target PullRequest Ref [feature/new-topic]',
 			'> Initializing working directory...',
-			'[command]rm -rdf ./*',
+			'[command]rm -rdf ./* ./.[!.]*',
 			'> Cloning [create-pr-action/create/test] branch from the remote repo...',
 			'[command]git clone --branch=create-pr-action/create/test',
 			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
@@ -391,7 +391,7 @@ describe('execute', () => {
 			'::endgroup::',
 			'::group::Target PullRequest Ref [feature/new-topic]',
 			'> Initializing working directory...',
-			'[command]rm -rdf ./*',
+			'[command]rm -rdf ./* ./.[!.]*',
 			'> Cloning [create-pr-action/create/test] branch from the remote repo...',
 			'[command]git clone --branch=create-pr-action/create/test',
 			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
@@ -461,7 +461,7 @@ describe('execute', () => {
 
 		stdoutCalledWith(mockStdout, [
 			'::group::Initializing working directory...',
-			'[command]rm -rdf ./*',
+			'[command]rm -rdf ./* ./.[!.]*',
 			'::endgroup::',
 			'::group::Cloning [create-pr-action/create/test] branch from the remote repo...',
 			'[command]git clone --branch=create-pr-action/create/test',

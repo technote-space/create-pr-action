@@ -363,7 +363,7 @@ describe('resolveConflicts', () => {
 
 		execCalledWith(mockExec, [
 			'git merge --no-edit origin/change || :',
-			'rm -rdf ./*',
+			'rm -rdf ./* ./.[!.]*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
 			'yarn upgrade',
@@ -405,7 +405,7 @@ describe('resolveConflicts', () => {
 
 		execCalledWith(mockExec, [
 			'git merge --no-edit origin/change || :',
-			'rm -rdf ./*',
+			'rm -rdf ./* ./.[!.]*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
 			'yarn upgrade',
