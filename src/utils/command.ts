@@ -102,7 +102,7 @@ export const getDiff = async(logger: Logger): Promise<string[]> => {
 export const getRefDiff = async(base: string, compare: string, logger: Logger, context: Context): Promise<string[]> => {
 	logger.startProcess('Checking references diff...');
 	await helper.fetchBranch(getWorkspace(), base, context);
-	return (await helper.getRefDiff(getWorkspace(), base, compare, getGitFilterStatus())).filter(filterExtension);
+	return (await helper.getRefDiff(getWorkspace(), base, compare, getGitFilterStatus(), '..')).filter(filterExtension);
 };
 
 const initDirectory = async(logger: Logger): Promise<void> => {
