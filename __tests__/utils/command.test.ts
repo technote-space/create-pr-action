@@ -322,6 +322,8 @@ describe('resolveConflicts', () => {
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
 		setChildProcessParams({
 			stdout: (command: string): string => {
 				if (command.startsWith('git merge')) {
@@ -335,6 +337,8 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
 			'git merge --no-edit origin/change || :',
 			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
 		]);
@@ -345,6 +349,8 @@ describe('resolveConflicts', () => {
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
 		setChildProcessParams({
 			stdout: (command: string): string => {
 				if (command.startsWith('git merge')) {
@@ -362,6 +368,8 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
 			'git merge --no-edit origin/change || :',
 			'rm -rdf ./* ./.[!.]*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
@@ -404,6 +412,8 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
+			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
 			'git merge --no-edit origin/change || :',
 			'rm -rdf ./* ./.[!.]*',
 			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,

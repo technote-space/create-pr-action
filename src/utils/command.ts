@@ -112,7 +112,16 @@ const initDirectory = async(logger: Logger): Promise<void> => {
 	fs.mkdirSync(getWorkspace(), {recursive: true});
 };
 
+export const config = async(logger: Logger): Promise<void> => {
+	const name  = getCommitName();
+	const email = getCommitEmail();
+	logger.startProcess('Configuring git committer to be %s <%s>', name, email);
+	await helper.config(getWorkspace(), name, email);
+};
+
 export const merge = async(branch: string, logger: Logger): Promise<boolean> => {
+	await config(logger);
+
 	logger.startProcess('Merging [%s] branch...', branch.replace(/^(refs\/)?heads/, ''));
 	const results = await helper.runCommand(getWorkspace(), [
 		`git merge --no-edit origin/${branch.replace(/^(refs\/)?heads/, '')} || :`,
@@ -121,14 +130,9 @@ export const merge = async(branch: string, logger: Logger): Promise<boolean> => 
 	return !results[0].stdout.some(RegExp.prototype.test, /^CONFLICT /);
 };
 
-export const config = async(logger: Logger): Promise<void> => {
-	const name  = getCommitName();
-	const email = getCommitEmail();
-	logger.startProcess('Configuring git committer to be %s <%s>', name, email);
-	await helper.config(getWorkspace(), name, email);
-};
-
 export const commit = async(logger: Logger): Promise<void> => {
+	await config(logger);
+
 	logger.startProcess('Committing...');
 	await helper.makeCommit(getWorkspace(), getCommitMessage());
 };
@@ -222,7 +226,6 @@ export const resolveConflicts = async(branchName: string, logger: Logger, octoki
 			await getApiHelper(logger).closePR(branchName, octokit, context);
 			return;
 		}
-		await config(logger);
 		await commit(logger);
 		await push(branchName, logger, context);
 		await getApiHelper(logger).pullsCreateOrUpdate(branchName, {

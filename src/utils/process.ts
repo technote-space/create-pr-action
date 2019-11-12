@@ -47,7 +47,6 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 		mergeable = await isMergeable(pr.number, octokit, context);
 	} else {
 		// Commit local diffs
-		await config(logger);
 		await commit(logger);
 		await push(branchName, logger, context);
 	}
