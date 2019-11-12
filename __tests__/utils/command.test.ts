@@ -97,11 +97,7 @@ describe('checkBranch', () => {
 		const mockExec = spyOnExec();
 		setExists(true);
 
-		await checkBranch(logger, context({
-			head: {
-				ref: 'test-branch',
-			},
-		}));
+		expect(await checkBranch(logger, context({}))).toBe(true);
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
@@ -118,16 +114,12 @@ describe('checkBranch', () => {
 		const mockExec = spyOnExec();
 		setExists(true);
 
-		await checkBranch(logger, context({
-			head: {
-				ref: 'test-branch',
-			},
-		}));
+		expect(await checkBranch(logger, context({}))).toBe(false);
 
 		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
-			`git -C ${dir} clone --branch=test-branch https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			`git -C ${dir} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
 			`git -C ${dir} checkout -b "create-pr-action/test-branch"`,
 			'ls -la',
 		]);
@@ -219,7 +211,7 @@ describe('getChangedFiles', () => {
 		});
 	});
 
-	it('should return empty', async() => {
+	it('should return empty 1', async() => {
 		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
 		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
@@ -258,6 +250,227 @@ describe('getChangedFiles', () => {
 				},
 			],
 		});
+	});
+
+	it('should return empty 2', async() => {
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
+		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
+		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
+		process.env.INPUT_COMMIT_NAME             = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL            = 'example@example.com';
+		const mockStdout                          = spyOnStdout();
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.includes(' branch -a ')) {
+					return 'create-pr-action/test-branch';
+				}
+				if (command.startsWith('git merge')) {
+					return 'Auto-merging merge.txt\nCONFLICT (content): Merge conflict in merge.txt\nAutomatic merge failed; fix conflicts and then commit the result.';
+				}
+				return '';
+			},
+		});
+		setExists(true);
+
+		expect(await getChangedFiles(logger, _context)).toEqual({
+			files: [],
+			output: [
+				{
+					command: 'sudo npm install -g npm-check-updates',
+					stdout: [''],
+				},
+				{
+					command: 'npm install --save test1 test2',
+					stdout: [''],
+				},
+				{
+					command: 'npm update',
+					stdout: [''],
+				},
+			],
+		});
+		stdoutCalledWith(mockStdout, [
+			'::group::Initializing working directory...',
+			'[command]rm -rdf ./* ./.[!.]*',
+			'::endgroup::',
+			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
+			'[command]git clone --branch=create-pr-action/test-branch',
+			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
+			'  >> create-pr-action/test-branch',
+			'[command]ls -la',
+			'::endgroup::',
+			'::group::Configuring git committer to be GitHub Actions <example@example.com>',
+			'[command]git config user.name "GitHub Actions"',
+			'[command]git config user.email "example@example.com"',
+			'::endgroup::',
+			'::group::Merging [create-pr-action/test-branch] branch...',
+			'[command]git merge --no-edit origin/create-pr-action/test-branch || :',
+			'  >> Auto-merging merge.txt',
+			'  >> CONFLICT (content): Merge conflict in merge.txt',
+			'  >> Automatic merge failed; fix conflicts and then commit the result.',
+			'::endgroup::',
+			'::group::Running commands...',
+			'[command]sudo npm install -g npm-check-updates',
+			'[command]npm install --save test1 test2',
+			'[command]npm update',
+			'::endgroup::',
+			'::group::Checking diff...',
+			'[command]git add --all',
+			'[command]git status --short -uno',
+		]);
+	});
+
+	it('should return empty 3', async() => {
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
+		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
+		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
+		process.env.INPUT_COMMIT_NAME             = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL            = 'example@example.com';
+		const mockStdout                          = spyOnStdout();
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.includes(' branch -a ')) {
+					return 'create-pr-action/test-branch';
+				}
+				if (command.startsWith('git merge')) {
+					return 'Already up to date.';
+				}
+				return '';
+			},
+		});
+		setExists(true);
+
+		expect(await getChangedFiles(logger, _context)).toEqual({
+			files: [],
+			output: [
+				{
+					command: 'sudo npm install -g npm-check-updates',
+					stdout: [''],
+				},
+				{
+					command: 'npm install --save test1 test2',
+					stdout: [''],
+				},
+				{
+					command: 'npm update',
+					stdout: [''],
+				},
+			],
+		});
+		stdoutCalledWith(mockStdout, [
+			'::group::Initializing working directory...',
+			'[command]rm -rdf ./* ./.[!.]*',
+			'::endgroup::',
+			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
+			'[command]git clone --branch=create-pr-action/test-branch',
+			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
+			'  >> create-pr-action/test-branch',
+			'[command]ls -la',
+			'::endgroup::',
+			'::group::Configuring git committer to be GitHub Actions <example@example.com>',
+			'[command]git config user.name "GitHub Actions"',
+			'[command]git config user.email "example@example.com"',
+			'::endgroup::',
+			'::group::Merging [create-pr-action/test-branch] branch...',
+			'[command]git merge --no-edit origin/create-pr-action/test-branch || :',
+			'  >> Already up to date.',
+			'::endgroup::',
+			'::group::Checking references diff...',
+			'[command]git diff HEAD..origin/create-pr-action/test-branch --name-only',
+			'::endgroup::',
+			'::group::Running commands...',
+			'[command]sudo npm install -g npm-check-updates',
+			'[command]npm install --save test1 test2',
+			'[command]npm update',
+			'::endgroup::',
+			'::group::Checking diff...',
+			'[command]git add --all',
+			'[command]git status --short -uno',
+		]);
+	});
+
+	it('should return empty 4', async() => {
+		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
+		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
+		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
+		process.env.INPUT_COMMIT_NAME             = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL            = 'example@example.com';
+		const mockStdout                          = spyOnStdout();
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.includes(' branch -a ')) {
+					return 'create-pr-action/test-branch';
+				}
+				if (command.includes(' diff ')) {
+					return '__tests__/fixtures/test.md';
+				}
+				if (command.startsWith('git merge')) {
+					return 'Already up to date.';
+				}
+				return '';
+			},
+		});
+		setExists(true);
+
+		expect(await getChangedFiles(logger, _context)).toEqual({
+			files: [],
+			output: [
+				{
+					command: 'sudo npm install -g npm-check-updates',
+					stdout: [''],
+				},
+				{
+					command: 'npm install --save test1 test2',
+					stdout: [''],
+				},
+				{
+					command: 'npm update',
+					stdout: [''],
+				},
+			],
+		});
+		stdoutCalledWith(mockStdout, [
+			'::group::Initializing working directory...',
+			'[command]rm -rdf ./* ./.[!.]*',
+			'::endgroup::',
+			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
+			'[command]git clone --branch=create-pr-action/test-branch',
+			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
+			'  >> create-pr-action/test-branch',
+			'[command]ls -la',
+			'::endgroup::',
+			'::group::Configuring git committer to be GitHub Actions <example@example.com>',
+			'[command]git config user.name "GitHub Actions"',
+			'[command]git config user.email "example@example.com"',
+			'::endgroup::',
+			'::group::Merging [create-pr-action/test-branch] branch...',
+			'[command]git merge --no-edit origin/create-pr-action/test-branch || :',
+			'  >> Already up to date.',
+			'::endgroup::',
+			'::group::Checking references diff...',
+			'[command]git diff HEAD..origin/create-pr-action/test-branch --name-only',
+			'::endgroup::',
+			'::group::Pushing to hello/world@create-pr-action/test-branch...',
+			'[command]git push "create-pr-action/test-branch":"refs/heads/create-pr-action/test-branch"',
+			'::endgroup::',
+			'::group::Running commands...',
+			'[command]sudo npm install -g npm-check-updates',
+			'[command]npm install --save test1 test2',
+			'[command]npm update',
+			'::endgroup::',
+			'::group::Checking diff...',
+			'[command]git add --all',
+			'[command]git status --short -uno',
+		]);
 	});
 });
 

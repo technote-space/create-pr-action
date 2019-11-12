@@ -98,14 +98,15 @@ const getExecuteCommands = (): string[] => getArrayInput('EXECUTE_COMMANDS', tru
 
 export const getDiff = async(logger: Logger): Promise<string[]> => {
 	logger.startProcess('Checking diff...');
+
 	await helper.runCommand(getWorkspace(), ['git add --all']);
 	return await helper.getDiff(getWorkspace());
 };
 
-export const getRefDiff = async(base: string, compare: string, logger: Logger, context: Context): Promise<string[]> => {
+export const getRefDiff = async(compare: string, logger: Logger): Promise<string[]> => {
 	logger.startProcess('Checking references diff...');
-	await helper.fetchBranch(getWorkspace(), base, context);
-	return (await helper.getRefDiff(getWorkspace(), base, compare, getGitFilterStatus(), '..')).filter(filterExtension);
+
+	return (await helper.getRefDiff(getWorkspace(), 'HEAD', compare, getGitFilterStatus(), '..')).filter(filterExtension);
 };
 
 const initDirectory = async(logger: Logger): Promise<void> => {
@@ -118,7 +119,9 @@ const initDirectory = async(logger: Logger): Promise<void> => {
 export const config = async(logger: Logger): Promise<void> => {
 	const name  = getCommitName();
 	const email = getCommitEmail();
+
 	logger.startProcess('Configuring git committer to be %s <%s>', name, email);
+
 	await helper.config(getWorkspace(), name, email);
 };
 
@@ -142,11 +145,13 @@ export const commit = async(logger: Logger): Promise<void> => {
 
 export const push = async(branchName: string, logger: Logger, context: Context): Promise<void> => {
 	logger.startProcess('Pushing to %s@%s...', getRepository(context), branchName);
+
 	await helper.push(getWorkspace(), branchName, false, context);
 };
 
 const forcePush = async(branchName: string, logger: Logger, context: Context): Promise<void> => {
 	logger.startProcess('Pushing to %s@%s...', getRepository(context), branchName);
+
 	await helper.forcePush(getWorkspace(), branchName, context);
 };
 
@@ -205,7 +210,11 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 	await initDirectory(logger);
 	await clone(logger, context);
 	if (await checkBranch(logger, context)) {
-		await merge(getPrHeadRef(context), logger);
+		if (await merge(getPrHeadRef(context), logger)) {
+			if ((await getRefDiff(getPrHeadRef(context), logger)).length) {
+				await push(getPrBranchName(context), logger, context);
+			}
+		}
 	}
 
 	return runCommands(logger);

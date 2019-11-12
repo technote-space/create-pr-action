@@ -50,7 +50,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 		await push(branchName, logger, context);
 	}
 
-	if (!(await getRefDiff(getPrHeadRef(context), branchName, logger, context)).length) {
+	if (!(await getRefDiff(branchName, logger)).length) {
 		// Close if there is no diff
 		await getApiHelper(logger).closePR(branchName, octokit, context);
 		return;
