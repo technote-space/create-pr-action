@@ -6,7 +6,6 @@ import {
 	getApiHelper,
 	getChangedFiles,
 	getRefDiff,
-	config,
 	commit,
 	push,
 	isMergeable,
