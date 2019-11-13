@@ -74,9 +74,8 @@ describe('clone', () => {
 			},
 		}));
 
-		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} clone --branch=create-pr-action/test-branch https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
+			'git clone --branch=create-pr-action/test-branch https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :',
 		]);
 		stdoutCalledWith(mockStdout, [
 			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
@@ -99,9 +98,8 @@ describe('checkBranch', () => {
 
 		expect(await checkBranch(logger, context({}))).toBe(true);
 
-		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
+			'git branch -a | grep -E \'^\\*\' | cut -b 3-',
 			'ls -la',
 		]);
 	});
@@ -116,11 +114,10 @@ describe('checkBranch', () => {
 
 		expect(await checkBranch(logger, context({}))).toBe(false);
 
-		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
-			`git -C ${dir} branch -a | grep -E '^\\*' | cut -b 3-`,
-			`git -C ${dir} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
-			`git -C ${dir} checkout -b "create-pr-action/test-branch"`,
+			'git branch -a | grep -E \'^\\*\' | cut -b 3-',
+			'git clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :',
+			'git checkout -b "create-pr-action/test-branch"',
 			'ls -la',
 		]);
 	});
@@ -139,10 +136,9 @@ describe('getDiff', () => {
 
 		expect(await getDiff(logger)).toEqual(['test2.md']);
 
-		const dir = path.resolve('test-dir');
 		execCalledWith(mockExec, [
 			'git add --all',
-			`git -C ${dir} status --short -uno`,
+			'git status --short -uno',
 		]);
 	});
 });
@@ -460,7 +456,7 @@ describe('getChangedFiles', () => {
 			'[command]git diff HEAD..origin/create-pr-action/test-branch --name-only',
 			'::endgroup::',
 			'::group::Pushing to hello/world@create-pr-action/test-branch...',
-			'[command]git push "create-pr-action/test-branch":"refs/heads/create-pr-action/test-branch"',
+			'[command]git push origin "create-pr-action/test-branch":"refs/heads/create-pr-action/test-branch"',
 			'::endgroup::',
 			'::group::Running commands...',
 			'[command]sudo npm install -g npm-check-updates',
@@ -550,10 +546,10 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
+			'git config user.name "GitHub Actions"',
+			'git config user.email "example@example.com"',
 			'git merge --no-edit origin/change || :',
-			`git -C ${process.env.GITHUB_WORKSPACE} push "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
+			'git push https://octocat:test-token@github.com/hello/world.git "test":"refs/heads/test" > /dev/null 2>&1',
 		]);
 	});
 
@@ -581,15 +577,15 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
+			'git config user.name "GitHub Actions"',
+			'git config user.email "example@example.com"',
 			'git merge --no-edit origin/change || :',
 			'rm -rdf ./* ./.[!.]*',
-			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
-			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
+			'git clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :',
+			'git checkout -b "create-pr-action/test-branch"',
 			'yarn upgrade',
 			'git add --all',
-			`git -C ${process.env.GITHUB_WORKSPACE} status --short -uno`,
+			'git status --short -uno',
 		]);
 	});
 
@@ -625,20 +621,20 @@ describe('resolveConflicts', () => {
 		await resolveConflicts('test', logger, octokit, context({}));
 
 		execCalledWith(mockExec, [
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
+			'git config user.name "GitHub Actions"',
+			'git config user.email "example@example.com"',
 			'git merge --no-edit origin/change || :',
 			'rm -rdf ./* ./.[!.]*',
-			`git -C ${process.env.GITHUB_WORKSPACE} clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :`,
-			`git -C ${process.env.GITHUB_WORKSPACE} checkout -b "create-pr-action/test-branch"`,
+			'git clone --branch=change https://octocat:test-token@github.com/hello/world.git . > /dev/null 2>&1 || :',
+			'git checkout -b "create-pr-action/test-branch"',
 			'yarn upgrade',
 			'git add --all',
-			`git -C ${process.env.GITHUB_WORKSPACE} status --short -uno`,
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.name "GitHub Actions"`,
-			`git -C ${process.env.GITHUB_WORKSPACE} config user.email "example@example.com"`,
-			`git -C ${process.env.GITHUB_WORKSPACE} commit -qm "commit message"`,
-			`git -C ${process.env.GITHUB_WORKSPACE} show --stat-count=10 HEAD`,
-			`git -C ${process.env.GITHUB_WORKSPACE} push --force "https://octocat:test-token@github.com/hello/world.git" "test":"refs/heads/test" > /dev/null 2>&1`,
+			'git status --short -uno',
+			'git config user.name "GitHub Actions"',
+			'git config user.email "example@example.com"',
+			'git commit -qm "commit message"',
+			'git show --stat-count=10 HEAD',
+			'git push --force https://octocat:test-token@github.com/hello/world.git "test":"refs/heads/test" > /dev/null 2>&1',
 		]);
 	});
 });
