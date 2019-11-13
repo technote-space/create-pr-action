@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/upgrade-packages-action",
-  "version": "1.0.0.27",
+  "version": "1.0.0.28",
   "description": "Template for GitHub actions.",
   "author": "Technote <technote.space@gmail.com> (https://technote.space)",
   "license": "MIT",
