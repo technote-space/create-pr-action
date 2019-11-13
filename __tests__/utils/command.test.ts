@@ -263,7 +263,7 @@ describe('getChangedFiles', () => {
 				if (command.includes(' branch -a ')) {
 					return 'create-pr-action/test-branch';
 				}
-				if (command.startsWith('git merge')) {
+				if (command.startsWith('git merge --no-edit')) {
 					return 'Auto-merging merge.txt\nCONFLICT (content): Merge conflict in merge.txt\nAutomatic merge failed; fix conflicts and then commit the result.';
 				}
 				return '';
@@ -307,6 +307,9 @@ describe('getChangedFiles', () => {
 			'  >> Auto-merging merge.txt',
 			'  >> CONFLICT (content): Merge conflict in merge.txt',
 			'  >> Automatic merge failed; fix conflicts and then commit the result.',
+			'::endgroup::',
+			'::group::Canceling merge...',
+			'[command]git merge --abort',
 			'::endgroup::',
 			'::group::Running commands...',
 			'[command]sudo npm install -g npm-check-updates',

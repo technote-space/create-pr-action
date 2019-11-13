@@ -137,6 +137,11 @@ export const merge = async(branch: string, logger: Logger): Promise<boolean> => 
 	return !results[0].stdout.some(RegExp.prototype.test, /^CONFLICT /);
 };
 
+export const abortMerge = async(logger: Logger): Promise<void> => {
+	logger.startProcess('Canceling merge...');
+	await helper.runCommand(getWorkspace(), 'git merge --abort');
+};
+
 export const commit = async(logger: Logger): Promise<void> => {
 	await config(logger);
 
@@ -215,6 +220,8 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 			if ((await getRefDiff(getPrHeadRef(context), logger)).length) {
 				await push(getPrBranchName(context), logger, context);
 			}
+		} else {
+			await abortMerge(logger);
 		}
 	}
 
