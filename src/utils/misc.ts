@@ -1,11 +1,13 @@
 import { Context } from '@actions/github/lib/context';
-import { Utils } from '@technote-space/github-action-helper';
+import { Utils, ContextHelper } from '@technote-space/github-action-helper';
 import { isTargetEvent, isTargetLabels } from '@technote-space/filter-github-action';
 import { getInput } from '@actions/core' ;
 import moment from 'moment';
 import { TARGET_EVENTS, DEFAULT_PR_BRANCH_PREFIX, ACTION_URL, ACTION_NAME, ACTION_OWNER, ACTION_REPO, ACTION_MARKETPLACE_URL } from '../constant';
 
-const {getWorkspace, getArrayInput, getBoolValue, isPr, escapeRegExp, replaceAll} = Utils;
+const {getWorkspace, getArrayInput, getBoolValue} = Utils;
+const {escapeRegExp, replaceAll, getPrefixRegExp} = Utils;
+const {isPr}                                      = ContextHelper;
 
 export const getCommitMessage = (): string => getInput('COMMIT_MESSAGE', {required: true});
 
@@ -62,13 +64,11 @@ const replaceContextVariables = (string: string, context: Context): string => re
 
 export const getPrBranchPrefix = (): string => getInput('PR_BRANCH_PREFIX') || DEFAULT_PR_BRANCH_PREFIX;
 
-export const getPrBranchName = (context: Context): string => getPrBranchPrefix() + replaceContextVariables(getInput('PR_BRANCH_NAME', {required: true}), context);
-
-export const getPrBaseRef = (context: Context): string => context.payload.pull_request ? context.payload.pull_request.base.ref : '';
-
 export const getPrHeadRef = (context: Context): string => context.payload.pull_request ? context.payload.pull_request.head.ref : '';
 
 export const isActionPr = (context: Context): boolean => (new RegExp('^' + escapeRegExp(getPrBranchPrefix()))).test(getPrHeadRef(context));
+
+export const getPrBranchName = (context: Context): string => getPrBranchPrefix() + replaceContextVariables(getInput('PR_BRANCH_NAME', {required: true}), context);
 
 export const getPrTitle = (context: Context): string => replaceContextVariables(getInput('PR_TITLE', {required: true}), context);
 
@@ -153,6 +153,14 @@ export const isDisabledDeletePackage = (): boolean => !getBoolValue(getInput('DE
 
 export const isClosePR = (context: Context): boolean => isPr(context) && context.payload.action === 'closed';
 
+export const isTargetBranch = (branchName: string): boolean => {
+	const prefix = getInput('TARGET_BRANCH_PREFIX');
+	if (prefix) {
+		return getPrefixRegExp(prefix).test(branchName);
+	}
+	return true;
+};
+
 export const isTargetContext = (context: Context): boolean => {
 	if (!isTargetEvent(TARGET_EVENTS, context)) {
 		return false;
@@ -174,6 +182,7 @@ export const filterGitStatus = (line: string): boolean => {
 		if (!targets) {
 			throw new Error('Invalid input [FILTER_GIT_STATUS].');
 		}
+		// language=JSRegexp
 		return (new RegExp(`^[${targets}]\\s+`)).test(line);
 	}
 	return true;

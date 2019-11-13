@@ -8,7 +8,6 @@ import {
 	replaceDirectory,
 	getPrBranchPrefix,
 	getPrBranchName,
-	getPrBaseRef,
 	getPrHeadRef,
 	isActionPr,
 	getPrTitle,
@@ -17,6 +16,7 @@ import {
 	isDisabledDeletePackage,
 	isTargetContext,
 	isClosePR,
+	isTargetBranch,
 	filterGitStatus,
 	filterExtension,
 } from '../../src/utils/misc';
@@ -270,24 +270,6 @@ describe('getPrHeadRef', () => {
 
 	it('should return empty', () => {
 		expect(getPrHeadRef(getContext({}))).toBe('');
-	});
-});
-
-describe('getPrBaseRef', () => {
-	it('should get pr base ref', () => {
-		expect(getPrBaseRef(getContext({
-			payload: {
-				'pull_request': {
-					base: {
-						ref: 'master',
-					},
-				},
-			},
-		}))).toBe('master');
-	});
-
-	it('should return empty', () => {
-		expect(getPrBaseRef(getContext({}))).toBe('');
 	});
 });
 
@@ -602,6 +584,24 @@ describe('isClosePR', () => {
 			event: 'pull_request',
 			action: 'synchronize',
 		}))).toBe(false);
+	});
+});
+
+describe('isTargetBranch', () => {
+	testEnv();
+
+	it('should return true 1', () => {
+		expect(isTargetBranch('test')).toBe(true);
+	});
+
+	it('should return true 2', () => {
+		process.env.INPUT_TARGET_BRANCH_PREFIX = 'feature/';
+		expect(isTargetBranch('feature/test')).toBe(true);
+	});
+
+	it('should return false', () => {
+		process.env.INPUT_TARGET_BRANCH_PREFIX = 'feature/';
+		expect(isTargetBranch('test')).toBe(false);
 	});
 });
 
