@@ -78,7 +78,7 @@ inputs:
     description: Date format.
     default: 'YYYY-MM-DD'
   FILTER_GIT_STATUS:
-    description: Filter by git status. (M or D or A)
+    description: Filter by git status. (M, D or A)
     default: ''
   FILTER_EXTENSIONS:
     description: Filter by extensions. (e.g. md, txt)
