@@ -1,3 +1,4 @@
+import { context } from '@actions/github/lib/github';
 import fs from 'fs';
 import { Logger, GitHelper, Utils, ContextHelper, ApiHelper } from '@technote-space/github-action-helper';
 import { GitHub } from '@actions/github';
@@ -107,6 +108,7 @@ export const getDiff = async(logger: Logger): Promise<string[]> => {
 export const getRefDiff = async(compare: string, logger: Logger): Promise<string[]> => {
 	logger.startProcess('Checking references diff...');
 
+	await helper.fetchBranch(getWorkspace(), compare, context);
 	return (await helper.getRefDiff(getWorkspace(), 'HEAD', compare, getGitFilterStatus(), '..')).filter(filterExtension);
 };
 

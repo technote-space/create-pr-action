@@ -324,6 +324,7 @@ describe('getChangedFiles', () => {
 
 	it('should return empty 3', async() => {
 		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.GITHUB_REPOSITORY             = 'hello/world';
 		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
@@ -381,6 +382,7 @@ describe('getChangedFiles', () => {
 			'  >> Already up to date.',
 			'::endgroup::',
 			'::group::Checking references diff...',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/create-pr-action/test-branch:refs/remotes/origin/create-pr-action/test-branch',
 			'[command]git diff HEAD..origin/create-pr-action/test-branch --name-only',
 			'::endgroup::',
 			'::group::Running commands...',
@@ -396,6 +398,7 @@ describe('getChangedFiles', () => {
 
 	it('should return empty 4', async() => {
 		process.env.GITHUB_WORKSPACE              = path.resolve('test-dir');
+		process.env.GITHUB_REPOSITORY             = 'hello/world';
 		process.env.INPUT_GITHUB_TOKEN            = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
@@ -456,6 +459,7 @@ describe('getChangedFiles', () => {
 			'  >> Already up to date.',
 			'::endgroup::',
 			'::group::Checking references diff...',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/create-pr-action/test-branch:refs/remotes/origin/create-pr-action/test-branch',
 			'[command]git diff HEAD..origin/create-pr-action/test-branch --name-only',
 			'::endgroup::',
 			'::group::Pushing to hello/world@create-pr-action/test-branch...',
