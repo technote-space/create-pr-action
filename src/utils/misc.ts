@@ -1,11 +1,13 @@
 import { Context } from '@actions/github/lib/context';
-import { Utils } from '@technote-space/github-action-helper';
+import { Utils, ContextHelper } from '@technote-space/github-action-helper';
 import { isTargetEvent, isTargetLabels } from '@technote-space/filter-github-action';
 import { getInput } from '@actions/core' ;
 import moment from 'moment';
 import { TARGET_EVENTS, DEFAULT_PR_BRANCH_PREFIX, ACTION_URL, ACTION_NAME, ACTION_OWNER, ACTION_REPO, ACTION_MARKETPLACE_URL } from '../constant';
 
-const {getWorkspace, getArrayInput, getBoolValue, isPr, escapeRegExp, replaceAll} = Utils;
+const {getWorkspace, getArrayInput, getBoolValue} = Utils;
+const {escapeRegExp, replaceAll, getPrefixRegExp} = Utils;
+const {isPr}                                      = ContextHelper;
 
 export const getCommitMessage = (): string => getInput('COMMIT_MESSAGE', {required: true});
 
@@ -150,6 +152,14 @@ export const getPrBody = (files: string[], output: {
 export const isDisabledDeletePackage = (): boolean => !getBoolValue(getInput('DELETE_PACKAGE'));
 
 export const isClosePR = (context: Context): boolean => isPr(context) && context.payload.action === 'closed';
+
+export const isTargetBranch = (branchName: string): boolean => {
+	const prefix = getInput('TARGET_BRANCH_PREFIX');
+	if (prefix) {
+		return getPrefixRegExp(prefix).test(branchName);
+	}
+	return true;
+};
 
 export const isTargetContext = (context: Context): boolean => {
 	if (!isTargetEvent(TARGET_EVENTS, context)) {

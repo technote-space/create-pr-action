@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { Logger, GitHelper, Utils, ApiHelper } from '@technote-space/github-action-helper';
+import { Logger, GitHelper, Utils, ContextHelper, ApiHelper } from '@technote-space/github-action-helper';
 import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
 import { getInput } from '@actions/core' ;
@@ -18,7 +18,8 @@ import {
 	getPrBody,
 } from './misc';
 
-const {getWorkspace, getRepository, getArrayInput, useNpm} = Utils;
+const {getWorkspace, getArrayInput, useNpm} = Utils;
+const {getRepository}                       = ContextHelper;
 
 const helper = new GitHelper(new Logger(replaceDirectory), {
 	depth: -1,
