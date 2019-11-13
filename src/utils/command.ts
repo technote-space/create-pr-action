@@ -37,7 +37,7 @@ export const clone = async(logger: Logger, context: Context): Promise<void> => {
 export const checkBranch = async(logger: Logger, context: Context): Promise<boolean> => {
 	const clonedBranch = await helper.getCurrentBranchName(getWorkspace());
 	if (getPrBranchName(context) === clonedBranch) {
-		await helper.runCommand(getWorkspace(), ['ls -la']);
+		await helper.runCommand(getWorkspace(), 'ls -la');
 		return true;
 	}
 
@@ -46,7 +46,7 @@ export const checkBranch = async(logger: Logger, context: Context): Promise<bool
 	logger.startProcess('Cloning [%s] from the remote repo...', getPrHeadRef(context));
 	await helper.cloneBranch(getWorkspace(), getPrHeadRef(context), context);
 	await helper.createBranch(getWorkspace(), getPrBranchName(context));
-	await helper.runCommand(getWorkspace(), ['ls -la']);
+	await helper.runCommand(getWorkspace(), 'ls -la');
 	return false;
 };
 
@@ -100,7 +100,7 @@ const getExecuteCommands = (): string[] => getArrayInput('EXECUTE_COMMANDS', tru
 export const getDiff = async(logger: Logger): Promise<string[]> => {
 	logger.startProcess('Checking diff...');
 
-	await helper.runCommand(getWorkspace(), ['git add --all']);
+	await helper.runCommand(getWorkspace(), 'git add --all');
 	return await helper.getDiff(getWorkspace());
 };
 
@@ -113,7 +113,7 @@ export const getRefDiff = async(compare: string, logger: Logger): Promise<string
 const initDirectory = async(logger: Logger): Promise<void> => {
 	logger.startProcess('Initializing working directory...');
 
-	await helper.runCommand(getWorkspace(), ['rm -rdf ./* ./.[!.]*']);
+	await helper.runCommand(getWorkspace(), 'rm -rdf ./* ./.[!.]*');
 	fs.mkdirSync(getWorkspace(), {recursive: true});
 };
 
@@ -130,9 +130,9 @@ export const merge = async(branch: string, logger: Logger): Promise<boolean> => 
 	await config(logger);
 
 	logger.startProcess('Merging [%s] branch...', branch.replace(/^(refs\/)?heads/, ''));
-	const results = await helper.runCommand(getWorkspace(), [
+	const results = await helper.runCommand(getWorkspace(),
 		`git merge --no-edit origin/${branch.replace(/^(refs\/)?heads/, '')} || :`,
-	]);
+	);
 
 	return !results[0].stdout.some(RegExp.prototype.test, /^CONFLICT /);
 };
