@@ -308,7 +308,7 @@ describe('getChangedFiles', () => {
 			'  >> CONFLICT (content): Merge conflict in merge.txt',
 			'  >> Automatic merge failed; fix conflicts and then commit the result.',
 			'::endgroup::',
-			'::group::Canceling merge...',
+			'::group::Aborting merge...',
 			'[command]git merge --abort',
 			'::endgroup::',
 			'::group::Running commands...',

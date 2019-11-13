@@ -138,7 +138,7 @@ export const merge = async(branch: string, logger: Logger): Promise<boolean> => 
 };
 
 export const abortMerge = async(logger: Logger): Promise<void> => {
-	logger.startProcess('Canceling merge...');
+	logger.startProcess('Aborting merge...');
 	await helper.runCommand(getWorkspace(), 'git merge --abort');
 };
 
