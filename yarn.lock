@@ -371,10 +371,10 @@
   dependencies:
     "@actions/github" "^1.1.0"
 
-"@technote-space/github-action-helper@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-0.3.4.tgz#00dfa4eff03f7b5116d659a3a9270a1ab41184df"
-  integrity sha512-IzgXm/qjHEXMtysScXr6aAq1wfpfUdZIrY8ng2uQ4j74E9HI2UBntzHG17bsUWgooxYSXtFLzCfLh2Az5hHkOA==
+"@technote-space/github-action-helper@^0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-0.4.0.tgz#5670dad8c250cc0fd223c2525e00316461aa34e1"
+  integrity sha512-dLnwBIazrJ0eXMlsuivu77aP8rKhu0ZOzUk4FhWZEFNh4rMhqvSPHT7Yoq15PwMA8GL9KGoXL4My++7Bk4CCRQ==
   dependencies:
     "@actions/core" "^1.2.0"
     "@actions/github" "^1.1.0"
@@ -1798,9 +1798,9 @@ ignore@^4.0.6:
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
 import-fresh@^3.0.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.1.0.tgz#6d33fa1dcef6df930fae003446f33415af905118"
-  integrity sha512-PpuksHKGt8rXfWEr9m9EHIpgyyaltBy8+eF6GJM0QCAxMgxCfucMF3mjecK2QsJr0amJW7gTqh5/wht0z2UhEQ==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.2.0.tgz#fed4d772a13949de7d9894b647e77297db14dedf"
+  integrity sha512-w1waegcRoBrRQ6kfX2+KWc3lIaVUvHiib7F1ZpggbL5+GyZZrpbOnOVNNuylJonNHO6aCJubjfDUzH6J8HmwSA==
   dependencies:
     parent-module "^1.0.0"
     resolve-from "^4.0.0"
