@@ -179,6 +179,23 @@ describe('execute', () => {
 	});
 
 	it('should do nothing 2', async() => {
+		process.env.INPUT_GITHUB_TOKEN         = 'test-token';
+		process.env.INPUT_TARGET_BRANCH_PREFIX = 'test/';
+		const mockStdout                       = spyOnStdout();
+
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=1')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.list2'))
+			.get('/repos/hello/world/pulls?sort=created&direction=asc&per_page=100&page=2')
+			.reply(200, () => ([]));
+
+		await execute(context('synchronize'));
+
+		stdoutCalledWith(mockStdout, []);
+	});
+
+	it('should do nothing 3', async() => {
 		process.env.GITHUB_WORKSPACE       = path.resolve('test');
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
@@ -308,17 +325,18 @@ describe('execute', () => {
 	});
 
 	it('should do schedule', async() => {
-		process.env.GITHUB_WORKSPACE       = path.resolve('test');
-		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
-		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
-		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
-		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
-		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
-		process.env.INPUT_PR_BRANCH_NAME   = 'create/test';
-		process.env.INPUT_COMMIT_MESSAGE   = 'test: create pull request';
-		process.env.INPUT_PR_TITLE         = 'test: create pull request (${PR_NUMBER})';
-		process.env.INPUT_PR_BODY          = 'pull request body';
-		const mockStdout                   = spyOnStdout();
+		process.env.GITHUB_WORKSPACE           = path.resolve('test');
+		process.env.INPUT_GITHUB_TOKEN         = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS     = 'yarn upgrade';
+		process.env.INPUT_PR_BRANCH_NAME       = 'test-branch';
+		process.env.INPUT_COMMIT_NAME          = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL         = 'example@example.com';
+		process.env.INPUT_PR_BRANCH_NAME       = 'create/test';
+		process.env.INPUT_COMMIT_MESSAGE       = 'test: create pull request';
+		process.env.INPUT_PR_TITLE             = 'test: create pull request (${PR_NUMBER})';
+		process.env.INPUT_PR_BODY              = 'pull request body';
+		process.env.INPUT_TARGET_BRANCH_PREFIX = 'feature/';
+		const mockStdout                       = spyOnStdout();
 		setChildProcessParams({
 			stdout: (command: string): string => {
 				if (command.endsWith('status --short -uno')) {

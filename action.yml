@@ -83,6 +83,9 @@ inputs:
   FILTER_EXTENSIONS:
     description: Filter by extensions. (e.g. md, txt)
     default: ''
+  TARGET_BRANCH_PREFIX:
+    description: Filter by branch name. (e.g. release/)
+    default: ''
 branding:
   # https://feathericons.com/
   icon: 'package'

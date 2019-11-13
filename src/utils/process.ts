@@ -1,7 +1,7 @@
 import { getInput } from '@actions/core';
 import { GitHub } from '@actions/github';
 import { Context } from '@actions/github/lib/context';
-import { Logger, Utils } from '@technote-space/github-action-helper';
+import { Logger, Utils, ContextHelper } from '@technote-space/github-action-helper';
 import {
 	getApiHelper,
 	getChangedFiles,
@@ -17,15 +17,20 @@ import {
 	getPrBranchName,
 	isActionPr,
 	isClosePR,
+	isTargetBranch,
 	getPrHeadRef,
 } from './misc';
 import { INTERVAL_MS } from '../constant';
 
-const {isPr, isCron, sleep} = Utils;
-const commonLogger          = new Logger(replaceDirectory);
+const {sleep}        = Utils;
+const {isPr, isCron} = ContextHelper;
+const commonLogger   = new Logger(replaceDirectory);
 
 const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promise<void> => {
 	if (isActionPr(context)) {
+		return;
+	}
+	if (!isTargetBranch(getPrHeadRef(context))) {
 		return;
 	}
 	if (isCron(context)) {
