@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update dependencies
-        uses: technote-space/create-pr-action@test/v1
+        uses: technote-space/create-pr-action@gh-actions
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GLOBAL_INSTALL_PACKAGES: npm-check-updates
