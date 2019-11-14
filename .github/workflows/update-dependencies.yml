@@ -13,7 +13,7 @@ jobs:
       - name: Update dependencies
         uses: technote-space/create-pr-action@gh-actions
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           GLOBAL_INSTALL_PACKAGES: npm-check-updates
           EXECUTE_COMMANDS: |
             ncu -u --packageFile package.json
