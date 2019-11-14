@@ -48,17 +48,21 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 			// There is no PR
 			return;
 		}
+		if (!(await getRefDiff(getPrHeadRef(context), logger)).length) {
+			// Close if there is no diff
+			await getApiHelper(logger).closePR(branchName, octokit, context);
+			return;
+		}
 		mergeable = await isMergeable(pr.number, octokit, context);
 	} else {
 		// Commit local diffs
 		await commit(logger);
+		if (!(await getRefDiff(getPrHeadRef(context), logger)).length) {
+			// Close if there is no diff
+			await getApiHelper(logger).closePR(branchName, octokit, context);
+			return;
+		}
 		await push(branchName, logger, context);
-	}
-
-	if (!(await getRefDiff(branchName, logger)).length) {
-		// Close if there is no diff
-		await getApiHelper(logger).closePR(branchName, octokit, context);
-		return;
 	}
 
 	if (files.length) {

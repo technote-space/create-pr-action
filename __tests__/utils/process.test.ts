@@ -77,6 +77,7 @@ describe('execute', () => {
 
 	it('should close pull request 2', async() => {
 		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.GITHUB_REPOSITORY      = 'hello/world';
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
@@ -149,15 +150,83 @@ describe('execute', () => {
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
 			'::endgroup::',
-			'::group::Pushing to hello/world@create-pr-action/create/test...',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
-			'::endgroup::',
 			'::group::Checking references diff...',
-			'[command]git diff HEAD..origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/change:refs/remotes/origin/change',
+			'[command]git diff HEAD..origin/change --name-only',
 			'::endgroup::',
 			'::group::Closing PullRequest... [create-pr-action/create/test]',
 			'::endgroup::',
 			'::group::Deleting reference... [refs/heads/create-pr-action/create/test]',
+			'::endgroup::',
+		]);
+	});
+
+	it('should close pull request 3', async() => {
+		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.GITHUB_REPOSITORY      = 'hello/world';
+		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
+		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
+		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL     = 'example@example.com';
+		process.env.INPUT_PR_BRANCH_NAME   = 'test-branch';
+		const mockStdout                   = spyOnStdout();
+		setChildProcessParams({
+			stdout: (command: string): string => {
+				if (command.includes(' diff ')) {
+					return '';
+				}
+				return 'stdout';
+			},
+		});
+		setExists(true);
+
+		nock('https://api.github.com')
+			.persist()
+			.get('/repos/hello/world/pulls?head=hello%3Acreate-pr-action%2Ftest-branch')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.list'))
+			.patch('/repos/hello/world/pulls/1347')
+			.reply(200, () => getApiFixture(rootDir, 'pulls.update'))
+			.delete('/repos/hello/world/git/refs/heads/create-pr-action/test-branch')
+			.reply(204);
+
+		await execute(context('synchronize'));
+
+		stdoutCalledWith(mockStdout, [
+			'::group::Initializing working directory...',
+			'[command]rm -rdf ./* ./.[!.]*',
+			'  >> stdout',
+			'::endgroup::',
+			'::group::Cloning [create-pr-action/test-branch] branch from the remote repo...',
+			'[command]git clone --branch=create-pr-action/test-branch',
+			'[command]git branch -a | grep -E \'^\\*\' | cut -b 3-',
+			'  >> stdout',
+			'> remote branch [create-pr-action/test-branch] not found.',
+			'> now branch: stdout',
+			'::endgroup::',
+			'::group::Cloning [change] from the remote repo...',
+			'[command]git clone --branch=change',
+			'[command]git checkout -b "create-pr-action/test-branch"',
+			'  >> stdout',
+			'[command]ls -la',
+			'  >> stdout',
+			'::endgroup::',
+			'::group::Running commands...',
+			'[command]yarn upgrade',
+			'  >> stdout',
+			'::endgroup::',
+			'::group::Checking diff...',
+			'[command]git add --all',
+			'  >> stdout',
+			'[command]git status --short -uno',
+			'> There is no diff.',
+			'::endgroup::',
+			'::group::Checking references diff...',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/change:refs/remotes/origin/change',
+			'[command]git diff HEAD..origin/change --name-only',
+			'::endgroup::',
+			'::group::Closing PullRequest... [create-pr-action/test-branch]',
+			'::endgroup::',
+			'::group::Deleting reference... [refs/heads/create-pr-action/test-branch]',
 			'::endgroup::',
 		]);
 	});
@@ -246,6 +315,7 @@ describe('execute', () => {
 
 	it('should create pull request', async() => {
 		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.GITHUB_REPOSITORY      = 'hello/world';
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
@@ -313,11 +383,12 @@ describe('execute', () => {
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
 			'::endgroup::',
-			'::group::Pushing to hello/world@create-pr-action/create/test...',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
-			'::endgroup::',
 			'::group::Checking references diff...',
-			'[command]git diff HEAD..origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/change:refs/remotes/origin/change',
+			'[command]git diff HEAD..origin/change --name-only',
+			'::endgroup::',
+			'::group::Pushing to hello/world@create-pr-action/create/test...',
+			'[command]git push origin "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'::endgroup::',
 			'::group::Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
 			'::endgroup::',
@@ -326,6 +397,7 @@ describe('execute', () => {
 
 	it('should do schedule', async() => {
 		process.env.GITHUB_WORKSPACE           = path.resolve('test');
+		process.env.GITHUB_REPOSITORY          = 'hello/world';
 		process.env.INPUT_GITHUB_TOKEN         = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS     = 'yarn upgrade';
 		process.env.INPUT_PR_BRANCH_NAME       = 'test-branch';
@@ -398,10 +470,11 @@ describe('execute', () => {
 			'> Committing...',
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
-			'> Pushing to octocat/Hello-World@create-pr-action/create/test...',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'> Checking references diff...',
-			'[command]git diff HEAD..origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/feature/new-topic:refs/remotes/origin/feature/new-topic',
+			'[command]git diff HEAD..origin/feature/new-topic --name-only',
+			'> Pushing to octocat/Hello-World@create-pr-action/create/test...',
+			'[command]git push origin "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
 			'::endgroup::',
 			'::group::Target PullRequest Ref [feature/new-topic]',
@@ -428,10 +501,11 @@ describe('execute', () => {
 			'> Committing...',
 			'[command]git commit -qm "test: create pull request"',
 			'[command]git show --stat-count=10 HEAD',
-			'> Pushing to octocat/Hello-World@create-pr-action/create/test...',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'> Checking references diff...',
-			'[command]git diff HEAD..origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/feature/new-topic:refs/remotes/origin/feature/new-topic',
+			'[command]git diff HEAD..origin/feature/new-topic --name-only',
+			'> Pushing to octocat/Hello-World@create-pr-action/create/test...',
+			'[command]git push origin "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
 			'::endgroup::',
 		]);
@@ -439,6 +513,7 @@ describe('execute', () => {
 
 	it('should resolve conflicts', async() => {
 		process.env.GITHUB_WORKSPACE       = path.resolve('test');
+		process.env.GITHUB_REPOSITORY      = 'hello/world';
 		process.env.INPUT_GITHUB_TOKEN     = 'test-token';
 		process.env.INPUT_EXECUTE_COMMANDS = 'yarn upgrade';
 		process.env.INPUT_COMMIT_NAME      = 'GitHub Actions';
@@ -498,7 +573,8 @@ describe('execute', () => {
 			'> There is no diff.',
 			'::endgroup::',
 			'::group::Checking references diff...',
-			'[command]git diff HEAD..origin/create-pr-action/create/test --name-only',
+			'[command]git fetch --prune --no-recurse-submodules origin +refs/heads/change:refs/remotes/origin/change',
+			'[command]git diff HEAD..origin/change --name-only',
 			'::endgroup::',
 			'::group::Configuring git committer to be GitHub Actions <example@example.com>',
 			'[command]git config user.name "GitHub Actions"',
@@ -509,7 +585,7 @@ describe('execute', () => {
 			'  >> Already up to date.',
 			'::endgroup::',
 			'::group::Pushing to hello/world@create-pr-action/create/test...',
-			'[command]git push "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
+			'[command]git push origin "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
 			'::endgroup::',
 		]);
 	});
