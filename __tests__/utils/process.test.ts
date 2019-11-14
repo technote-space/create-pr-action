@@ -475,7 +475,7 @@ describe('execute', () => {
 			'[command]git diff HEAD..origin/feature/new-topic --name-only',
 			'> Pushing to octocat/Hello-World@create-pr-action/create/test...',
 			'[command]git push origin "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
-			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
+			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [feature/new-topic]',
 			'::endgroup::',
 			'::group::Target PullRequest Ref [feature/new-topic]',
 			'> Initializing working directory...',
@@ -506,7 +506,7 @@ describe('execute', () => {
 			'[command]git diff HEAD..origin/feature/new-topic --name-only',
 			'> Pushing to octocat/Hello-World@create-pr-action/create/test...',
 			'[command]git push origin "create-pr-action/create/test":"refs/heads/create-pr-action/create/test"',
-			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [heads/test]',
+			'> Creating comment to PullRequest... [create-pr-action/create/test] -> [feature/new-topic]',
 			'::endgroup::',
 		]);
 	});

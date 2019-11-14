@@ -108,6 +108,7 @@ export const execute = async(context: Context): Promise<void> => {
 					owner: pull.base.repo.owner.login,
 					repo: pull.base.repo.name,
 				},
+				ref: pull.head.ref
 			}));
 		}
 	}
