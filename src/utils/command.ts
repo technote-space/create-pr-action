@@ -218,11 +218,7 @@ export const getChangedFiles = async(logger: Logger, context: Context): Promise<
 	await initDirectory(logger);
 	await clone(logger, context);
 	if (await checkBranch(logger, context)) {
-		if (await merge(getPrHeadRef(context), logger)) {
-			if ((await getRefDiff(getPrHeadRef(context), logger)).length) {
-				await push(getPrBranchName(context), logger, context);
-			}
-		} else {
+		if (!await merge(getPrHeadRef(context), logger)) {
 			await abortMerge(logger);
 		}
 	}

@@ -48,7 +48,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 			// There is no PR
 			return;
 		}
-		if (!(await getRefDiff(branchName, logger)).length) {
+		if (!(await getRefDiff(getPrHeadRef(context), logger)).length) {
 			// Close if there is no diff
 			await getApiHelper(logger).closePR(branchName, octokit, context);
 			return;
@@ -57,7 +57,7 @@ const createPr = async(logger: Logger, octokit: GitHub, context: Context): Promi
 	} else {
 		// Commit local diffs
 		await commit(logger);
-		if (!(await getRefDiff(branchName, logger)).length) {
+		if (!(await getRefDiff(getPrHeadRef(context), logger)).length) {
 			// Close if there is no diff
 			await getApiHelper(logger).closePR(branchName, octokit, context);
 			return;
