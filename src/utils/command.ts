@@ -78,6 +78,22 @@ const getGlobalInstallPackagesCommands = (workDir: string): string[] => {
 	return [];
 };
 
+const getDevInstallPackagesCommands = (workDir: string): string[] => {
+	const packages = getArrayInput('DEV_INSTALL_PACKAGES');
+	if (packages.length) {
+		if (useNpm(workDir, getInput('PACKAGE_MANAGER'))) {
+			return [
+				'npm install --save-dev ' + packages.join(' '),
+			];
+		} else {
+			return [
+				'yarn add --dev ' + packages.join(' '),
+			];
+		}
+	}
+	return [];
+};
+
 const getInstallPackagesCommands = (workDir: string): string[] => {
 	const packages = getArrayInput('INSTALL_PACKAGES');
 	if (packages.length) {
@@ -195,6 +211,7 @@ const runCommands = async(logger: Logger): Promise<{
 	const commands: string[] = ([] as string[]).concat.apply([], [
 		getClearPackageCommands(),
 		getGlobalInstallPackagesCommands(getWorkspace()),
+		getDevInstallPackagesCommands(getWorkspace()),
 		getInstallPackagesCommands(getWorkspace()),
 		getExecuteCommands(),
 	]);

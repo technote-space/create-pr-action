@@ -18,6 +18,9 @@ inputs:
   INSTALL_PACKAGES:
     description: Packages to be installed.
     default: ''
+  DEV_INSTALL_PACKAGES:
+    description: Packages to be dev installed.
+    default: ''
   GLOBAL_INSTALL_PACKAGES:
     description: Packages to be global installed.
     default: ''

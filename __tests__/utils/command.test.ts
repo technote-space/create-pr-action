@@ -180,7 +180,8 @@ describe('getChangedFiles', () => {
 		process.env.INPUT_PACKAGE_MANAGER         = 'yarn';
 		process.env.INPUT_EXECUTE_COMMANDS        = 'yarn upgrade';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
-		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.INPUT_DEV_INSTALL_PACKAGES    = 'test1\ntest2';
+		process.env.INPUT_INSTALL_PACKAGES        = 'test3\ntest4';
 		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
 		setChildProcessParams({stdout: 'M  file1\nA  file2\nD  file3\n   file4\n\nB  file5\n'});
 
@@ -196,7 +197,11 @@ describe('getChangedFiles', () => {
 					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 				{
-					command: 'yarn add test1 test2',
+					command: 'yarn add --dev test1 test2',
+					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
+				},
+				{
+					command: 'yarn add test3 test4',
 					stdout: ['M  file1', 'A  file2', 'D  file3', '   file4', '', 'B  file5'],
 				},
 				{
@@ -213,7 +218,8 @@ describe('getChangedFiles', () => {
 		process.env.INPUT_EXECUTE_COMMANDS        = 'npm update';
 		process.env.INPUT_DELETE_PACKAGE          = '1';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'npm-check-updates';
-		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.INPUT_DEV_INSTALL_PACKAGES    = 'test1\ntest2';
+		process.env.INPUT_INSTALL_PACKAGES        = 'test3\ntest4';
 		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch';
 		setChildProcessParams({stdout: 'test'});
 
@@ -237,7 +243,11 @@ describe('getChangedFiles', () => {
 					stdout: ['test'],
 				},
 				{
-					command: 'npm install --save test1 test2',
+					command: 'npm install --save-dev test1 test2',
+					stdout: ['test'],
+				},
+				{
+					command: 'npm install --save test3 test4',
 					stdout: ['test'],
 				},
 				{
