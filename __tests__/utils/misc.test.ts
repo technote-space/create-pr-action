@@ -1,5 +1,6 @@
 /* eslint-disable no-magic-numbers */
 import { testEnv, getContext, generateContext } from '@technote-space/github-action-test-helper';
+import moment from 'moment';
 import path from 'path';
 import {
 	getCommitMessage,
@@ -381,21 +382,25 @@ describe('getPrBody', () => {
 		},
 	});
 
-	it('should get PR Body', () => {
-		process.env.INPUT_PR_BODY = `
-      ## Base PullRequest
+	it('should get PR Body 1', () => {
+		process.env.INPUT_VARIABLE1 = 'Base PullRequest';
+		process.env.INPUT_VARIABLE2 = 'Command results';
+		process.env.INPUT_VARIABLE3 = 'Details: ';
+		process.env.INPUT_VARIABLE4 = 'Changed files';
+		process.env.INPUT_PR_BODY   = `
+      ## \${VARIABLE1}
 
       \${PR_TITLE} (#\${PR_NUMBER})
 
-      ## Command results
+      ## \${VARIABLE2}
       <details>
-        <summary>Details: </summary>
+        <summary>\${VARIABLE3}</summary>
 
         \${COMMANDS_STDOUT}
 
       </details>
 
-      ## Changed files
+      ## \${VARIABLE4}
       <details>
         <summary>\${FILES_SUMMARY}: </summary>
 
@@ -456,8 +461,13 @@ describe('getPrBody', () => {
 		].join('\n'));
 	});
 
-	it('should get PR Body', () => {
-		process.env.INPUT_PR_BODY = `
+	it('should get PR Body 2', () => {
+		process.env.INPUT_DATE_FORMAT1 = 'YYYY/MM/DD';
+		process.env.INPUT_DATE_FORMAT2 = 'DD/MM/YYYY';
+		process.env.INPUT_VARIABLE1    = 'test1';
+		process.env.INPUT_VARIABLE3    = 'test3';
+		process.env.INPUT_VARIABLE5    = '';
+		process.env.INPUT_PR_BODY      = `
 		\${PR_LINK}
 		\${COMMANDS}
 		\${COMMANDS_STDOUT}
@@ -469,6 +479,11 @@ describe('getPrBody', () => {
 		\${ACTION_REPO}
 		\${ACTION_URL}
 		\${ACTION_MARKETPLACE_URL}
+		\${DATE1}
+		\${DATE2}
+		\${VARIABLE1}
+		\${VARIABLE3}
+		\${VARIABLE5}
 `;
 
 		expect(getPrBody(['README.md'], [
@@ -515,6 +530,11 @@ describe('getPrBody', () => {
 			'create-pr-action',
 			'https://github.com/technote-space/create-pr-action',
 			'https://github.com/marketplace/actions/create-pr-action',
+			moment().format('YYYY/MM/DD'),
+			moment().format('DD/MM/YYYY'),
+			'test1',
+			'test3',
+			'',
 		].join('\n'));
 	});
 

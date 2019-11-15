@@ -3,7 +3,17 @@ import { Utils, ContextHelper } from '@technote-space/github-action-helper';
 import { isTargetEvent, isTargetLabels } from '@technote-space/filter-github-action';
 import { getInput } from '@actions/core' ;
 import moment from 'moment';
-import { TARGET_EVENTS, DEFAULT_PR_BRANCH_PREFIX, ACTION_URL, ACTION_NAME, ACTION_OWNER, ACTION_REPO, ACTION_MARKETPLACE_URL } from '../constant';
+import {
+	TARGET_EVENTS,
+	DEFAULT_PR_BRANCH_PREFIX,
+	ACTION_URL,
+	ACTION_NAME,
+	ACTION_OWNER,
+	ACTION_REPO,
+	ACTION_MARKETPLACE_URL,
+	DATE_COUNT,
+	VARIABLE_COUNT,
+} from '../constant';
 
 const {getWorkspace, getArrayInput, getBoolValue} = Utils;
 const {escapeRegExp, replaceAll, getPrefixRegExp} = Utils;
@@ -22,7 +32,9 @@ export const replaceDirectory = (message: string): string => {
 		.split(workDir).join('<Working Directory>');
 };
 
-const getDate = (suffix: string): string => moment().format(getInput(`DATE_FORMAT${suffix}`));
+const getDate = (suffix: number): string => moment().format(getInput(`DATE_FORMAT${suffix}`));
+
+const getVariable = (suffix: number): string => process.env[`INPUT_VARIABLE${suffix}`] || '';
 
 /**
  * @return {{string, Function}[]} replacer
@@ -42,9 +54,11 @@ const contextVariables = (): { key: string; replace: (Context) => string }[] => 
 		{key: 'PR_BASE_REF', replace: (context: Context): string => getPrParam(context, pr => pr.base.ref)},
 		{key: 'PR_TITLE', replace: (context: Context): string => getPrParam(context, pr => pr.title)},
 		{key: 'PR_URL', replace: (context: Context): string => getPrParam(context, pr => pr.html_url)},
-		{key: 'DATE1', replace: (): string => getDate('1')},
-		{key: 'DATE2', replace: (): string => getDate('2')},
-	];
+	].concat([...Array(DATE_COUNT).keys()].map(index => ++index).map(index => ({
+		key: `DATE${index}`, replace: (): string => getDate(index),
+	}))).concat([...Array(VARIABLE_COUNT).keys()].map(index => ++index).map(index => ({
+		key: `VARIABLE${index}`, replace: (): string => getVariable(index),
+	})));
 };
 
 /**

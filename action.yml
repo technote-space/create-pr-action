@@ -51,19 +51,19 @@ inputs:
     description: PullRequest body.
     required: true
     default: |
-      ## Base PullRequest
+      ## ${VARIABLE1}
 
       ${PR_TITLE} (#${PR_NUMBER})
 
-      ## Command results
+      ## ${VARIABLE2}
       <details>
-        <summary>Details: </summary>
+        <summary>${VARIABLE3}</summary>
 
         ${COMMANDS_STDOUT}
 
       </details>
 
-      ## Changed files
+      ## ${VARIABLE4}
       <details>
         <summary>${FILES_SUMMARY}: </summary>
 
@@ -74,6 +74,21 @@ inputs:
       <hr>
 
       [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
+  VARIABLE1:
+    description: Variable1.
+    default: 'Base PullRequest'
+  VARIABLE2:
+    description: Variable2.
+    default: 'Command results'
+  VARIABLE3:
+    description: Variable3.
+    default: 'Details: '
+  VARIABLE4:
+    description: Variable4.
+    default: 'Changed files'
+  VARIABLE5:
+    description: Variable5.
+    default: ''
   DATE_FORMAT1:
     description: Date format.
     default: 'YYYY-MM-DD HH:mm:ss'
