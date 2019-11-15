@@ -11,19 +11,15 @@ const {showActionInfo} = ContextHelper;
  * run
  */
 async function run(): Promise<void> {
-	try {
-		const logger = new Logger();
-		showActionInfo(path.resolve(__dirname, '..'), logger, context);
+	const logger = new Logger();
+	showActionInfo(path.resolve(__dirname, '..'), logger, context);
 
-		if (!isTargetContext(context)) {
-			logger.info('This is not target event.');
-			return;
-		}
-
-		await execute(context);
-	} catch (error) {
-		setFailed(error.message);
+	if (!isTargetContext(context)) {
+		logger.info('This is not target event.');
+		return;
 	}
+
+	await execute(context);
 }
 
-run();
+run().catch(error => setFailed(error.message));
