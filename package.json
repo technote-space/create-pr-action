@@ -1,7 +1,7 @@
 {
   "name": "@technote-space/upgrade-packages-action",
   "version": "1.0.0.36",
-  "description": "Template for GitHub actions.",
+  "description": "This is a GitHub Actions that executes an arbitrary command and commits the changes to the new pull request.",
   "author": "Technote <technote.space@gmail.com> (https://technote.space)",
   "license": "MIT",
   "keywords": [
@@ -19,15 +19,12 @@
   "main": "lib/main.js",
   "dependencies": {
     "@actions/core": "^1.2.0",
-    "@actions/github": "^1.1.0",
-    "@technote-space/filter-github-action": "^0.1.8",
-    "@technote-space/github-action-helper": "^0.4.3",
-    "moment": "^2.24.0"
+    "@technote-space/github-action-pr-helper": "^0.0.4"
   },
   "devDependencies": {
-    "@technote-space/github-action-test-helper": "^0.0.20",
+    "@technote-space/github-action-test-helper": "^0.0.21",
     "@types/jest": "^24.0.23",
-    "@types/node": "^12.12.7",
+    "@types/node": "^12.12.8",
     "@typescript-eslint/eslint-plugin": "^2.7.0",
     "@typescript-eslint/parser": "^2.7.0",
     "eslint": "^6.6.0",
