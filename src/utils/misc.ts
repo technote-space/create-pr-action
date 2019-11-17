@@ -1,3 +1,4 @@
+import path from 'path';
 import { Utils } from '@technote-space/github-action-pr-helper';
 import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput } from '@actions/core' ;
@@ -6,6 +7,7 @@ import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, DEFAULT_PR_BRANCH_PREFIX } from
 const {getArrayInput, getBoolValue} = Utils;
 
 export const getRunnerArguments = (): MainArguments => ({
+	rootDir: path.resolve(__dirname, '../..'),
 	actionName: ACTION_NAME,
 	actionOwner: ACTION_OWNER,
 	actionRepo: ACTION_REPO,
