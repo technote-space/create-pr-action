@@ -9,9 +9,6 @@ inputs:
   PACKAGE_MANAGER:
     description: Package manager to use to install dependencies.
     default: ''
-  INCLUDE_LABELS:
-    description: Labels used to check if the PullRequest has it.
-    default: ''
   DELETE_PACKAGE:
     description: Whether to delete package file before install packages for performance.
     default: ''
@@ -51,19 +48,19 @@ inputs:
     description: PullRequest body.
     required: true
     default: |
-      ## ${VARIABLE1}
+      ## Base PullRequest
 
       ${PR_TITLE} (#${PR_NUMBER})
 
-      ## ${VARIABLE2}
+      ## Command results
       <details>
-        <summary>${VARIABLE3}</summary>
+        <summary>Details: </summary>
 
-        ${COMMANDS_STDOUT}
+        ${COMMANDS_OUTPUT}
 
       </details>
 
-      ## ${VARIABLE4}
+      ## Changed files
       <details>
         <summary>${FILES_SUMMARY}: </summary>
 
@@ -74,25 +71,10 @@ inputs:
       <hr>
 
       [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
-  VARIABLE1:
-    description: Variable1.
-    default: 'Base PullRequest'
-  VARIABLE2:
-    description: Variable2.
-    default: 'Command results'
-  VARIABLE3:
-    description: Variable3.
-    default: 'Details: '
-  VARIABLE4:
-    description: Variable4.
-    default: 'Changed files'
-  VARIABLE5:
-    description: Variable5.
-    default: ''
-  DATE_FORMAT1:
+  PR_DATE_FORMAT1:
     description: Date format.
     default: 'YYYY-MM-DD HH:mm:ss'
-  DATE_FORMAT2:
+  PR_DATE_FORMAT2:
     description: Date format.
     default: 'YYYY-MM-DD'
   FILTER_GIT_STATUS:
@@ -103,6 +85,9 @@ inputs:
     default: ''
   TARGET_BRANCH_PREFIX:
     description: Filter by branch name. (e.g. release/)
+    default: ''
+  INCLUDE_LABELS:
+    description: Labels used to check if the PullRequest has it.
     default: ''
 branding:
   # https://feathericons.com/

@@ -1,673 +1,102 @@
 /* eslint-disable no-magic-numbers */
-import { testEnv, getContext, generateContext } from '@technote-space/github-action-test-helper';
-import moment from 'moment';
-import path from 'path';
-import {
-	getCommitMessage,
-	getCommitName,
-	getCommitEmail,
-	replaceDirectory,
-	getPrBranchPrefix,
-	getPrBranchName,
-	getPrHeadRef,
-	isActionPr,
-	getPrTitle,
-	getPrLink,
-	getPrBody,
-	isDisabledDeletePackage,
-	isTargetContext,
-	isClosePR,
-	isTargetBranch,
-	filterGitStatus,
-	filterExtension,
-} from '../../src/utils/misc';
+import { testEnv } from '@technote-space/github-action-test-helper';
+import { getRunnerArguments } from '../../src/utils/misc';
 import { DEFAULT_PR_BRANCH_PREFIX } from '../../src/constant';
 
-describe('isTargetContext', () => {
+describe('getRunnerArguments', () => {
 	testEnv();
 
-	it('should return true 1', () => {
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'opened',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [],
-				},
-			},
-		}))).toBe(true);
+	it('should return args', () => {
+		expect(getRunnerArguments()).toEqual({
+			actionName: 'Create PR Action',
+			actionOwner: 'technote-space',
+			actionRepo: 'create-pr-action',
+			commitEmail: '',
+			commitMessage: '',
+			commitName: '',
+			deletePackage: false,
+			devInstallPackages: [],
+			executeCommands: [],
+			filterExtensions: [],
+			filterGitStatus: '',
+			globalInstallPackages: [],
+			includeLabels: [],
+			installPackages: [],
+			prBody: '',
+			prBranchName: '',
+			prBranchPrefix: DEFAULT_PR_BRANCH_PREFIX,
+			prDateFormats: [
+				'',
+				'',
+			],
+			prTitle: '',
+			targetBranchPrefix: '',
+		});
 	});
 
-	it('should return true 2', () => {
-		process.env.INPUT_INCLUDE_LABELS = 'label2';
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'synchronize',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [{name: 'label1'}, {name: 'label2'}],
-				},
-			},
-		}))).toBe(true);
-	});
-
-	it('should return true 3', () => {
-		process.env.INPUT_INCLUDE_LABELS = 'label1,label2\nlabel3';
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'synchronize',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [{name: 'label2'}],
-				},
-			},
-		}))).toBe(true);
-	});
-
-	it('should return true 4', () => {
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'opened',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [],
-				},
-			},
-		}))).toBe(true);
-	});
-
-	it('should return true 5', () => {
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'closed',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [],
-				},
-			},
-		}))).toBe(true);
-	});
-
-	it('should return true 6', () => {
-		expect(isTargetContext(generateContext({
-			event: 'schedule',
-		}))).toBe(true);
-	});
-
-	it('should return false 1', () => {
-		expect(isTargetContext(generateContext({
-			ref: 'tags/test',
-			event: 'push',
-		}))).toBe(false);
-	});
-
-	it('should return false 2', () => {
-		process.env.INPUT_INCLUDE_LABELS = 'test2';
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'opened',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [{name: 'label1'}],
-				},
-			},
-		}))).toBe(false);
-	});
-
-	it('should return false 3', () => {
-		expect(isTargetContext(generateContext({
-			ref: 'heads/test',
-			event: 'push',
-		}))).toBe(false);
-	});
-
-	it('should return false 4', () => {
-		process.env.INPUT_INCLUDE_LABELS = 'label1';
-		expect(isTargetContext(generateContext({
-			ref: 'heads/master',
-			event: 'pull_request',
-			action: 'synchronize',
-		}, {
-			payload: {
-				'pull_request': {
-					labels: [{name: 'label2'}],
-				},
-			},
-		}))).toBe(false);
-	});
-
-	it('should return false 5', () => {
-		expect(isTargetContext(generateContext({
-			event: 'pull_request',
-			action: 'closed',
-		}))).toBe(false);
-	});
-});
-
-describe('getCommitMessage', () => {
-	testEnv();
-
-	it('should get commit message', () => {
-		process.env.INPUT_COMMIT_MESSAGE = 'test';
-		expect(getCommitMessage()).toBe('test');
-	});
-
-	it('should throw error', () => {
-		expect(() => getCommitMessage()).toThrow();
-	});
-});
-
-describe('getCommitName', () => {
-	testEnv();
-
-	it('should get commit name', () => {
-		process.env.INPUT_COMMIT_NAME = 'test';
-		expect(getCommitName()).toBe('test');
-	});
-
-	it('should throw error', () => {
-		process.env.INPUT_COMMIT_NAME = '';
-		expect(() => getCommitName()).toThrow();
-	});
-});
-
-describe('getCommitEmail', () => {
-	testEnv();
-
-	it('should get commit email', () => {
-		process.env.INPUT_COMMIT_EMAIL = 'test';
-		expect(getCommitEmail()).toBe('test');
-	});
-
-	it('should throw error', () => {
-		process.env.INPUT_COMMIT_EMAIL = '';
-		expect(() => getCommitEmail()).toThrow();
-	});
-});
-
-describe('replaceDirectory', () => {
-	testEnv();
-
-	it('should replace working directory 1', () => {
-		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
-		const workDir                = path.resolve('test-dir');
-
-		expect(replaceDirectory(`git -C ${workDir} fetch`)).toBe('git fetch');
-	});
-
-	it('should replace working directory 2', () => {
-		process.env.GITHUB_WORKSPACE = path.resolve('test-dir');
-		const workDir                = path.resolve('test-dir');
-
-		expect(replaceDirectory(`cp -a ${workDir}/test1 ${workDir}/test2`)).toBe('cp -a <Working Directory>/test1 <Working Directory>/test2');
-	});
-});
-
-describe('getPrBranchPrefix', () => {
-	testEnv();
-
-	it('should get branch prefix', () => {
-		process.env.INPUT_PR_BRANCH_PREFIX = 'test-prefix/';
-		expect(getPrBranchPrefix()).toBe('test-prefix/');
-	});
-
-	it('should get default', () => {
-		expect(getPrBranchPrefix()).toBe(DEFAULT_PR_BRANCH_PREFIX);
-	});
-});
-
-describe('getPrBranchName', () => {
-	testEnv();
-	const context = getContext({
-		payload: {
-			'pull_request': {
-				number: 11,
-				id: 21031067,
-				head: {
-					ref: 'change',
-				},
-				base: {
-					ref: 'master',
-				},
-				title: 'title',
-				'html_url': 'url',
-			},
-		},
-	});
-
-	it('should get branch name', () => {
-		process.env.INPUT_PR_BRANCH_NAME = '${PR_NUMBER}-${PR_ID}-${PR_HEAD_REF}-${PR_BASE_REF}-${PR_TITLE}-${PR_URL}';
-		expect(getPrBranchName(context)).toBe('create-pr-action/11-21031067-change-master-title-url');
-	});
-
-	it('should throw error', () => {
-		expect(() => getPrBranchName(context)).toThrow();
-	});
-
-	it('should throw error', () => {
-		process.env.INPUT_PR_BRANCH_NAME = '${PR_NUMBER}-${PR_ID}-${PR_HEAD_REF}-${PR_BASE_REF}';
-		expect(() => getPrBranchName(getContext({}))).toThrow();
-	});
-});
-
-describe('getPrHeadRef', () => {
-	it('should get pr head ref', () => {
-		expect(getPrHeadRef(getContext({
-			payload: {
-				'pull_request': {
-					head: {
-						ref: 'change',
-					},
-				},
-			},
-		}))).toBe('change');
-	});
-
-	it('should return empty', () => {
-		expect(getPrHeadRef(getContext({}))).toBe('');
-	});
-});
-
-describe('isActionPr', () => {
-	testEnv();
-
-	it('should return true', () => {
-		process.env.INPUT_PR_BRANCH_PREFIX = 'prefix/';
-		expect(isActionPr(getContext({
-			payload: {
-				'pull_request': {
-					head: {
-						ref: 'prefix/test',
-					},
-				},
-			},
-		}))).toBe(true);
-	});
-
-	it('should return false 1', () => {
-		expect(isActionPr(getContext({
-			payload: {
-				'pull_request': {
-					head: {
-						ref: 'prefix/test',
-					},
-				},
-			},
-		}))).toBe(false);
-	});
-
-	it('should return false 2', () => {
-		expect(isActionPr(getContext({
-			payload: {},
-		}))).toBe(false);
-	});
-});
-
-describe('getPrTitle', () => {
-	testEnv();
-	const context = getContext({
-		payload: {
-			'pull_request': {
-				number: 11,
-				id: 21031067,
-				head: {
-					ref: 'change',
-				},
-				base: {
-					ref: 'master',
-				},
-			},
-		},
-	});
-
-	it('should get PR title', () => {
-		process.env.INPUT_PR_TITLE = '${PR_NUMBER}-${PR_ID}-${PR_HEAD_REF}-${PR_BASE_REF}';
-		expect(getPrTitle(context)).toBe('11-21031067-change-master');
-	});
-
-	it('should throw error', () => {
-		expect(() => getPrTitle(context)).toThrow();
-	});
-
-	it('should throw error', () => {
-		process.env.INPUT_PR_TITLE = '${PR_NUMBER}-${PR_ID}-${PR_HEAD_REF}-${PR_BASE_REF}';
-		expect(() => getPrTitle(getContext({}))).toThrow();
-	});
-});
-
-describe('getPrLink', () => {
-	it('should get pr link', () => {
-		expect(getPrLink(generateContext({
-			ref: 'heads/test',
-			event: 'push',
-		}, {
-			payload: {
-				'pull_request': {
-					title: 'test title',
-					'html_url': 'http://example.com',
-				},
-			},
-		}))).toBe('[test title](http://example.com)');
-	});
-
-	it('should get empty', () => {
-		expect(getPrLink(getContext({}))).toEqual('');
-	});
-});
-
-describe('getPrBody', () => {
-	testEnv();
-	const context = getContext({
-		ref: 'refs/heads/test',
-		eventName: 'push',
-		payload: {
-			'pull_request': {
-				number: 11,
-				id: 21031067,
-				head: {
-					ref: 'change',
-				},
-				base: {
-					ref: 'master',
-				},
-				title: 'test title',
-				'html_url': 'http://example.com',
-			},
-		},
-	});
-
-	it('should get PR Body 1', () => {
-		process.env.INPUT_VARIABLE1 = 'Base PullRequest';
-		process.env.INPUT_VARIABLE2 = 'Command results';
-		process.env.INPUT_VARIABLE3 = 'Details: ';
-		process.env.INPUT_VARIABLE4 = 'Changed files';
-		process.env.INPUT_PR_BODY   = `
-      ## \${VARIABLE1}
-
-      \${PR_TITLE} (#\${PR_NUMBER})
-
-      ## \${VARIABLE2}
-      <details>
-        <summary>\${VARIABLE3}</summary>
-
-        \${COMMANDS_STDOUT}
-
-      </details>
-
-      ## \${VARIABLE4}
-      <details>
-        <summary>\${FILES_SUMMARY}: </summary>
-
-        \${FILES}
-
-      </details>
-
-      <hr>
-
-      [:octocat: Repo](\${ACTION_URL}) | [:memo: Issues](\${ACTION_URL}/issues) | [:department_store: Marketplace](\${ACTION_MARKETPLACE_URL})
-`;
-
-		expect(getPrBody(['README.md', 'CHANGELOG.md'], [
-			{command: 'test1', stdout: ['test1-1', 'test1-2']},
-			{command: 'test2', stdout: ['test2-1', 'test2-2']},
-		], context)).toBe([
-			'## Base PullRequest',
-			'',
-			'test title (#11)',
-			'',
-			'## Command results',
-			'<details>',
-			'<summary>Details: </summary>',
-			'',
-			'<details>',
-			'<summary><em>test1</em></summary>',
-			'',
-			'```',
-			'test1-1',
-			'test1-2',
-			'```',
-			'',
-			'</details>',
-			'<details>',
-			'<summary><em>test2</em></summary>',
-			'',
-			'```',
-			'test2-1',
-			'test2-2',
-			'```',
-			'',
-			'</details>',
-			'',
-			'</details>',
-			'',
-			'## Changed files',
-			'<details>',
-			'<summary>Changed 2 files: </summary>',
-			'',
-			'- README.md',
-			'- CHANGELOG.md',
-			'',
-			'</details>',
-			'',
-			'<hr>',
-			'',
-			'[:octocat: Repo](https://github.com/technote-space/create-pr-action) | [:memo: Issues](https://github.com/technote-space/create-pr-action/issues) | [:department_store: Marketplace](https://github.com/marketplace/actions/create-pr-action)',
-		].join('\n'));
-	});
-
-	it('should get PR Body 2', () => {
-		process.env.INPUT_DATE_FORMAT1 = 'YYYY/MM/DD';
-		process.env.INPUT_DATE_FORMAT2 = 'DD/MM/YYYY';
-		process.env.INPUT_VARIABLE1    = 'test1';
-		process.env.INPUT_VARIABLE3    = 'test3';
-		process.env.INPUT_VARIABLE5    = '';
-		process.env.INPUT_PR_BODY      = `
-		\${PR_LINK}
-		\${COMMANDS}
-		\${COMMANDS_STDOUT}
-		\${COMMANDS_STDOUT_OPEN}
-		\${FILES}
-		\${FILES_SUMMARY}
-		\${ACTION_NAME}
-		\${ACTION_OWNER}
-		\${ACTION_REPO}
-		\${ACTION_URL}
-		\${ACTION_MARKETPLACE_URL}
-		\${DATE1}
-		\${DATE2}
-		\${VARIABLE1}
-		\${VARIABLE3}
-		\${VARIABLE5}
-`;
-
-		expect(getPrBody(['README.md'], [
-			{command: 'test1', stdout: ['test1-1', 'test1-2']},
-			{command: 'test2', stdout: []},
-		], context)).toBe([
-			'[test title](http://example.com)',
-			'',
-			'```',
-			'$ test1',
-			'$ test2',
-			'```',
-			'',
-			'<details>',
-			'<summary><em>test1</em></summary>',
-			'',
-			'```',
-			'test1-1',
-			'test1-2',
-			'```',
-			'',
-			'</details>',
-			'<details>',
-			'<summary><em>test2</em></summary>',
-			'',
-			'</details>',
-			'<details open>',
-			'<summary><em>test1</em></summary>',
-			'',
-			'```',
-			'test1-1',
-			'test1-2',
-			'```',
-			'',
-			'</details>',
-			'<details open>',
-			'<summary><em>test2</em></summary>',
-			'',
-			'</details>',
-			'- README.md',
-			'Changed file',
-			'Create PR Action',
-			'technote-space',
-			'create-pr-action',
-			'https://github.com/technote-space/create-pr-action',
-			'https://github.com/marketplace/actions/create-pr-action',
-			moment().format('YYYY/MM/DD'),
-			moment().format('DD/MM/YYYY'),
-			'test1',
-			'test3',
-			'',
-		].join('\n'));
-	});
-
-	it('should not be code', () => {
-		process.env.INPUT_PR_BODY = '${COMMANDS}';
-
-		expect(getPrBody([], [], context)).toBe('');
-	});
-
-	it('should throw error', () => {
-		expect(() => getPrBody([], [], context)).toThrow();
-	});
-});
-
-describe('isDisabledDeletePackage', () => {
-	testEnv();
-
-	it('should be false 1', () => {
-		process.env.INPUT_DELETE_PACKAGE = '1';
-		expect(isDisabledDeletePackage()).toBe(false);
-	});
-
-	it('should be false 2', () => {
-		process.env.INPUT_DELETE_PACKAGE = 'true';
-		expect(isDisabledDeletePackage()).toBe(false);
-	});
-
-	it('should be false 3', () => {
-		process.env.INPUT_DELETE_PACKAGE = 'abc';
-		expect(isDisabledDeletePackage()).toBe(false);
-	});
-
-	it('should be true 1', () => {
-		process.env.INPUT_DELETE_PACKAGE = '0';
-		expect(isDisabledDeletePackage()).toBe(true);
-	});
-
-	it('should be true 2', () => {
-		process.env.INPUT_DELETE_PACKAGE = 'false';
-		expect(isDisabledDeletePackage()).toBe(true);
-	});
-
-	it('should be true 3', () => {
-		process.env.INPUT_DELETE_PACKAGE = '';
-		expect(isDisabledDeletePackage()).toBe(true);
-	});
-});
-
-describe('isClosePR', () => {
-	testEnv();
-	it('should return true', () => {
-		expect(isClosePR(generateContext({
-			event: 'pull_request',
-			action: 'closed',
-		}))).toBe(true);
-	});
-
-	it('should return false 1', () => {
-		process.env.INPUT_PR_BRANCH_NAME = 'test';
-		expect(isClosePR(generateContext({
-			event: 'push',
-		}))).toBe(false);
-	});
-
-	it('should return false 2', () => {
-		expect(isClosePR(generateContext({
-			event: 'pull_request',
-			action: 'synchronize',
-		}))).toBe(false);
-	});
-});
-
-describe('isTargetBranch', () => {
-	testEnv();
-
-	it('should return true 1', () => {
-		expect(isTargetBranch('test')).toBe(true);
-	});
-
-	it('should return true 2', () => {
-		process.env.INPUT_TARGET_BRANCH_PREFIX = 'feature/';
-		expect(isTargetBranch('feature/test')).toBe(true);
-	});
-
-	it('should return false', () => {
-		process.env.INPUT_TARGET_BRANCH_PREFIX = 'feature/';
-		expect(isTargetBranch('test')).toBe(false);
-	});
-});
-
-describe('filterGitStatusFunc', () => {
-	testEnv();
-
-	it('should filter git status', () => {
-		process.env.INPUT_FILTER_GIT_STATUS = 'Mdc';
-
-		expect(filterGitStatus('M  test.md')).toBe(true);
-		expect(filterGitStatus('D  test.md')).toBe(true);
-		expect(filterGitStatus('A  test.md')).toBe(false);
-		expect(filterGitStatus('C  test.md')).toBe(false);
-	});
-
-	it('should not filter', () => {
-		expect(filterGitStatus('M  test.md')).toBe(true);
-		expect(filterGitStatus('D  test.md')).toBe(true);
-		expect(filterGitStatus('A  test.md')).toBe(true);
-		expect(filterGitStatus('C  test.md')).toBe(true);
-	});
-
-	it('should throw error', () => {
-		process.env.INPUT_FILTER_GIT_STATUS = 'c';
-		expect(() => filterGitStatus('C  test.md')).toThrow();
-	});
-});
-
-describe('filterExtension', () => {
-	testEnv();
-
-	it('should filter extension', () => {
-		process.env.INPUT_FILTER_EXTENSIONS = 'md,.txt';
-
-		expect(filterExtension('test.md')).toBe(true);
-		expect(filterExtension('test.txt')).toBe(true);
-		expect(filterExtension('test.js')).toBe(false);
-		expect(filterExtension('test.1md')).toBe(false);
-		expect(filterExtension('test.md1')).toBe(false);
-	});
-
-	it('should not filter', () => {
-		expect(filterExtension('test.md')).toBe(true);
-		expect(filterExtension('test.txt')).toBe(true);
-		expect(filterExtension('test.js')).toBe(true);
-		expect(filterExtension('test.1md')).toBe(true);
-		expect(filterExtension('test.md1')).toBe(true);
+	it('should return args', () => {
+		process.env.INPUT_INSTALL_PACKAGES        = 'test1\ntest2';
+		process.env.INPUT_DEV_INSTALL_PACKAGES    = 'test3\ntest4';
+		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'test5\ntest6';
+		process.env.INPUT_EXECUTE_COMMANDS        = 'ncu -u && yarn upgrade';
+		process.env.INPUT_COMMIT_NAME             = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL            = 'example@example.com';
+		process.env.INPUT_COMMIT_MESSAGE          = 'test: create pull request';
+		process.env.INPUT_PR_BRANCH_PREFIX        = 'prefix/';
+		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch-${PR_ID}';
+		process.env.INPUT_PR_TITLE                = 'test: create pull request (${PR_NUMBER})';
+		process.env.INPUT_PR_BODY                 = 'pull request body';
+		process.env.INPUT_PR_DATE_FORMAT1         = 'YYYY-MM-DD HH:mm:ss';
+		process.env.INPUT_PR_DATE_FORMAT2         = 'YYYY-MM-DD';
+		process.env.INPUT_FILTER_GIT_STATUS       = 'MD';
+		process.env.INPUT_FILTER_EXTENSIONS       = '.md, txt';
+		process.env.INPUT_TARGET_BRANCH_PREFIX    = 'feature/';
+		process.env.INPUT_DELETE_PACKAGE          = '1';
+		process.env.INPUT_INCLUDE_LABELS          = 'label1, label2\nlabel3';
+
+		expect(getRunnerArguments()).toEqual({
+			actionName: 'Create PR Action',
+			actionOwner: 'technote-space',
+			actionRepo: 'create-pr-action',
+			commitEmail: 'example@example.com',
+			commitMessage: 'test: create pull request',
+			commitName: 'GitHub Actions',
+			deletePackage: true,
+			devInstallPackages: [
+				'test3',
+				'test4',
+			],
+			executeCommands: [
+				'ncu -u',
+				'yarn upgrade',
+			],
+			filterExtensions: [
+				'.md',
+				'txt',
+			],
+			filterGitStatus: 'MD',
+			globalInstallPackages: [
+				'test5',
+				'test6',
+			],
+			includeLabels: [
+				'label1',
+				'label2',
+				'label3',
+			],
+			installPackages: [
+				'test1',
+				'test2',
+			],
+			prBody: 'pull request body',
+			prBranchName: 'test-branch-${PR_ID}',
+			prBranchPrefix: 'prefix/',
+			prDateFormats: [
+				'YYYY-MM-DD HH:mm:ss',
+				'YYYY-MM-DD',
+			],
+			prTitle: 'test: create pull request (${PR_NUMBER})',
+			targetBranchPrefix: 'feature/',
+		});
 	});
 });
