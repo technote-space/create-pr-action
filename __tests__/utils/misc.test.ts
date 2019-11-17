@@ -1,4 +1,5 @@
 /* eslint-disable no-magic-numbers */
+import path from 'path';
 import { testEnv } from '@technote-space/github-action-test-helper';
 import { getRunnerArguments } from '../../src/utils/misc';
 import { DEFAULT_PR_BRANCH_PREFIX } from '../../src/constant';
@@ -8,6 +9,7 @@ describe('getRunnerArguments', () => {
 
 	it('should return args', () => {
 		expect(getRunnerArguments()).toEqual({
+			rootDir: path.resolve(__dirname, '../..'),
 			actionName: 'Create PR Action',
 			actionOwner: 'technote-space',
 			actionRepo: 'create-pr-action',
@@ -55,6 +57,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_INCLUDE_LABELS          = 'label1, label2\nlabel3';
 
 		expect(getRunnerArguments()).toEqual({
+			rootDir: path.resolve(__dirname, '../..'),
 			actionName: 'Create PR Action',
 			actionOwner: 'technote-space',
 			actionRepo: 'create-pr-action',
