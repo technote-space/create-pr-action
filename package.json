@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/upgrade-packages-action",
-  "version": "1.0.0.36",
+  "version": "1.0.0.37",
   "description": "This is a GitHub Actions that executes an arbitrary command and commits the changes to the new pull request.",
   "author": "Technote <technote.space@gmail.com> (https://technote.space)",
   "license": "MIT",
