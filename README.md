@@ -1,6 +1,6 @@
 # Create PR Action
 
-[![Build Status](https://github.com/technote-space/upgrade-packages-action/workflows/Build/badge.svg)](https://github.com/technote-space/upgrade-packages-action/actions)
+[![CI Status](https://github.com/technote-space/upgrade-packages-action/workflows/CI/badge.svg)](https://github.com/technote-space/upgrade-packages-action/actions)
 [![codecov](https://codecov.io/gh/technote-space/upgrade-packages-action/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/upgrade-packages-action)
 [![CodeFactor](https://www.codefactor.io/repository/github/technote-space/upgrade-packages-action/badge)](https://www.codefactor.io/repository/github/technote-space/upgrade-packages-action)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/upgrade-packages-action/blob/master/LICENSE)
