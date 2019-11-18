@@ -27,6 +27,7 @@ describe('getRunnerArguments', () => {
 			prBody: '',
 			prBranchName: '',
 			prBranchPrefix: DEFAULT_PR_BRANCH_PREFIX,
+			prCloseMessage: '',
 			prDateFormats: [
 				'',
 				'',
@@ -48,6 +49,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_PR_BRANCH_NAME          = 'test-branch-${PR_ID}';
 		process.env.INPUT_PR_TITLE                = 'test: create pull request (${PR_NUMBER})';
 		process.env.INPUT_PR_BODY                 = 'pull request body';
+		process.env.INPUT_PR_CLOSE_MESSAGE        = 'close message';
 		process.env.INPUT_PR_DATE_FORMAT1         = 'YYYY-MM-DD HH:mm:ss';
 		process.env.INPUT_PR_DATE_FORMAT2         = 'YYYY-MM-DD';
 		process.env.INPUT_FILTER_GIT_STATUS       = 'MD';
@@ -94,6 +96,7 @@ describe('getRunnerArguments', () => {
 			prBody: 'pull request body',
 			prBranchName: 'test-branch-${PR_ID}',
 			prBranchPrefix: 'prefix/',
+			prCloseMessage: 'close message',
 			prDateFormats: [
 				'YYYY-MM-DD HH:mm:ss',
 				'YYYY-MM-DD',
