@@ -23,6 +23,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	prTitle: getInput('PR_TITLE'),
 	prBody: getInput('PR_BODY'),
 	prDateFormats: [getInput('PR_DATE_FORMAT1'), getInput('PR_DATE_FORMAT2')],
+	prCloseMessage: getInput('PR_CLOSE_MESSAGE'),
 	filterGitStatus: getInput('FILTER_GIT_STATUS'),
 	filterExtensions: getArrayInput('FILTER_EXTENSIONS'),
 	targetBranchPrefix: getInput('TARGET_BRANCH_PREFIX'),

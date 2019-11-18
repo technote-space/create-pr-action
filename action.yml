@@ -71,6 +71,9 @@ inputs:
       <hr>
 
       [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
+  PR_CLOSE_MESSAGE:
+    description: Message body when closing PullRequest.
+    default: 'This PR is no longer needed because the package looks up-to-date.'
   PR_DATE_FORMAT1:
     description: Date format.
     default: 'YYYY-MM-DD HH:mm:ss'
