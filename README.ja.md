@@ -36,7 +36,11 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## スクリーンショット
-![action](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+### コマンドの実行
+![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+
+### 作成されたプルリクエスト
+![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
 
 ## インストール
 1. workflow を設定  
