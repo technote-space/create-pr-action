@@ -14,6 +14,8 @@
 **Table of Contents**
 
 - [スクリーンショット](#%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88)
+  - [コマンドの実行](#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AE%E5%AE%9F%E8%A1%8C)
+  - [作成されたプルリクエスト](#%E4%BD%9C%E6%88%90%E3%81%95%E3%82%8C%E3%81%9F%E3%83%97%E3%83%AB%E3%83%AA%E3%82%AF%E3%82%A8%E3%82%B9%E3%83%88)
 - [インストール](#%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB)
 - [オプション](#%E3%82%AA%E3%83%97%E3%82%B7%E3%83%A7%E3%83%B3)
   - [GLOBAL_INSTALL_PACKAGES](#global_install_packages)
@@ -36,7 +38,11 @@
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## スクリーンショット
-![action](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+### コマンドの実行
+![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+
+### 作成されたプルリクエスト
+![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
 
 ## インストール
 1. workflow を設定  

@@ -14,6 +14,8 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
 **Table of Contents**
 
 - [Screenshots](#screenshots)
+  - [Run commands](#run-commands)
+  - [Created Pull Request](#created-pull-request)
 - [Installation](#installation)
 - [Options](#options)
   - [GLOBAL_INSTALL_PACKAGES](#global_install_packages)
@@ -36,7 +38,11 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Screenshots
-![action](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+### Run commands
+![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+
+### Created Pull Request
+![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
 
 ## Installation
 1. Setup workflow  
