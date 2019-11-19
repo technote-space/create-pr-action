@@ -2,7 +2,7 @@ import path from 'path';
 import { Utils } from '@technote-space/github-action-pr-helper';
 import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput } from '@actions/core' ;
-import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, DEFAULT_PR_BRANCH_PREFIX } from '../constant';
+import { ACTION_NAME, ACTION_OWNER, ACTION_REPO } from '../constant';
 
 const {getArrayInput, getBoolValue} = Utils;
 
@@ -18,7 +18,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	commitMessage: getInput('COMMIT_MESSAGE'),
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),
-	prBranchPrefix: getInput('PR_BRANCH_PREFIX') || DEFAULT_PR_BRANCH_PREFIX,
+	prBranchPrefix: getInput('PR_BRANCH_PREFIX'),
 	prBranchName: getInput('PR_BRANCH_NAME'),
 	prTitle: getInput('PR_TITLE'),
 	prBody: getInput('PR_BODY'),

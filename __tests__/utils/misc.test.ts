@@ -2,7 +2,6 @@
 import path from 'path';
 import { testEnv } from '@technote-space/github-action-test-helper';
 import { getRunnerArguments } from '../../src/utils/misc';
-import { DEFAULT_PR_BRANCH_PREFIX } from '../../src/constant';
 
 describe('getRunnerArguments', () => {
 	testEnv();
@@ -26,7 +25,7 @@ describe('getRunnerArguments', () => {
 			installPackages: [],
 			prBody: '',
 			prBranchName: '',
-			prBranchPrefix: DEFAULT_PR_BRANCH_PREFIX,
+			prBranchPrefix: '',
 			prCloseMessage: '',
 			prDateFormats: [
 				'',
