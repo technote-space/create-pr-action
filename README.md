@@ -14,6 +14,8 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
 **Table of Contents**
 
 - [Screenshots](#screenshots)
+  - [Run commands](#run-commands)
+  - [Created Pull Request](#created-pull-request)
 - [Installation](#installation)
 - [Options](#options)
   - [GLOBAL_INSTALL_PACKAGES](#global_install_packages)
