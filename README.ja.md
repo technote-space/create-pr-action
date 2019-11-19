@@ -7,7 +7,7 @@
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
-This is a `GitHub Actions` that executes an arbitrary command and commits the changes to the new pull request.
+これは任意のコマンドを実行して変更をプルリクエストにコミットする `GitHub Actions` です。
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -25,12 +25,12 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Screenshots
+## スクリーンショット
 ![action](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
 
-## Installation
-1. Setup workflow  
-   e.g. `.github/workflows/update-packages.yml`
+## インストール
+1. workflow を設定  
+   例：`.github/workflows/update-packages.yml`
    ```yaml
    on:
      schedule:
@@ -62,43 +62,43 @@ This is a `GitHub Actions` that executes an arbitrary command and commits the ch
    ```
 [More details of target event](#action-event-details)
 
-## Options
+## オプション
 ### GLOBAL_INSTALL_PACKAGES
-Packages to be global installed.  
+グローバルにインストールするパッケージ
 default: `''`
 
 ### EXECUTE_COMMANDS
-Commands to be executed.  
+実行するコマンド
 
 ### COMMIT_MESSAGE
-Commit message.
+コミットメッセージ
 
 ### COMMIT_NAME
-Git commit name.  
+コミット時に設定する名前  
 default: `'GitHub Actions'`
 
 ### COMMIT_EMAIL
-Git commit email.  
+コミット時に設定するメールアドレス  
 default: `'example@example.com'`
 
 ### PR_BRANCH_PREFIX
-PullRequest branch prefix.  
+ブランチ名のプリフィックス  
 default: `'create-pr-action/'`
 
 ### PR_BRANCH_NAME
-PullRequest branch name.  
-Several variables are available ([variables1](#variables1))
+ブランチ名  
+いくつかの変数が使用可能です ([variables1](#variables1))
 
 ### PR_TITLE
-PullRequest title.  
-Several variables are available ([variables1](#variables1))
+プルリクエストのタイトル  
+いくつかの変数が使用可能です ([variables1](#variables1))
 
 ### PR_BODY
-PullRequest body.  
-Several variables are available ([variables2](#variables2))
+プルリクエストの本文  
+いくつかの変数が使用可能です ([variables2](#variables2))
 
-## Action event details
-### Target event
+## Action イベント詳細
+### 対象イベント
 | eventName | action |
 |:---:|:---:|
 |pull_request|opened, synchronize, reopened, labeled, unlabeled|
@@ -108,7 +108,7 @@ Several variables are available ([variables2](#variables2))
 - The following activity types must be explicitly specified ([detail](https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows#pull-request-event-pull_request))
   - `labeled`, `unlabeled`, `closed`
 
-## Variables
+## 変数
 ### Variables1
 - PR_NUMBER
 - PR_ID
@@ -125,17 +125,17 @@ Several variables are available ([variables2](#variables2))
 - FILES
 - FILES_SUMMARY
 
-## Addition
-The `GITHUB_TOKEN` that is provided as a part of `GitHub Actions` doesn't have authorization to create any successive events.  
-So it won't spawn actions which triggered by push.  
-This can be a problem if you have branch protection configured.  
+## 補足
+GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作成する権限がありません。  
+したがって、プッシュによってトリガーされるビルドアクションなどは実行されません。  
+これはブランチプロテクションを設定していると問題になる場合があります。  
 
-If you want to trigger actions, use a personal access token instead.  
-1. Generate a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) with the public_repo or repo scope.  
-(repo is required for private repositories).  
-1. [Save as ACCESS_TOKEN](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables)
-1. Use `ACCESS_TOKEN` instead of `GITHUB_TOKEN`.  
-   e.g. `.github/workflows/update-packages.yml`
+もしアクションをトリガーしたい場合は代わりに`personal access token`を使用してください。  
+1. public_repo または repo の権限で [Personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) を生成  
+(repo はプライベートリポジトリで必要です)  
+1. [ACCESS_TOKENとして保存](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables)
+1. `GITHUB_TOKEN`の代わりに`ACCESS_TOKEN`を使用  
+   例：`.github/workflows/update-packages.yml`
    ```yaml
    on:
      schedule:
