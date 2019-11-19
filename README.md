@@ -1,9 +1,9 @@
 # Create PR Action
 
-[![CI Status](https://github.com/technote-space/upgrade-packages-action/workflows/CI/badge.svg)](https://github.com/technote-space/upgrade-packages-action/actions)
-[![codecov](https://codecov.io/gh/technote-space/upgrade-packages-action/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/upgrade-packages-action)
-[![CodeFactor](https://www.codefactor.io/repository/github/technote-space/upgrade-packages-action/badge)](https://www.codefactor.io/repository/github/technote-space/upgrade-packages-action)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/upgrade-packages-action/blob/master/LICENSE)
+[![CI Status](https://github.com/technote-space/create-pr-action/workflows/CI/badge.svg)](https://github.com/technote-space/create-pr-action/actions)
+[![codecov](https://codecov.io/gh/technote-space/create-pr-action/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/create-pr-action)
+[![CodeFactor](https://www.codefactor.io/repository/github/technote-space/create-pr-action/badge)](https://www.codefactor.io/repository/github/technote-space/create-pr-action)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/create-pr-action/blob/master/LICENSE)
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 

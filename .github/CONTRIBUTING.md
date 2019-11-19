@@ -1,7 +1,7 @@
 # Contributing
-[issues]: https://github.com/technote-space/upgrade-packages-action/issues
-[fork]: https://github.com/technote-space/upgrade-packages-action/fork
-[pr]: https://github.com/technote-space/upgrade-packages-action/compare
+[issues]: https://github.com/technote-space/create-pr-action/issues
+[fork]: https://github.com/technote-space/create-pr-action/fork
+[pr]: https://github.com/technote-space/create-pr-action/compare
 [eslint]: https://eslint.org/
 [jest]: https://jestjs.io/
 [code-of-conduct]: CODE_OF_CONDUCT.md
