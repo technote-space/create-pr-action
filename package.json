@@ -19,7 +19,7 @@
   "main": "lib/main.js",
   "dependencies": {
     "@actions/core": "^1.2.0",
-    "@technote-space/github-action-pr-helper": "^0.1.0"
+    "@technote-space/github-action-pr-helper": "^0.1.2"
   },
   "devDependencies": {
     "@technote-space/github-action-test-helper": "^0.0.21",
@@ -31,7 +31,7 @@
     "jest": "^24.9.0",
     "jest-circus": "^24.9.0",
     "nock": "^11.7.0",
-    "ts-jest": "^24.1.0",
+    "ts-jest": "^24.2.0",
     "typescript": "^3.7.2"
   },
   "publishConfig": {
