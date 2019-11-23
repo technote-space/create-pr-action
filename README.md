@@ -185,6 +185,8 @@ If you want to trigger actions, use a personal access token instead.
              PR_TITLE: 'chore: update npm dependencies'
    ```
 
+test
+
 ## Author
 [GitHub (Technote)](https://github.com/technote-space)  
 [Blog](https://technote.space)
