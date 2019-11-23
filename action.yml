@@ -50,7 +50,7 @@ inputs:
     default: |
       ## Base PullRequest
 
-      ${PR_TITLE} (#${PR_NUMBER})
+      ${PR_TITLE} (${PR_NUMBER_REF})
 
       ## Command results
       <details>
