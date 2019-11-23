@@ -380,10 +380,10 @@
     "@actions/github" "^1.1.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.1.2.tgz#df63516c0ef603d855d2e84d23b6e0632f4bb794"
-  integrity sha512-QluwhZG1v6AAiXvqDBS/DKSzXyrHVOnfSCJKivdvD+6h9VrDa2NJxuBXbLul16dbnRikCaBqT5mXXTw2Zh/NzA==
+"@technote-space/github-action-pr-helper@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.1.4.tgz#1211d512f4d64d357fa8554246bc799b1b46ea31"
+  integrity sha512-GJ8fpNJzwhMzow8rOPFK5YKljiumtv/A1EJA6zOmUJN9+z8r21l6WDE72j9h91GWDam/B9BeMeYQ0ILndTNaWw==
   dependencies:
     "@actions/core" "^1.2.0"
     "@actions/github" "^1.1.0"
