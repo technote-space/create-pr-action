@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Update dependencies
-        uses: technote-space/create-pr-action@test/v1
+        uses: technote-space/create-pr-action@gh-actions
         with:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           GLOBAL_INSTALL_PACKAGES: npm-check-updates
@@ -24,4 +24,4 @@ jobs:
           COMMIT_NAME: Technote
           COMMIT_EMAIL: technote.space@gmail.com
           PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
-          PR_TITLE: 'chore: update npm dependencies'
+          PR_TITLE: 'chore: update npm dependencies (${PR_HEAD_REF} -> ${PR_BASE_REF})'
