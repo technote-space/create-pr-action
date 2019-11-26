@@ -7,7 +7,8 @@
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
-これは任意のコマンドを実行して変更をプルリクエストにコミットする `GitHub Actions` です。
+これは任意のコマンドを実行して変更をプルリクエストにコミットする `GitHub Actions` です。  
+コンフリクトを解決したり不要になったプルリクエストをクローズしたりするマネジメント機能も備えています。  
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -91,11 +92,11 @@ default: `''`
 
 ### COMMIT_NAME
 コミット時に設定する名前  
-default: `'GitHub Actions'`
+default: `'github-actions[bot]'`
 
 ### COMMIT_EMAIL
 コミット時に設定するメールアドレス  
-default: `'example@example.com'`
+default: `'41898282+github-actions[bot]@users.noreply.github.com'`
 
 ### PR_BRANCH_PREFIX
 ブランチ名のプリフィックス  
@@ -126,20 +127,24 @@ default: `'create-pr-action/'`
 
 ## 変数
 ### Variables1
-- PR_NUMBER
-- PR_ID
-- PR_HEAD_REF
-- PR_TITLE
-- PR_URL
+| name | description |
+|:---|:---|
+| PR_NUMBER | pull_request.number (例：`11`) |
+| PR_NUMBER_REF | `#${pull_request.number}` (例：`#11`) |
+| PR_ID | pull_request.id (例：`21031067`) |
+| PR_HEAD_REF | pull_request.head.ref (例：`change`) |
+| PR_BASE_REF | pull_request.base.ref (例：`master`) |
+| PR_TITLE | pull_request.title (例：`Update the README with new information.`) |
 
 ### Variables2
 - [variables1](#variables1)
-- PR_LINK
-- COMMANDS
-- COMMANDS_STDOUT
-- COMMANDS_OUTPUT
-- FILES
-- FILES_SUMMARY
+
+| name | description |
+|:---|:---|
+| PR_LINK | プルリクエストへのリンク |
+| COMMANDS_OUTPUT | TOC コマンドの結果 |
+| FILES_SUMMARY | 例：`Changed 2 files` |
+| FILES | 変更されたファイル一覧 |
 
 ## 補足
 GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作成する権限がありません。  

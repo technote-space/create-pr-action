@@ -1,11 +1,14 @@
-# https://help.github.com/ja/articles/metadata-syntax-for-github-actions
 name: Create PR Action
+
 description: Run command and create Pull Request.
+
 author: technote-space
+
 inputs:
   GITHUB_TOKEN:
     description: Secret GitHub API token to use for making API requests.
     required: true
+
   PACKAGE_MANAGER:
     description: Package manager to use to install dependencies.
     default: ''
@@ -24,17 +27,17 @@ inputs:
   EXECUTE_COMMANDS:
     description: Commands to be executed.
     required: true
+
   COMMIT_MESSAGE:
     description: Commit message.
     required: true
   COMMIT_NAME:
     description: Git commit name.
-    required: true
-    default: 'GitHub Actions'
+    default: 'github-actions[bot]'
   COMMIT_EMAIL:
     description: Git commit email.
-    required: true
-    default: 'example@example.com'
+    default: '41898282+github-actions[bot]@users.noreply.github.com'
+
   PR_BRANCH_PREFIX:
     description: PullRequest branch prefix.
     default: 'create-pr-action/'
@@ -80,6 +83,7 @@ inputs:
   PR_DATE_FORMAT2:
     description: Date format.
     default: 'YYYY-MM-DD'
+
   FILTER_GIT_STATUS:
     description: Filter by git status. (M, D or A)
     default: ''
@@ -92,10 +96,12 @@ inputs:
   INCLUDE_LABELS:
     description: Labels used to check if the PullRequest has it.
     default: ''
+
 branding:
   # https://feathericons.com/
   icon: 'package'
   color: 'orange'
+
 runs:
   using: node12
   main: lib/main.js

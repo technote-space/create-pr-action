@@ -7,7 +7,8 @@
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
-This is a `GitHub Actions` that executes an arbitrary command and commits the changes to the new pull request.
+This is a `GitHub Actions` that executes an arbitrary command and commits the changes to the new pull request.  
+It also has a management function that resolves conflicts and closes pull requests that are no longer needed.  
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -91,11 +92,11 @@ Commit message.
 
 ### COMMIT_NAME
 Git commit name.  
-default: `'GitHub Actions'`
+default: `'github-actions[bot]'`
 
 ### COMMIT_EMAIL
 Git commit email.  
-default: `'example@example.com'`
+default: `'41898282+github-actions[bot]@users.noreply.github.com'`
 
 ### PR_BRANCH_PREFIX
 PullRequest branch prefix.  
@@ -126,20 +127,24 @@ Several variables are available ([variables2](#variables2))
 
 ## Variables
 ### Variables1
-- PR_NUMBER
-- PR_ID
-- PR_HEAD_REF
-- PR_TITLE
-- PR_URL
+| name | description |
+|:---|:---|
+| PR_NUMBER | pull_request.number (e.g. `11`) |
+| PR_NUMBER_REF | `#${pull_request.number}` (e.g. `#11`) |
+| PR_ID | pull_request.id (e.g. `21031067`) |
+| PR_HEAD_REF | pull_request.head.ref (e.g. `change`) |
+| PR_BASE_REF | pull_request.base.ref (e.g. `master`) |
+| PR_TITLE | pull_request.title (e.g. `Update the README with new information.`) |
 
 ### Variables2
 - [variables1](#variables1)
-- PR_LINK
-- COMMANDS
-- COMMANDS_STDOUT
-- COMMANDS_OUTPUT
-- FILES
-- FILES_SUMMARY
+
+| name | description |
+|:---|:---|
+| PR_LINK | Link to PR |
+| COMMANDS_OUTPUT | Result of TOC command |
+| FILES_SUMMARY | e.g. `Changed 2 files` |
+| FILES | Changed file list |
 
 ## Addition
 The `GITHUB_TOKEN` that is provided as a part of `GitHub Actions` doesn't have authorization to create any successive events.  
