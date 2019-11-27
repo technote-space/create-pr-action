@@ -24,9 +24,10 @@ describe('getRunnerArguments', () => {
 			includeLabels: [],
 			installPackages: [],
 			prBody: '',
-			prBranchName: '',
 			prBranchPrefix: '',
+			prBranchName: '',
 			prBranchPrefixForDefaultBranch: '',
+			prBranchNameForDefaultBranch: '',
 			prCloseMessage: '',
 			prDateFormats: [
 				'',
@@ -47,6 +48,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_COMMIT_MESSAGE           = 'test: create pull request';
 		process.env.INPUT_PR_BRANCH_PREFIX         = 'prefix/';
 		process.env.INPUT_PR_DEFAULT_BRANCH_PREFIX = 'release/';
+		process.env.INPUT_PR_DEFAULT_BRANCH_NAME   = '${PATCH_VERSION}';
 		process.env.INPUT_PR_BRANCH_NAME           = 'test-branch-${PR_ID}';
 		process.env.INPUT_PR_TITLE                 = 'test: create pull request (${PR_NUMBER})';
 		process.env.INPUT_PR_BODY                  = 'pull request body';
@@ -95,9 +97,10 @@ describe('getRunnerArguments', () => {
 				'test2',
 			],
 			prBody: 'pull request body',
-			prBranchName: 'test-branch-${PR_ID}',
 			prBranchPrefix: 'prefix/',
+			prBranchName: 'test-branch-${PR_ID}',
 			prBranchPrefixForDefaultBranch: 'release/',
+			prBranchNameForDefaultBranch: '${PATCH_VERSION}',
 			prCloseMessage: 'close message',
 			prDateFormats: [
 				'YYYY-MM-DD HH:mm:ss',
