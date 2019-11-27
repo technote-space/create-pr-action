@@ -364,31 +364,31 @@
   dependencies:
     "@types/node" ">= 8"
 
-"@technote-space/filter-github-action@^0.1.10":
+"@technote-space/filter-github-action@^0.1.11":
   version "0.1.11"
   resolved "https://registry.yarnpkg.com/@technote-space/filter-github-action/-/filter-github-action-0.1.11.tgz#436af07a5dd0fa01fd0596eef5a50552a21a7cf7"
   integrity sha512-Ywyrv0U15vpdw5vS/E3GdibqQozHz5o05hH73cErB6CJOlkx8X4cQRcKxYUNbN2K4r+y24ccOmnVK+/YsGydFQ==
   dependencies:
     "@actions/github" "^1.1.0"
 
-"@technote-space/github-action-helper@^0.6.0":
-  version "0.6.1"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-0.6.1.tgz#a643cd191f3605d0c0f5fbf7820431fd8f0a6222"
-  integrity sha512-NmlSe7tXdMcV5A4LGoAsyZTC1+ZMMNUCD5zajFLCujMxsIF2/9CjLkpld3CNn7M8VR+pEmhpCxjHtCn96TJBmQ==
+"@technote-space/github-action-helper@^0.6.2":
+  version "0.6.2"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-0.6.2.tgz#a7355a775bb331fc575f1e5858660d1b2194b99c"
+  integrity sha512-85Irh68zaXrklKirRkIdR5jdiZyEo8gGwrZQAID4kUshpsj9BTlC9XkQbwlBMnJqmW85Z7eWwccfgcoAve7Bdw==
   dependencies:
     "@actions/core" "^1.2.0"
     "@actions/github" "^1.1.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.1.9.tgz#ff7be5ce4b761f545653d9c1e32d794f15c0d95f"
-  integrity sha512-iqxOYlGsFHfayv4koi6uMNMbuonHVkCBuWgkfUNhN1a4OlqrnfYpWWP0P7aCj9Ym5DsyAQeNM/mHlyx3pYtZdw==
+"@technote-space/github-action-pr-helper@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.1.10.tgz#d95084fe85fb48239d76e2f5202c1a681fc74706"
+  integrity sha512-z0ka6W5i6yBkuWrU4EcOaMhVYPXaUbfehwOGMOrv4PGOhHquMOBNrvpABkXBlyAOKuZ9WhG6845zo0ZGrPRnsg==
   dependencies:
     "@actions/core" "^1.2.0"
     "@actions/github" "^1.1.0"
-    "@technote-space/filter-github-action" "^0.1.10"
-    "@technote-space/github-action-helper" "^0.6.0"
+    "@technote-space/filter-github-action" "^0.1.11"
+    "@technote-space/github-action-helper" "^0.6.2"
     moment "^2.24.0"
 
 "@technote-space/github-action-test-helper@^0.0.25":
