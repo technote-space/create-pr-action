@@ -19,6 +19,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),
 	prBranchPrefix: getInput('PR_BRANCH_PREFIX'),
+	prBranchPrefixForDefaultBranch: getInput('PR_DEFAULT_BRANCH_PREFIX'),
 	prBranchName: getInput('PR_BRANCH_NAME'),
 	prTitle: getInput('PR_TITLE'),
 	prBody: getInput('PR_BODY'),
