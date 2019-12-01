@@ -26,6 +26,7 @@ describe('getRunnerArguments', () => {
 			prBody: '',
 			prBranchPrefix: '',
 			prBranchName: '',
+			prBodyForDefaultBranch: '',
 			prBranchPrefixForDefaultBranch: '',
 			prBranchNameForDefaultBranch: '',
 			prCloseMessage: '',
@@ -34,6 +35,7 @@ describe('getRunnerArguments', () => {
 				'',
 			],
 			prTitle: '',
+			prTitleForDefaultBranch: '',
 			targetBranchPrefix: '',
 		});
 	});
@@ -47,11 +49,13 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_COMMIT_EMAIL             = 'example@example.com';
 		process.env.INPUT_COMMIT_MESSAGE           = 'test: create pull request';
 		process.env.INPUT_PR_BRANCH_PREFIX         = 'prefix/';
-		process.env.INPUT_PR_DEFAULT_BRANCH_PREFIX = 'release/';
-		process.env.INPUT_PR_DEFAULT_BRANCH_NAME   = '${PATCH_VERSION}';
 		process.env.INPUT_PR_BRANCH_NAME           = 'test-branch-${PR_ID}';
 		process.env.INPUT_PR_TITLE                 = 'test: create pull request (${PR_NUMBER})';
 		process.env.INPUT_PR_BODY                  = 'pull request body';
+		process.env.INPUT_PR_DEFAULT_BRANCH_PREFIX = 'release/';
+		process.env.INPUT_PR_DEFAULT_BRANCH_NAME   = '${PATCH_VERSION}';
+		process.env.INPUT_PR_DEFAULT_BRANCH_TITLE  = 'test: create pull request 2 (${PR_NUMBER})';
+		process.env.INPUT_PR_DEFAULT_BRANCH_BODY   = 'pull request body 2';
 		process.env.INPUT_PR_CLOSE_MESSAGE         = 'close message';
 		process.env.INPUT_PR_DATE_FORMAT1          = 'YYYY-MM-DD HH:mm:ss';
 		process.env.INPUT_PR_DATE_FORMAT2          = 'YYYY-MM-DD';
@@ -97,6 +101,7 @@ describe('getRunnerArguments', () => {
 				'test2',
 			],
 			prBody: 'pull request body',
+			prBodyForDefaultBranch: 'pull request body 2',
 			prBranchPrefix: 'prefix/',
 			prBranchName: 'test-branch-${PR_ID}',
 			prBranchPrefixForDefaultBranch: 'release/',
@@ -107,6 +112,7 @@ describe('getRunnerArguments', () => {
 				'YYYY-MM-DD',
 			],
 			prTitle: 'test: create pull request (${PR_NUMBER})',
+			prTitleForDefaultBranch: 'test: create pull request 2 (${PR_NUMBER})',
 			targetBranchPrefix: 'feature/',
 		});
 	});
