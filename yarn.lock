@@ -371,25 +371,25 @@
   dependencies:
     "@actions/github" "^1.1.0"
 
-"@technote-space/github-action-helper@^0.6.10":
-  version "0.6.10"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-0.6.10.tgz#a7324992a4bb1912f0846362bceaf14effb92621"
-  integrity sha512-q9rYV5EZ9EjlKx3jhDGJrOwURuECcSYQW/jb78xrjBW8HvoIAdFT39FLflu2SIgyagMqlDAaZiImEchT8mxVkg==
+"@technote-space/github-action-helper@^0.6.11":
+  version "0.6.11"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-0.6.11.tgz#faae2c907765d416488401cecfa581c059ece0be"
+  integrity sha512-mm/MWKNVIdaDEb0BLJdKbFWk+DfnuUwBk7VabBvw70BLSsdDXudyLp8D8KjQFrgDZICMCrX62uq0uXBc9JSY7A==
   dependencies:
     "@actions/core" "^1.2.0"
     "@actions/github" "^1.1.0"
     shell-escape "^0.2.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^0.2.2":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.2.2.tgz#e4dd02f2e5ede63c3dc8fc58277a5895acbeed49"
-  integrity sha512-qmhR0XSaBq5x0TMkfz8Q8lq9LLLR5G1n0fYdAD8BZSPTa85VgNokkby9WXJIWzlBiiTFO3atMVR43mw+eFCOqw==
+"@technote-space/github-action-pr-helper@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.2.3.tgz#865da9b03ee8490f48e8cde4fca6558e7ec9d3b7"
+  integrity sha512-6nRAs/UxfiQVIfPVhl+a967DQ9kbL7QRWz0WGx/dh2LPYiL5H2Xl/+XsUm2jlqhLmxLsPtrvp3mpiAcPEaga0Q==
   dependencies:
     "@actions/core" "^1.2.0"
     "@actions/github" "^1.1.0"
     "@technote-space/filter-github-action" "^0.1.11"
-    "@technote-space/github-action-helper" "^0.6.10"
+    "@technote-space/github-action-helper" "^0.6.11"
     moment "^2.24.0"
 
 "@technote-space/github-action-test-helper@^0.0.25":
