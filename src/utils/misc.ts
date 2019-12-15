@@ -26,6 +26,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	prBranchNameForDefaultBranch: getInput('PR_DEFAULT_BRANCH_NAME'),
 	prTitleForDefaultBranch: getInput('PR_DEFAULT_BRANCH_TITLE'),
 	prBodyForDefaultBranch: getInput('PR_DEFAULT_BRANCH_BODY'),
+	prBodyForComment: getInput('PR_COMMENT_BODY'),
 	prDateFormats: [getInput('PR_DATE_FORMAT1'), getInput('PR_DATE_FORMAT2')],
 	prCloseMessage: getInput('PR_CLOSE_MESSAGE'),
 	filterGitStatus: getInput('FILTER_GIT_STATUS'),
