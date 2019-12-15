@@ -12,18 +12,23 @@ inputs:
   PACKAGE_MANAGER:
     description: Package manager to use to install dependencies.
     default: ''
+    required: false
   DELETE_PACKAGE:
     description: Whether to delete package file before install packages for performance.
     default: ''
+    required: false
   INSTALL_PACKAGES:
     description: Packages to be installed.
     default: ''
+    required: false
   DEV_INSTALL_PACKAGES:
     description: Packages to be dev installed.
     default: ''
+    required: false
   GLOBAL_INSTALL_PACKAGES:
     description: Packages to be global installed.
     default: ''
+    required: false
   EXECUTE_COMMANDS:
     description: Commands to be executed.
     required: true
@@ -34,13 +39,16 @@ inputs:
   COMMIT_NAME:
     description: Git commit name.
     default: 'github-actions[bot]'
+    required: true
   COMMIT_EMAIL:
     description: Git commit email.
     default: '41898282+github-actions[bot]@users.noreply.github.com'
+    required: true
 
   PR_BRANCH_PREFIX:
     description: PullRequest branch prefix.
     default: 'create-pr-action/'
+    required: true
   PR_BRANCH_NAME:
     description: PullRequest branch name.
     required: true
@@ -76,7 +84,7 @@ inputs:
       [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
   PR_COMMENT_BODY:
     description: PullRequest body for comment.
-    required: true
+    required: false
     default: |
       ## Command results
       <details>
@@ -100,37 +108,48 @@ inputs:
   PR_DEFAULT_BRANCH_PREFIX:
     description: PullRequest branch prefix for default branch.
     default: ''
+    required: false
   PR_DEFAULT_BRANCH_NAME:
     description: PullRequest branch name for default branch.
     default: ''
+    required: false
   PR_DEFAULT_BRANCH_TITLE:
     description: PullRequest title for default branch.
     default: ''
+    required: false
   PR_DEFAULT_BRANCH_BODY:
     description: PullRequest body for default branch.
     default: ''
+    required: false
   PR_CLOSE_MESSAGE:
     description: Message body when closing PullRequest.
     default: 'This PR is no longer needed because the package looks up-to-date.'
+    required: false
   PR_DATE_FORMAT1:
     description: Date format.
     default: 'YYYY-MM-DD HH:mm:ss'
+    required: false
   PR_DATE_FORMAT2:
     description: Date format.
     default: 'YYYY-MM-DD'
+    required: false
 
   FILTER_GIT_STATUS:
     description: Filter by git status. (M, D or A)
     default: ''
+    required: false
   FILTER_EXTENSIONS:
     description: Filter by extensions. (e.g. md, txt)
     default: ''
+    required: false
   TARGET_BRANCH_PREFIX:
     description: Filter by branch name. (e.g. release/)
     default: ''
+    required: false
   INCLUDE_LABELS:
     description: Labels used to check if the PullRequest has it.
     default: ''
+    required: false
 
 branding:
   # https://feathericons.com/
