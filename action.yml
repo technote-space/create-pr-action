@@ -74,6 +74,29 @@ inputs:
       <hr>
 
       [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
+  PR_COMMENT_BODY:
+    description: PullRequest body for comment.
+    required: true
+    default: |
+      ## Command results
+      <details>
+        <summary>Details: </summary>
+
+        ${COMMANDS_OUTPUT}
+
+      </details>
+
+      ## Changed files
+      <details>
+        <summary>${FILES_SUMMARY}: </summary>
+
+        ${FILES}
+
+      </details>
+
+      <hr>
+
+      [:octocat: Repo](${ACTION_URL}) | [:memo: Issues](${ACTION_URL}/issues) | [:department_store: Marketplace](${ACTION_MARKETPLACE_URL})
   PR_DEFAULT_BRANCH_PREFIX:
     description: PullRequest branch prefix for default branch.
     default: ''
