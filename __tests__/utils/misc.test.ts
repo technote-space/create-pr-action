@@ -24,6 +24,7 @@ describe('getRunnerArguments', () => {
 			includeLabels: [],
 			installPackages: [],
 			prBody: '',
+			prBodyForComment: '',
 			prBranchPrefix: '',
 			prBranchName: '',
 			prBodyForDefaultBranch: '',
@@ -52,6 +53,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_PR_BRANCH_NAME           = 'test-branch-${PR_ID}';
 		process.env.INPUT_PR_TITLE                 = 'test: create pull request (${PR_NUMBER})';
 		process.env.INPUT_PR_BODY                  = 'pull request body';
+		process.env.INPUT_PR_COMMENT_BODY          = 'pull request body for comment';
 		process.env.INPUT_PR_DEFAULT_BRANCH_PREFIX = 'release/';
 		process.env.INPUT_PR_DEFAULT_BRANCH_NAME   = '${PATCH_VERSION}';
 		process.env.INPUT_PR_DEFAULT_BRANCH_TITLE  = 'test: create pull request 2 (${PR_NUMBER})';
@@ -101,6 +103,7 @@ describe('getRunnerArguments', () => {
 				'test2',
 			],
 			prBody: 'pull request body',
+			prBodyForComment: 'pull request body for comment',
 			prBodyForDefaultBranch: 'pull request body 2',
 			prBranchPrefix: 'prefix/',
 			prBranchName: 'test-branch-${PR_ID}',
