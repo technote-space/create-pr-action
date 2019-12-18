@@ -37,7 +37,7 @@ describe('getRunnerArguments', () => {
 			],
 			prTitle: '',
 			prTitleForDefaultBranch: '',
-			targetBranchPrefix: '',
+			targetBranchPrefix: [],
 		});
 	});
 
@@ -63,7 +63,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_PR_DATE_FORMAT2          = 'YYYY-MM-DD';
 		process.env.INPUT_FILTER_GIT_STATUS        = 'MD';
 		process.env.INPUT_FILTER_EXTENSIONS        = '.md, txt';
-		process.env.INPUT_TARGET_BRANCH_PREFIX     = 'feature/';
+		process.env.INPUT_TARGET_BRANCH_PREFIX     = 'feature/\nrelease/';
 		process.env.INPUT_DELETE_PACKAGE           = '1';
 		process.env.INPUT_INCLUDE_LABELS           = 'label1, label2\nlabel3';
 
@@ -116,7 +116,7 @@ describe('getRunnerArguments', () => {
 			],
 			prTitle: 'test: create pull request (${PR_NUMBER})',
 			prTitleForDefaultBranch: 'test: create pull request 2 (${PR_NUMBER})',
-			targetBranchPrefix: 'feature/',
+			targetBranchPrefix: ['feature/', 'release/'],
 		});
 	});
 });
