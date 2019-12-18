@@ -31,7 +31,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	prCloseMessage: getInput('PR_CLOSE_MESSAGE'),
 	filterGitStatus: getInput('FILTER_GIT_STATUS'),
 	filterExtensions: getArrayInput('FILTER_EXTENSIONS'),
-	targetBranchPrefix: getInput('TARGET_BRANCH_PREFIX'),
+	targetBranchPrefix: getArrayInput('TARGET_BRANCH_PREFIX'),
 	deletePackage: getBoolValue(getInput('DELETE_PACKAGE')),
 	includeLabels: getArrayInput('INCLUDE_LABELS'),
 });
