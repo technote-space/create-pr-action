@@ -169,10 +169,10 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
    name: Update packages
    jobs:
      release:
-       name: Update js packages
+       name: Update npm packages
        runs-on: ubuntu-latest
        steps:
-         - name: Release GitHub Actions
+         - name: Update npm packages
            uses: technote-space/create-pr-action@v1
            with:
              # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
