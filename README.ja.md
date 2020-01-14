@@ -92,11 +92,13 @@ default: `''`
 
 ### COMMIT_NAME
 コミット時に設定する名前  
-default: `'github-actions[bot]'`
+default: `'${github.actor}'`  
+[About Github Context](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)
 
 ### COMMIT_EMAIL
 コミット時に設定するメールアドレス  
-default: `'41898282+github-actions[bot]@users.noreply.github.com'`
+default: `'${github.actor}@users.noreply.github.com'`  
+[About Github Context](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)
 
 ### PR_BRANCH_PREFIX
 ブランチ名のプリフィックス  

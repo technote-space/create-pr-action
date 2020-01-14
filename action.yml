@@ -38,11 +38,9 @@ inputs:
     required: true
   COMMIT_NAME:
     description: Git commit name.
-    default: 'github-actions[bot]'
     required: true
   COMMIT_EMAIL:
     description: Git commit email.
-    default: '41898282+github-actions[bot]@users.noreply.github.com'
     required: true
 
   PR_BRANCH_PREFIX:
