@@ -18,6 +18,9 @@ It also has a management function that resolves conflicts and closes pull reques
   - [Run commands](#run-commands)
   - [Created Pull Request](#created-pull-request)
 - [Installation](#installation)
+  - [e.g. Update npm packages](#eg-update-npm-packages)
+  - [e.g. Update composer packages](#eg-update-composer-packages)
+  - [e.g. Mixed](#eg-mixed)
 - [Options](#options)
   - [GLOBAL_INSTALL_PACKAGES](#global_install_packages)
   - [EXECUTE_COMMANDS](#execute_commands)
@@ -46,37 +49,103 @@ It also has a management function that resolves conflicts and closes pull reques
 ![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
 
 ## Installation
-1. Setup workflow  
-   e.g. `.github/workflows/update-packages.yml`
-   ```yaml
-   on:
-     schedule:
-       - cron: 0 0 * * *
-     pull_request:
-       types: [opened, synchronize, reopened, closed]
+### e.g. Update npm packages
+e.g. `.github/workflows/update-npm-packages.yml`
+```yaml
+on:
+ schedule:
+   - cron: 0 0 * * *
+ pull_request:
+   types: [opened, synchronize, reopened, closed]
 
+name: Update packages
+jobs:
+ release:
+   name: Update npm packages
+   runs-on: ubuntu-latest
+   steps:
+     - name: Update npm packages
+       uses: technote-space/create-pr-action@v1
+       with:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         GLOBAL_INSTALL_PACKAGES: npm-check-updates
+         EXECUTE_COMMANDS: |
+           ncu -u --packageFile package.json
+           yarn install
+           yarn upgrade
+           yarn audit
+         COMMIT_MESSAGE: 'chore: update npm dependencies'
+         COMMIT_NAME: 'GitHub Actions'
+         COMMIT_EMAIL: 'example@example.com'
+         PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
+         PR_TITLE: 'chore: update npm dependencies'
+```
+
+### e.g. Update composer packages
+e.g. `.github/workflows/update-composer-packages.yml`
+```yaml
+on:
+ schedule:
+   - cron: 0 0 * * *
+ pull_request:
+   types: [opened, synchronize, reopened, closed]
+
+name: Update packages
+jobs:
+ release:
+   name: Update composer packages
+   runs-on: ubuntu-latest
+   steps:
+     - name: Update composer packages
+       uses: technote-space/create-pr-action@v1
+       with:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         EXECUTE_COMMANDS: |
+           rm -f "composer.lock"
+           < "composer.json" jq -r '.require | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --no-interaction --prefer-dist --no-suggest
+           < "composer.json" jq -r '."require-dev" | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --dev --no-interaction --prefer-dist --no-suggest
+         COMMIT_MESSAGE: 'chore: update composer dependencies'
+         COMMIT_NAME: 'GitHub Actions'
+         COMMIT_EMAIL: 'example@example.com'
+         PR_BRANCH_NAME: 'chore-composer-update-${PR_ID}'
+         PR_TITLE: 'chore: update composer dependencies'
+```
+
+### e.g. Mixed
+e.g. `.github/workflows/update-packages.yml`
+```yaml
+on:
+ schedule:
+   - cron: 0 0 * * *
+ pull_request:
+   types: [opened, synchronize, reopened, closed]
+
+name: Update packages
+jobs:
+ release:
    name: Update packages
-   jobs:
-     release:
-       name: Update js packages
-       runs-on: ubuntu-latest
-       steps:
-         - name: Release GitHub Actions
-           uses: technote-space/create-pr-action@v1
-           with:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-             GLOBAL_INSTALL_PACKAGES: npm-check-updates
-             EXECUTE_COMMANDS: |
-               ncu -u --packageFile package.json
-               yarn install
-               yarn upgrade
-               yarn audit
-             COMMIT_MESSAGE: 'chore: update npm dependencies'
-             COMMIT_NAME: 'GitHub Actions'
-             COMMIT_EMAIL: 'example@example.com'
-             PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
-             PR_TITLE: 'chore: update npm dependencies'
-   ```
+   runs-on: ubuntu-latest
+   steps:
+     - name: Update packages
+       uses: technote-space/create-pr-action@v1
+       with:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+         GLOBAL_INSTALL_PACKAGES: npm-check-updates
+         EXECUTE_COMMANDS: |
+           ncu -u --packageFile package.json
+           yarn install
+           yarn upgrade
+           yarn audit
+           rm -f "composer.lock"
+           < "composer.json" jq -r '.require | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --no-interaction --prefer-dist --no-suggest
+           < "composer.json" jq -r '."require-dev" | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --dev --no-interaction --prefer-dist --no-suggest
+         COMMIT_MESSAGE: 'chore: update dependencies'
+         COMMIT_NAME: 'GitHub Actions'
+         COMMIT_EMAIL: 'example@example.com'
+         PR_BRANCH_NAME: 'chore-update-${PR_ID}'
+         PR_TITLE: 'chore: update dependencies'
+```
+
 [More details of target event](#action-event-details)
 
 ## Options
@@ -92,11 +161,13 @@ Commit message.
 
 ### COMMIT_NAME
 Git commit name.  
-default: `'github-actions[bot]'`
+default: `'${github.actor}'`  
+[About Github Context](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)
 
 ### COMMIT_EMAIL
 Git commit email.  
-default: `'41898282+github-actions[bot]@users.noreply.github.com'`
+default: `'${github.actor}@users.noreply.github.com'`  
+[About Github Context](https://help.github.com/en/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)
 
 ### PR_BRANCH_PREFIX
 PullRequest branch prefix.  
@@ -167,10 +238,10 @@ If you want to trigger actions, use a personal access token instead.
    name: Update packages
    jobs:
      release:
-       name: Update js packages
+       name: Update npm packages
        runs-on: ubuntu-latest
        steps:
-         - name: Release GitHub Actions
+         - name: Update npm packages
            uses: technote-space/create-pr-action@v1
            with:
              # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
