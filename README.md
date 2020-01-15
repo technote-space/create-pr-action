@@ -68,9 +68,8 @@ jobs:
        uses: technote-space/create-pr-action@v1
        with:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         GLOBAL_INSTALL_PACKAGES: npm-check-updates
          EXECUTE_COMMANDS: |
-           ncu -u --packageFile package.json
+           npx npm-check-updates -u --packageFile package.json
            yarn install
            yarn upgrade
            yarn audit
@@ -130,9 +129,8 @@ jobs:
        uses: technote-space/create-pr-action@v1
        with:
          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         GLOBAL_INSTALL_PACKAGES: npm-check-updates
          EXECUTE_COMMANDS: |
-           ncu -u --packageFile package.json
+           npx npm-check-updates -u --packageFile package.json
            yarn install
            yarn upgrade
            yarn audit
@@ -246,9 +244,8 @@ If you want to trigger actions, use a personal access token instead.
            with:
              # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-             GLOBAL_INSTALL_PACKAGES: npm-check-updates
              EXECUTE_COMMANDS: |
-               ncu -u --packageFile package.json
+               npx npm-check-updates -u --packageFile package.json
                yarn install
                yarn upgrade
                yarn audit
