@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/create-pr-action",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "This is a GitHub Actions that executes an arbitrary command and commits the changes to the new pull request.",
   "author": "Technote <technote.space@gmail.com> (https://technote.space)",
   "license": "MIT",
@@ -19,7 +19,7 @@
   "main": "lib/main.js",
   "dependencies": {
     "@actions/core": "^1.2.1",
-    "@technote-space/github-action-pr-helper": "^0.2.16"
+    "@technote-space/github-action-pr-helper": "^0.2.17"
   },
   "devDependencies": {
     "@technote-space/github-action-test-helper": "^0.0.28",
@@ -32,7 +32,7 @@
     "jest-circus": "^24.9.0",
     "nock": "^11.7.2",
     "ts-jest": "^24.3.0",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.5"
   },
   "publishConfig": {
     "access": "public"
