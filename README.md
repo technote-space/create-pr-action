@@ -211,7 +211,7 @@ Several variables are available ([variables2](#variables2))
 | name | description |
 |:---|:---|
 | PR_LINK | Link to PR |
-| COMMANDS_OUTPUT | Result of TOC command |
+| COMMANDS_OUTPUT | Results of command |
 | FILES_SUMMARY | e.g. `Changed 2 files` |
 | FILES | Changed file list |
 

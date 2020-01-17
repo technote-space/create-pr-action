@@ -211,7 +211,7 @@ default: `'create-pr-action/'`
 | name | description |
 |:---|:---|
 | PR_LINK | プルリクエストへのリンク |
-| COMMANDS_OUTPUT | TOC コマンドの結果 |
+| COMMANDS_OUTPUT | コマンドの結果 |
 | FILES_SUMMARY | 例：`Changed 2 files` |
 | FILES | 変更されたファイル一覧 |
 
