@@ -14,7 +14,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	installPackages: getArrayInput('INSTALL_PACKAGES'),
 	devInstallPackages: getArrayInput('DEV_INSTALL_PACKAGES'),
 	globalInstallPackages: getArrayInput('GLOBAL_INSTALL_PACKAGES'),
-	executeCommands: getArrayInput('EXECUTE_COMMANDS', false, '&&'),
+	executeCommands: getArrayInput('EXECUTE_COMMANDS', false, '&&', false),
 	commitMessage: getInput('COMMIT_MESSAGE'),
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),

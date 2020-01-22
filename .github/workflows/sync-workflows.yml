@@ -15,17 +15,17 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           EXECUTE_COMMANDS: |
-            rm -rdf ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
-            mkdir -p ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
-            cp -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/sync-workflows.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/ > /dev/null 2>&1 || :
-            rm -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/*.yml
-            git clone --depth=1 https://github.com/technote-space/github-actions-workflows.git ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows
-            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/ts-repo/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
-            cp -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/sync-workflows.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/sync-workflows.yml > /dev/null 2>&1 || :
-            sed -i 's/cron:.\+$/cron: 0 18 * * */' ${{ env.GITHUB_WORKSPACE }}/.github/workflows/update-dependencies.yml
-            rm -rdf ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
+            rm -rdf .github/workflows/.tmp
+            mkdir -p .github/workflows/.tmp
+            cp -f .github/workflows/sync-workflows.yml .github/workflows/.tmp/ > /dev/null 2>&1 || :
+            rm -f .github/workflows/*.yml
+            git clone --depth=1 https://github.com/technote-space/github-actions-workflows.git .github/workflows/.tmp/workflows
+            cp .github/workflows/.tmp/workflows/ts-repo/*.yml .github/workflows/
+            cp -f .github/workflows/.tmp/sync-workflows.yml .github/workflows/sync-workflows.yml > /dev/null 2>&1 || :
+            sed -i 's/cron:.\+$/cron: 0 18 * * */' .github/workflows/update-dependencies.yml
+            rm -rdf .github/workflows/.tmp
           COMMIT_MESSAGE: 'chore: sync workflows'
           PR_BRANCH_PREFIX: chore/
-          PR_BRANCH_NAME: 'chore-sync-workflows-${PR_ID}'
+          PR_BRANCH_NAME: 'chore-sync-workflows'
           PR_TITLE: 'chore: sync workflows'
           ONLY_DEFAULT_BRANCH: true
