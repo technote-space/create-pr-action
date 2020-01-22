@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import path from 'path';
-import {testEnv} from '@technote-space/github-action-test-helper';
-import {getRunnerArguments} from '../../src/utils/misc';
+import { testEnv } from '@technote-space/github-action-test-helper';
+import { getRunnerArguments } from '../../src/utils/misc';
 
 describe('getRunnerArguments', () => {
 	testEnv(path.resolve(__dirname, '../..'));
@@ -12,6 +12,8 @@ describe('getRunnerArguments', () => {
 			actionName: 'Create PR Action',
 			actionOwner: 'technote-space',
 			actionRepo: 'create-pr-action',
+			checkDefaultBranch: true,
+			checkOnlyDefaultBranch: false,
 			commitEmail: '',
 			commitMessage: '',
 			commitName: '',
@@ -82,36 +84,40 @@ describe('getRunnerArguments', () => {
 	});
 
 	it('should return args', () => {
-		process.env.INPUT_INSTALL_PACKAGES = 'test1\ntest2';
-		process.env.INPUT_DEV_INSTALL_PACKAGES = 'test3\ntest4';
-		process.env.INPUT_GLOBAL_INSTALL_PACKAGES = 'test5\ntest6';
-		process.env.INPUT_EXECUTE_COMMANDS = 'ncu -u && yarn upgrade';
-		process.env.INPUT_COMMIT_NAME = 'GitHub Actions';
-		process.env.INPUT_COMMIT_EMAIL = 'example@example.com';
-		process.env.INPUT_COMMIT_MESSAGE = 'test: create pull request';
-		process.env.INPUT_PR_BRANCH_PREFIX = 'prefix/';
-		process.env.INPUT_PR_BRANCH_NAME = 'test-branch-${PR_ID}';
-		process.env.INPUT_PR_TITLE = 'test: create pull request (${PR_NUMBER})';
-		process.env.INPUT_PR_BODY = 'pull request body';
-		process.env.INPUT_PR_COMMENT_BODY = 'pull request body for comment';
+		process.env.INPUT_INSTALL_PACKAGES         = 'test1\ntest2';
+		process.env.INPUT_DEV_INSTALL_PACKAGES     = 'test3\ntest4';
+		process.env.INPUT_GLOBAL_INSTALL_PACKAGES  = 'test5\ntest6';
+		process.env.INPUT_EXECUTE_COMMANDS         = 'ncu -u && yarn upgrade';
+		process.env.INPUT_COMMIT_NAME              = 'GitHub Actions';
+		process.env.INPUT_COMMIT_EMAIL             = 'example@example.com';
+		process.env.INPUT_COMMIT_MESSAGE           = 'test: create pull request';
+		process.env.INPUT_PR_BRANCH_PREFIX         = 'prefix/';
+		process.env.INPUT_PR_BRANCH_NAME           = 'test-branch-${PR_ID}';
+		process.env.INPUT_PR_TITLE                 = 'test: create pull request (${PR_NUMBER})';
+		process.env.INPUT_PR_BODY                  = 'pull request body';
+		process.env.INPUT_PR_COMMENT_BODY          = 'pull request body for comment';
 		process.env.INPUT_PR_DEFAULT_BRANCH_PREFIX = 'test/';
-		process.env.INPUT_PR_DEFAULT_BRANCH_NAME = '${PATCH_VERSION}';
-		process.env.INPUT_PR_DEFAULT_BRANCH_TITLE = 'test: create pull request 2 (${PR_NUMBER})';
-		process.env.INPUT_PR_DEFAULT_BRANCH_BODY = 'pull request body 2';
-		process.env.INPUT_PR_CLOSE_MESSAGE = 'close message';
-		process.env.INPUT_PR_DATE_FORMAT1 = 'YYYY-MM-DD HH:mm';
-		process.env.INPUT_PR_DATE_FORMAT2 = 'YYYY-MM-DD HH';
-		process.env.INPUT_FILTER_GIT_STATUS = 'MD';
-		process.env.INPUT_FILTER_EXTENSIONS = '.md, txt';
-		process.env.INPUT_TARGET_BRANCH_PREFIX = 'feature/\nrelease/';
-		process.env.INPUT_DELETE_PACKAGE = '1';
-		process.env.INPUT_INCLUDE_LABELS = 'label1, label2\nlabel3';
+		process.env.INPUT_PR_DEFAULT_BRANCH_NAME   = '${PATCH_VERSION}';
+		process.env.INPUT_PR_DEFAULT_BRANCH_TITLE  = 'test: create pull request 2 (${PR_NUMBER})';
+		process.env.INPUT_PR_DEFAULT_BRANCH_BODY   = 'pull request body 2';
+		process.env.INPUT_PR_CLOSE_MESSAGE         = 'close message';
+		process.env.INPUT_PR_DATE_FORMAT1          = 'YYYY-MM-DD HH:mm';
+		process.env.INPUT_PR_DATE_FORMAT2          = 'YYYY-MM-DD HH';
+		process.env.INPUT_FILTER_GIT_STATUS        = 'MD';
+		process.env.INPUT_FILTER_EXTENSIONS        = '.md, txt';
+		process.env.INPUT_TARGET_BRANCH_PREFIX     = 'feature/\nrelease/';
+		process.env.INPUT_DELETE_PACKAGE           = '1';
+		process.env.INPUT_INCLUDE_LABELS           = 'label1, label2\nlabel3';
+		process.env.INPUT_CHECK_DEFAULT_BRANCH     = '0';
+		process.env.INPUT_ONLY_DEFAULT_BRANCH      = 'true';
 
 		expect(getRunnerArguments()).toEqual({
 			rootDir: path.resolve(__dirname, '../..'),
 			actionName: 'Create PR Action',
 			actionOwner: 'technote-space',
 			actionRepo: 'create-pr-action',
+			checkDefaultBranch: false,
+			checkOnlyDefaultBranch: true,
 			commitEmail: 'example@example.com',
 			commitMessage: 'test: create pull request',
 			commitName: 'GitHub Actions',

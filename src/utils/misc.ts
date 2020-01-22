@@ -34,4 +34,6 @@ export const getRunnerArguments = (): MainArguments => ({
 	targetBranchPrefix: getArrayInput('TARGET_BRANCH_PREFIX'),
 	deletePackage: getBoolValue(getInput('DELETE_PACKAGE')),
 	includeLabels: getArrayInput('INCLUDE_LABELS'),
+	checkDefaultBranch: getBoolValue(getInput('CHECK_DEFAULT_BRANCH')),
+	checkOnlyDefaultBranch: getBoolValue(getInput('ONLY_DEFAULT_BRANCH')),
 });
