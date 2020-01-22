@@ -31,6 +31,8 @@ It also has a management function that resolves conflicts and closes pull reques
   - [PR_BRANCH_NAME](#pr_branch_name)
   - [PR_TITLE](#pr_title)
   - [PR_BODY](#pr_body)
+  - [CHECK_DEFAULT_BRANCH](#check_default_branch)
+  - [ONLY_DEFAULT_BRANCH](#only_default_branch)
 - [Action event details](#action-event-details)
   - [Target event](#target-event)
 - [Variables](#variables)
