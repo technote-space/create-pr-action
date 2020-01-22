@@ -407,9 +407,9 @@
     universal-user-agent "^4.0.0"
 
 "@octokit/types@^2.0.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-2.1.0.tgz#fe3ea39ed7d20ec06954a9314d4f17aa93e033a3"
-  integrity sha512-n1GUYFgKm5glcy0E+U5jnqAFY2p04rnK4A0YhuM70C7Vm9Vyx+xYwd/WOTEr8nUJcbPSR/XL+/26+rirY6jJQA==
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@octokit/types/-/types-2.1.1.tgz#77e80d1b663c5f1f829e5377b728fa3c4fe5a97d"
+  integrity sha512-89LOYH+d/vsbDX785NOfLxTW88GjNd0lWRz1DVPVsZgg9Yett5O+3MOvwo7iHgvUwbFz0mf/yPIjBkUbs4kxoQ==
   dependencies:
     "@types/node" ">= 8"
 
@@ -437,10 +437,10 @@
     shell-escape "^0.2.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^0.2.21":
-  version "0.2.21"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.2.21.tgz#331c84736aded5bff67f408c7970e22f2cf3c422"
-  integrity sha512-v+1I/Eh2KvxYlcvgj1sGPfVxhqqUJ+H+EyLcZGtHuFRKbU4RuUBy+G2RzAG8Yfjrke9Fm+dedZScyy8w0R0kzg==
+"@technote-space/github-action-pr-helper@^0.2.22":
+  version "0.2.22"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.2.22.tgz#264f0d8c2f753bf4fd938363f20ba39c4f2ddf97"
+  integrity sha512-8E4rIxu2FAxq3RDQgdE9K3GTDrhNCWr53oy3V2sUrpCWAu1qDPU8p1BX/hC1uscq9CxwnSvtrj9f0LK9zzf4uA==
   dependencies:
     "@actions/core" "^1.2.1"
     "@actions/github" "^2.0.1"
