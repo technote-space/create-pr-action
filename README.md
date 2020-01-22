@@ -183,6 +183,14 @@ Several variables are available ([variables1](#variables1))
 PullRequest body.  
 Several variables are available ([variables2](#variables2))
 
+### CHECK_DEFAULT_BRANCH
+Whether to check default branch.  
+default: `'true'`
+
+### ONLY_DEFAULT_BRANCH
+Whether not to check other than default branch.  
+default: `'false'`
+
 ## Action event details
 ### Target event
 | eventName | action |
