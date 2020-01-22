@@ -183,6 +183,14 @@ default: `'create-pr-action/'`
 プルリクエストの本文  
 いくつかの変数が使用可能です ([variables2](#variables2))
 
+### CHECK_DEFAULT_BRANCH
+デフォルトブランチをチェックするかどうか  
+default: `'true'`
+
+### ONLY_DEFAULT_BRANCH
+デフォルトブランチ以外をチェックしないかどうか  
+default: `'false'`
+
 ## Action イベント詳細
 ### 対象イベント
 | eventName | action |
