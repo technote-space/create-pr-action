@@ -150,6 +150,14 @@ inputs:
     description: Labels used to check if the PullRequest has it.
     default: ''
     required: false
+  CHECK_DEFAULT_BRANCH:
+    description: Whether to check default branch.
+    default: 'true'
+    required: false
+  ONLY_DEFAULT_BRANCH:
+    description: Whether not to check other than default branch.
+    default: 'false'
+    required: false
 
 branding:
   # https://feathericons.com/

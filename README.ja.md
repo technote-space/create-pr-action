@@ -31,6 +31,8 @@
   - [PR_BRANCH_NAME](#pr_branch_name)
   - [PR_TITLE](#pr_title)
   - [PR_BODY](#pr_body)
+  - [CHECK_DEFAULT_BRANCH](#check_default_branch)
+  - [ONLY_DEFAULT_BRANCH](#only_default_branch)
 - [Action イベント詳細](#action-%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E8%A9%B3%E7%B4%B0)
   - [対象イベント](#%E5%AF%BE%E8%B1%A1%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88)
 - [変数](#%E5%A4%89%E6%95%B0)
@@ -182,6 +184,14 @@ default: `'create-pr-action/'`
 ### PR_BODY
 プルリクエストの本文  
 いくつかの変数が使用可能です ([variables2](#variables2))
+
+### CHECK_DEFAULT_BRANCH
+デフォルトブランチをチェックするかどうか  
+default: `'true'`
+
+### ONLY_DEFAULT_BRANCH
+デフォルトブランチ以外をチェックしないかどうか  
+default: `'false'`
 
 ## Action イベント詳細
 ### 対象イベント

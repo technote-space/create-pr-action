@@ -14,7 +14,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	installPackages: getArrayInput('INSTALL_PACKAGES'),
 	devInstallPackages: getArrayInput('DEV_INSTALL_PACKAGES'),
 	globalInstallPackages: getArrayInput('GLOBAL_INSTALL_PACKAGES'),
-	executeCommands: getArrayInput('EXECUTE_COMMANDS', false, '&&'),
+	executeCommands: getArrayInput('EXECUTE_COMMANDS', false, '&&', false),
 	commitMessage: getInput('COMMIT_MESSAGE'),
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),
@@ -34,4 +34,6 @@ export const getRunnerArguments = (): MainArguments => ({
 	targetBranchPrefix: getArrayInput('TARGET_BRANCH_PREFIX'),
 	deletePackage: getBoolValue(getInput('DELETE_PACKAGE')),
 	includeLabels: getArrayInput('INCLUDE_LABELS'),
+	checkDefaultBranch: getBoolValue(getInput('CHECK_DEFAULT_BRANCH')),
+	checkOnlyDefaultBranch: getBoolValue(getInput('ONLY_DEFAULT_BRANCH')),
 });
