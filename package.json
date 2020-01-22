@@ -19,7 +19,7 @@
   "main": "lib/main.js",
   "dependencies": {
     "@actions/core": "^1.2.1",
-    "@technote-space/github-action-pr-helper": "^0.2.21"
+    "@technote-space/github-action-pr-helper": "^0.2.22"
   },
   "devDependencies": {
     "@technote-space/github-action-test-helper": "^0.1.3",
