@@ -1,0 +1,31 @@
+on:
+  schedule:
+    - cron: 0 15 * * 4
+  repository_dispatch:
+    types: [sync-workflows]
+
+name: Sync workflows
+jobs:
+  release:
+    name: Sync workflows
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync workflows
+        uses: technote-space/create-pr-action@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+          EXECUTE_COMMANDS: |
+            rm -rdf ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
+            mkdir -p ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
+            cp -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/sync-workflows.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/ > /dev/null 2>&1 || :
+            rm -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/*.yml
+            git clone --depth=1 https://github.com/technote-space/github-actions-workflows.git ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows
+            cp ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/workflows/ts-repo/*.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/
+            cp -f ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp/sync-workflows.yml ${{ env.GITHUB_WORKSPACE }}/.github/workflows/sync-workflows.yml > /dev/null 2>&1 || :
+            sed -i 's/cron:.\+$/cron: 0 18 * * */' ${{ env.GITHUB_WORKSPACE }}/.github/workflows/update-dependencies.yml
+            rm -rdf ${{ env.GITHUB_WORKSPACE }}/.github/workflows/.tmp
+          COMMIT_MESSAGE: 'chore: sync workflows'
+          PR_BRANCH_PREFIX: chore/
+          PR_BRANCH_NAME: 'chore-sync-workflows-${PR_ID}'
+          PR_TITLE: 'chore: sync workflows'
+          ONLY_DEFAULT_BRANCH: true
