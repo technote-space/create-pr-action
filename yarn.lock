@@ -453,10 +453,10 @@
     shell-escape "^0.2.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^0.3.4":
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.3.4.tgz#e00976149898a687dfee78cbcde5a4269665a8d3"
-  integrity sha512-Gs5GpQbJKWbVnWY+ExZr6Mg1rNfOUW7pJP2tdIwfjTTrR60Ds5sq6VKioBOIm7TiqZG5Z3YyT2cGb0fzKQqysg==
+"@technote-space/github-action-pr-helper@^0.3.5":
+  version "0.3.5"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-0.3.5.tgz#9fb541a73b957af0e54c5e8a44e7fd9abbdeb077"
+  integrity sha512-6vEOxqHo8zy97Veo781/SvLNxXSaFsYygO5J6d/qT8fETaRdLfZjdVpTCWgniY2sxzJ1xt29f61MhzE/dYs3SA==
   dependencies:
     "@actions/core" "^1.2.2"
     "@actions/github" "^2.1.0"
