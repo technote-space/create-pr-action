@@ -150,7 +150,7 @@ jobs:
 
 ## オプション
 ### GLOBAL_INSTALL_PACKAGES
-グローバルにインストールするパッケージ
+グローバルにインストールするパッケージ  
 default: `''`
 
 ### EXECUTE_COMMANDS
@@ -201,7 +201,7 @@ default: `'false'`
 |pull_request|closed|
 |schedule|*|
 
-- The following activity types must be explicitly specified ([detail](https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows#pull-request-event-pull_request))
+- 次のアクティビティタイプは明示的に指定する必要があります ([detail](https://help.github.com/en/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows#pull-request-event-pull_request))
   - `labeled`, `unlabeled`, `closed`
 
 ## 変数
