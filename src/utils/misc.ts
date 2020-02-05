@@ -1,5 +1,5 @@
 import path from 'path';
-import { Utils } from '@technote-space/github-action-pr-helper';
+import { Utils } from '@technote-space/github-action-helper';
 import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput } from '@actions/core' ;
 import { ACTION_NAME, ACTION_OWNER, ACTION_REPO } from '../constant';
