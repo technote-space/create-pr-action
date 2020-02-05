@@ -12,6 +12,8 @@ jobs:
   eslint:
     name: ESLint
     runs-on: ubuntu-latest
+    env:
+      LINT: 1
     steps:
       - uses: actions/checkout@v2
         with:
