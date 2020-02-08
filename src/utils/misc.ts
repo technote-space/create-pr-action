@@ -2,17 +2,14 @@ import path from 'path';
 import { Utils } from '@technote-space/github-action-helper';
 import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput } from '@actions/core' ;
-import { ACTION_NAME, ACTION_OWNER, ACTION_REPO } from '../constant';
+import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, REPLACE_NCU_COMMAND } from '../constant';
 
 const {getArrayInput, getBoolValue} = Utils;
 
 // ^npx npm-check-updates
 // ^npm-check-updates
 // ^ncu
-const replaceNcuCommand = (command: string): string => command
-	.replace(Utils.getPrefixRegExp('npx npm-check-updates '), 'yarn ncu ')
-	.replace(Utils.getPrefixRegExp('npm-check-updates  '), 'yarn ncu ')
-	.replace(Utils.getPrefixRegExp('ncu '), 'yarn ncu ');
+const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), REPLACE_NCU_COMMAND), command);
 
 export const replaceNcuCommands = (commands: Array<string>): Array<string> => commands.map(replaceNcuCommand);
 

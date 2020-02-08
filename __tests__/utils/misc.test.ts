@@ -128,7 +128,7 @@ describe('getRunnerArguments', () => {
 			],
 			executeCommands: [
 				'ls -lat',
-				'yarn ncu -u',
+				'./node_modules/.bin/ncu -u',
 				'yarn upgrade',
 				'ls -lat',
 			],
