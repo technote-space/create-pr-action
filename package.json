@@ -20,10 +20,14 @@
   "bugs": {
     "url": "https://github.com/technote-space/create-pr-action/issues"
   },
-  "main": "lib/main.js",
+  "files": [
+    "lib",
+    "action.yml"
+  ],
   "dependencies": {
     "@actions/core": "^1.2.2",
-    "@technote-space/github-action-pr-helper": "^0.4.6"
+    "@technote-space/github-action-pr-helper": "^0.4.6",
+    "npm-check-updates": "^4.0.1"
   },
   "devDependencies": {
     "@technote-space/github-action-test-helper": "^0.2.1",
