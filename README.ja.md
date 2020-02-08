@@ -10,9 +10,12 @@
 これは任意のコマンドを実行して変更をプルリクエストにコミットする `GitHub Actions` です。  
 コンフリクトを解決したり不要になったプルリクエストをクローズしたりするマネジメント機能も備えています。  
 
+## Table of Contents
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details>
+<summary>Details</summary>
 
 - [スクリーンショット](#%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88)
   - [コマンドの実行](#%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%AE%E5%AE%9F%E8%A1%8C)
@@ -41,6 +44,7 @@
 - [補足](#%E8%A3%9C%E8%B6%B3)
 - [Author](#author)
 
+</details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## スクリーンショット

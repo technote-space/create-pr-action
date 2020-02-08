@@ -10,9 +10,12 @@
 This is a `GitHub Actions` that executes an arbitrary command and commits the changes to the new pull request.  
 It also has a management function that resolves conflicts and closes pull requests that are no longer needed.  
 
+## Table of Contents
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
+<details>
+<summary>Details</summary>
 
 - [Screenshots](#screenshots)
   - [Run commands](#run-commands)
@@ -41,6 +44,7 @@ It also has a management function that resolves conflicts and closes pull reques
 - [Addition](#addition)
 - [Author](#author)
 
+</details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Screenshots
