@@ -7,6 +7,8 @@
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
+## Table of Contents
+
 これは任意のコマンドを実行して変更をプルリクエストにコミットする `GitHub Actions` です。  
 コンフリクトを解決したり不要になったプルリクエストをクローズしたりするマネジメント機能も備えています。  
 
