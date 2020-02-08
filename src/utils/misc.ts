@@ -6,6 +6,16 @@ import { ACTION_NAME, ACTION_OWNER, ACTION_REPO } from '../constant';
 
 const {getArrayInput, getBoolValue} = Utils;
 
+// ^npx npm-check-updates
+// ^npm-check-updates
+// ^ncu
+const replaceNcuCommand = (command: string): string => command
+	.replace(Utils.getPrefixRegExp('npx npm-check-updates '), 'yarn ncu ')
+	.replace(Utils.getPrefixRegExp('npm-check-updates  '), 'yarn ncu ')
+	.replace(Utils.getPrefixRegExp('ncu '), 'yarn ncu ');
+
+export const replaceNcuCommands = (commands: Array<string>): Array<string> => commands.map(replaceNcuCommand);
+
 export const getRunnerArguments = (): MainArguments => ({
 	rootDir: path.resolve(__dirname, '../..'),
 	actionName: ACTION_NAME,
@@ -13,8 +23,8 @@ export const getRunnerArguments = (): MainArguments => ({
 	actionRepo: ACTION_REPO,
 	installPackages: getArrayInput('INSTALL_PACKAGES'),
 	devInstallPackages: getArrayInput('DEV_INSTALL_PACKAGES'),
-	globalInstallPackages: getArrayInput('GLOBAL_INSTALL_PACKAGES'),
-	executeCommands: getArrayInput('EXECUTE_COMMANDS', false, '&&', false),
+	globalInstallPackages: getArrayInput('GLOBAL_INSTALL_PACKAGES').filter(item => 'npm-check-updates' !== item),
+	executeCommands: replaceNcuCommands(getArrayInput('EXECUTE_COMMANDS', false, '&&', false)),
 	commitMessage: getInput('COMMIT_MESSAGE'),
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),
