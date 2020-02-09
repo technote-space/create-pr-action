@@ -86,7 +86,7 @@ describe('getRunnerArguments', () => {
 	it('should return args', () => {
 		process.env.INPUT_INSTALL_PACKAGES         = 'test1\ntest2';
 		process.env.INPUT_DEV_INSTALL_PACKAGES     = 'test3\ntest4';
-		process.env.INPUT_GLOBAL_INSTALL_PACKAGES  = 'test5\ntest6';
+		process.env.INPUT_GLOBAL_INSTALL_PACKAGES  = 'test5\ntest6\nnpm-check-updates';
 		process.env.INPUT_EXECUTE_COMMANDS         = 'ls -lat\nncu -u && yarn upgrade\nls -lat';
 		process.env.INPUT_COMMIT_NAME              = 'GitHub Actions';
 		process.env.INPUT_COMMIT_EMAIL             = 'example@example.com';
@@ -128,7 +128,7 @@ describe('getRunnerArguments', () => {
 			],
 			executeCommands: [
 				'ls -lat',
-				'ncu -u',
+				path.resolve(__dirname, '../../node_modules/npm-check-updates/bin/ncu') + ' -u',
 				'yarn upgrade',
 				'ls -lat',
 			],
