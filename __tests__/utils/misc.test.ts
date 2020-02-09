@@ -128,7 +128,7 @@ describe('getRunnerArguments', () => {
 			],
 			executeCommands: [
 				'ls -lat',
-				'./node_modules/.bin/ncu -u',
+				path.resolve(__dirname, '../../node_modules/npm-check-updates/bin/ncu') + ' -u',
 				'yarn upgrade',
 				'ls -lat',
 			],
