@@ -10,7 +10,7 @@ const {getArrayInput, getBoolValue} = Utils;
 // ^npx npm-check-updates ⇒ ncu
 const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), 'ncu '), command);
 
-const getExportPathCommand = (): ExecuteTask => async(): Promise<CommandOutput> => {
+const getAddPathCommand = (): ExecuteTask => async(): Promise<CommandOutput> => {
 	addPath(BIN_PATH);
 	return {
 		command: 'add path',
@@ -29,7 +29,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	installPackages: getArrayInput('INSTALL_PACKAGES'),
 	devInstallPackages: getArrayInput('DEV_INSTALL_PACKAGES'),
 	globalInstallPackages: getArrayInput('GLOBAL_INSTALL_PACKAGES').filter(item => 'npm-check-updates' !== item),
-	executeCommands: ([getExportPathCommand()] as Array<string | ExecuteTask>).concat(replaceNcuCommands(getArrayInput('EXECUTE_COMMANDS', false, '&&', false))),
+	executeCommands: ([getAddPathCommand()] as Array<string | ExecuteTask>).concat(replaceNcuCommands(getArrayInput('EXECUTE_COMMANDS', false, '&&', false))),
 	commitMessage: getInput('COMMIT_MESSAGE'),
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),
