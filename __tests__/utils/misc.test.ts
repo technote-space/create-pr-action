@@ -1,15 +1,17 @@
 /* eslint-disable no-magic-numbers */
 import path from 'path';
-import { testEnv } from '@technote-space/github-action-test-helper';
+import { stdoutCalledWith, spyOnStdout, testEnv } from '@technote-space/github-action-test-helper';
 import { getRunnerArguments } from '../../src/utils/misc';
-
-const binRoot = path.resolve(__dirname, '../../node_modules/npm-check-updates/bin');
 
 describe('getRunnerArguments', () => {
 	testEnv(path.resolve(__dirname, '../..'));
 
 	it('should return args', () => {
-		expect(getRunnerArguments()).toEqual({
+		const args = getRunnerArguments();
+		expect(args).toHaveProperty('executeCommands');
+		expect(args.executeCommands).toHaveLength(1);
+		delete args.executeCommands;
+		expect(args).toEqual({
 			rootDir: path.resolve(__dirname, '../..'),
 			actionName: 'Create PR Action',
 			actionOwner: 'technote-space',
@@ -21,9 +23,6 @@ describe('getRunnerArguments', () => {
 			commitName: '',
 			deletePackage: false,
 			devInstallPackages: [],
-			executeCommands: [
-				`export PATH=$PATH:${binRoot}`,
-			],
 			filterExtensions: [],
 			filterGitStatus: '',
 			globalInstallPackages: [],
@@ -87,7 +86,7 @@ describe('getRunnerArguments', () => {
 		});
 	});
 
-	it('should return args', () => {
+	it('should return args', async() => {
 		process.env.INPUT_INSTALL_PACKAGES         = 'test1\ntest2';
 		process.env.INPUT_DEV_INSTALL_PACKAGES     = 'test3\ntest4';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES  = 'test5\ntest6\nnpm-check-updates';
@@ -115,7 +114,14 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_CHECK_DEFAULT_BRANCH     = '0';
 		process.env.INPUT_ONLY_DEFAULT_BRANCH      = 'true';
 
-		expect(getRunnerArguments()).toEqual({
+		const args = getRunnerArguments();
+		expect(args).toHaveProperty('executeCommands');
+		expect(args.executeCommands).toHaveLength(6);
+		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+		// @ts-ignore
+		const task = args.executeCommands.shift();
+		expect(typeof task === 'function').toBe(true);
+		expect(args).toEqual({
 			rootDir: path.resolve(__dirname, '../..'),
 			actionName: 'Create PR Action',
 			actionOwner: 'technote-space',
@@ -131,7 +137,6 @@ describe('getRunnerArguments', () => {
 				'test4',
 			],
 			executeCommands: [
-				`export PATH=$PATH:${binRoot}`,
 				'ls -lat',
 				'ncu -u',
 				'ncu -u --packageFile package.json',
@@ -172,5 +177,19 @@ describe('getRunnerArguments', () => {
 			prTitleForDefaultBranch: 'test: create pull request 2 (${PR_NUMBER})',
 			targetBranchPrefix: ['feature/', 'release/'],
 		});
+
+		const mockStdout = spyOnStdout();
+		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+		// @ts-ignore
+		expect(await task()).toEqual({
+			command: 'add path',
+			stdout: [
+				path.resolve(__dirname, '../../node_modules/npm-check-updates/bin'),
+			],
+			stderr: [],
+		});
+		stdoutCalledWith(mockStdout, [
+			`::add-path::${path.resolve(__dirname, '../../node_modules/npm-check-updates/bin')}`,
+		]);
 	});
 });
