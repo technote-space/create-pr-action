@@ -2,14 +2,14 @@ import path from 'path';
 import { Utils } from '@technote-space/github-action-helper';
 import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput } from '@actions/core' ;
-import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, REPLACE_NCU_COMMAND } from '../constant';
+import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH } from '../constant';
 
 const {getArrayInput, getBoolValue} = Utils;
 
-// ^npx npm-check-updates
-// ^npm-check-updates
-// ^ncu
-const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), REPLACE_NCU_COMMAND), command);
+// ^npx npm-check-updates ⇒ ncu
+const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), 'ncu '), command);
+
+const getExportPathCommand = (): string => `export PATH=$PATH:${BIN_PATH}`;
 
 export const replaceNcuCommands = (commands: Array<string>): Array<string> => commands.map(replaceNcuCommand);
 
@@ -21,7 +21,7 @@ export const getRunnerArguments = (): MainArguments => ({
 	installPackages: getArrayInput('INSTALL_PACKAGES'),
 	devInstallPackages: getArrayInput('DEV_INSTALL_PACKAGES'),
 	globalInstallPackages: getArrayInput('GLOBAL_INSTALL_PACKAGES').filter(item => 'npm-check-updates' !== item),
-	executeCommands: replaceNcuCommands(getArrayInput('EXECUTE_COMMANDS', false, '&&', false)),
+	executeCommands: replaceNcuCommands([getExportPathCommand()].concat(getArrayInput('EXECUTE_COMMANDS', false, '&&', false))),
 	commitMessage: getInput('COMMIT_MESSAGE'),
 	commitName: getInput('COMMIT_NAME'),
 	commitEmail: getInput('COMMIT_EMAIL'),
