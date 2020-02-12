@@ -3,6 +3,8 @@ import path from 'path';
 import { testEnv } from '@technote-space/github-action-test-helper';
 import { getRunnerArguments } from '../../src/utils/misc';
 
+const binRoot = path.resolve(__dirname, '../../node_modules/npm-check-updates/bin');
+
 describe('getRunnerArguments', () => {
 	testEnv(path.resolve(__dirname, '../..'));
 
@@ -19,7 +21,9 @@ describe('getRunnerArguments', () => {
 			commitName: '',
 			deletePackage: false,
 			devInstallPackages: [],
-			executeCommands: [],
+			executeCommands: [
+				`export PATH=$PATH:${binRoot}`,
+			],
 			filterExtensions: [],
 			filterGitStatus: '',
 			globalInstallPackages: [],
@@ -87,7 +91,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_INSTALL_PACKAGES         = 'test1\ntest2';
 		process.env.INPUT_DEV_INSTALL_PACKAGES     = 'test3\ntest4';
 		process.env.INPUT_GLOBAL_INSTALL_PACKAGES  = 'test5\ntest6\nnpm-check-updates';
-		process.env.INPUT_EXECUTE_COMMANDS         = 'ls -lat\nncu -u && yarn upgrade\nls -lat';
+		process.env.INPUT_EXECUTE_COMMANDS         = 'ls -lat\nncu -u && npx npm-check-updates -u --packageFile package.json && yarn upgrade\nls -lat';
 		process.env.INPUT_COMMIT_NAME              = 'GitHub Actions';
 		process.env.INPUT_COMMIT_EMAIL             = 'example@example.com';
 		process.env.INPUT_COMMIT_MESSAGE           = 'test: create pull request';
@@ -127,8 +131,10 @@ describe('getRunnerArguments', () => {
 				'test4',
 			],
 			executeCommands: [
+				`export PATH=$PATH:${binRoot}`,
 				'ls -lat',
-				path.resolve(__dirname, '../../node_modules/npm-check-updates/bin/ncu') + ' -u',
+				'ncu -u',
+				'ncu -u --packageFile package.json',
 				'yarn upgrade',
 				'ls -lat',
 			],
