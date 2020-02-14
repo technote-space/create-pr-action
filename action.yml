@@ -64,6 +64,9 @@ inputs:
     default: |
       ## Base PullRequest
 
+      <!-- START pr-commits -->
+      <!-- END pr-commits -->
+
       ${PR_TITLE} (${PR_NUMBER_REF})
 
       ## Command results
