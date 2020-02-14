@@ -62,10 +62,10 @@ inputs:
     description: PullRequest body.
     required: true
     default: |
-      ## Base PullRequest
-
       <!-- START pr-commits -->
       <!-- END pr-commits -->
+
+      ## Base PullRequest
 
       ${PR_TITLE} (${PR_NUMBER_REF})
 
