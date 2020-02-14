@@ -28,7 +28,10 @@ describe('getRunnerArguments', () => {
 			globalInstallPackages: [],
 			includeLabels: [],
 			installPackages: [],
-			prBody: '## Base PullRequest\n' +
+			prBody: '<!-- START pr-commits -->\n' +
+				'<!-- END pr-commits -->\n' +
+				'\n' +
+				'## Base PullRequest\n' +
 				'\n' +
 				'${PR_TITLE} (${PR_NUMBER_REF})\n' +
 				'\n' +
