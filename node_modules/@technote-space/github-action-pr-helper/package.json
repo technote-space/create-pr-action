@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/github-action-pr-helper",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "PullRequest Helper for GitHub Actions.",
   "author": {
     "name": "Technote",
