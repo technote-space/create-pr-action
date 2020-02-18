@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/create-pr-action",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "This is a GitHub Actions that executes an arbitrary command and commits the changes to the new pull request.",
   "author": {
     "name": "Technote",
