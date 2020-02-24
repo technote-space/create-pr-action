@@ -164,6 +164,10 @@ inputs:
     description: Whether not to check other than default branch.
     default: 'false'
     required: false
+  AUTO_MERGE_THRESHOLD_DAYS:
+    description: Threshold days to auto merge.
+    default: ''
+    required: false
 
 branding:
   # https://feathericons.com/
