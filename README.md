@@ -197,6 +197,16 @@ default: `'true'`
 Whether not to check other than default branch.  
 default: `'false'`
 
+### AUTO_MERGE_THRESHOLD_DAYS
+Threshold days to auto merge.  
+default: `''`
+
+Perform an automatic merge under the following conditions:
+
+* The number of days has passed since the PR was created
+* All checks are Success
+* Mergeable
+
 ## Action event details
 ### Target event
 | eventName | action |

@@ -51,4 +51,5 @@ export const getRunnerArguments = (): MainArguments => ({
 	includeLabels: getArrayInput('INCLUDE_LABELS'),
 	checkDefaultBranch: getBoolValue(getInput('CHECK_DEFAULT_BRANCH')),
 	checkOnlyDefaultBranch: getBoolValue(getInput('ONLY_DEFAULT_BRANCH')),
+	autoMergeThresholdDays: getInput('AUTO_MERGE_THRESHOLD_DAYS'),
 });
