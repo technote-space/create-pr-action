@@ -197,6 +197,16 @@ default: `'true'`
 デフォルトブランチ以外をチェックしないかどうか  
 default: `'false'`
 
+### AUTO_MERGE_THRESHOLD_DAYS
+自動マージを行う日数しきい値  
+default: `''`
+
+* PRを作成してからこの値の日数が経っている
+* すべてのチェックがSuccess
+* マージ可能
+
+な場合にマージを行います。
+
 ## Action イベント詳細
 ### 対象イベント
 | eventName | action |
