@@ -36,6 +36,7 @@
   - [PR_BODY](#pr_body)
   - [CHECK_DEFAULT_BRANCH](#check_default_branch)
   - [ONLY_DEFAULT_BRANCH](#only_default_branch)
+  - [AUTO_MERGE_THRESHOLD_DAYS](#auto_merge_threshold_days)
 - [Action イベント詳細](#action-%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E8%A9%B3%E7%B4%B0)
   - [対象イベント](#%E5%AF%BE%E8%B1%A1%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88)
 - [変数](#%E5%A4%89%E6%95%B0)
@@ -197,6 +198,16 @@ default: `'true'`
 デフォルトブランチ以外をチェックしないかどうか  
 default: `'false'`
 
+### AUTO_MERGE_THRESHOLD_DAYS
+自動マージを行う日数しきい値  
+default: `''`
+
+* PRを作成してからこの値の日数が経っている
+* すべてのチェックがSuccess
+* マージ可能
+
+な場合にマージを行います。
+
 ## Action イベント詳細
 ### 対象イベント
 | eventName | action |
@@ -218,6 +229,9 @@ default: `'false'`
 | PR_HEAD_REF | pull_request.head.ref (例：`change`) |
 | PR_BASE_REF | pull_request.base.ref (例：`master`) |
 | PR_TITLE | pull_request.title (例：`Update the README with new information.`) |
+| PATCH_VERSION | new patch version (e.g. `v1.2.4`) |
+| MINOR_VERSION | new minor version (e.g. `v1.3.0`) |
+| MAJOR_VERSION | new major version (e.g. `v2.0.0`) |
 
 ### Variables2
 - [variables1](#variables1)

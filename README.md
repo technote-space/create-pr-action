@@ -36,6 +36,7 @@ It also has a management function that resolves conflicts and closes pull reques
   - [PR_BODY](#pr_body)
   - [CHECK_DEFAULT_BRANCH](#check_default_branch)
   - [ONLY_DEFAULT_BRANCH](#only_default_branch)
+  - [AUTO_MERGE_THRESHOLD_DAYS](#auto_merge_threshold_days)
 - [Action event details](#action-event-details)
   - [Target event](#target-event)
 - [Variables](#variables)
@@ -197,6 +198,16 @@ default: `'true'`
 Whether not to check other than default branch.  
 default: `'false'`
 
+### AUTO_MERGE_THRESHOLD_DAYS
+Threshold days to auto merge.  
+default: `''`
+
+Perform an automatic merge under the following conditions:
+
+* The number of days has passed since the PR was created
+* All checks are Success
+* Mergeable
+
 ## Action event details
 ### Target event
 | eventName | action |
@@ -218,6 +229,9 @@ default: `'false'`
 | PR_HEAD_REF | pull_request.head.ref (e.g. `change`) |
 | PR_BASE_REF | pull_request.base.ref (e.g. `master`) |
 | PR_TITLE | pull_request.title (e.g. `Update the README with new information.`) |
+| PATCH_VERSION | new patch version (e.g. `v1.2.4`) |
+| MINOR_VERSION | new minor version (e.g. `v1.3.0`) |
+| MAJOR_VERSION | new major version (e.g. `v2.0.0`) |
 
 ### Variables2
 - [variables1](#variables1)
