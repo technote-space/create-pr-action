@@ -229,6 +229,9 @@ Perform an automatic merge under the following conditions:
 | PR_HEAD_REF | pull_request.head.ref (e.g. `change`) |
 | PR_BASE_REF | pull_request.base.ref (e.g. `master`) |
 | PR_TITLE | pull_request.title (e.g. `Update the README with new information.`) |
+| PATCH_VERSION | new patch version (e.g. `v1.2.4`) |
+| MINOR_VERSION | new minor version (e.g. `v1.3.0`) |
+| MAJOR_VERSION | new major version (e.g. `v2.0.0`) |
 
 ### Variables2
 - [variables1](#variables1)

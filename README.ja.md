@@ -229,6 +229,9 @@ default: `''`
 | PR_HEAD_REF | pull_request.head.ref (例：`change`) |
 | PR_BASE_REF | pull_request.base.ref (例：`master`) |
 | PR_TITLE | pull_request.title (例：`Update the README with new information.`) |
+| PATCH_VERSION | new patch version (e.g. `v1.2.4`) |
+| MINOR_VERSION | new minor version (e.g. `v1.3.0`) |
+| MAJOR_VERSION | new major version (e.g. `v2.0.0`) |
 
 ### Variables2
 - [variables1](#variables1)
