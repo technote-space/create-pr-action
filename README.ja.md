@@ -36,6 +36,7 @@
   - [PR_BODY](#pr_body)
   - [CHECK_DEFAULT_BRANCH](#check_default_branch)
   - [ONLY_DEFAULT_BRANCH](#only_default_branch)
+  - [AUTO_MERGE_THRESHOLD_DAYS](#auto_merge_threshold_days)
 - [Action イベント詳細](#action-%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88%E8%A9%B3%E7%B4%B0)
   - [対象イベント](#%E5%AF%BE%E8%B1%A1%E3%82%A4%E3%83%99%E3%83%B3%E3%83%88)
 - [変数](#%E5%A4%89%E6%95%B0)
