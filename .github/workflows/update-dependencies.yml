@@ -43,6 +43,9 @@ jobs:
           if [[ ! -f package.json ]] || [[ $(< package.json jq -r '.version == null') == 'true' ]]; then
             echo "::set-env name=RUNNING::"
           fi
+      - name: Set running flag
+        run: echo "::set-env name=RUNNING::"
+        if: steps.update_deps.outputs.result == 'succeeded'
       - name: Get version
         uses: technote-space/get-next-version-action@v1
         with:
