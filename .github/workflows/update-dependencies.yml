@@ -31,8 +31,6 @@ jobs:
           TARGET_BRANCH_PREFIX: release/
           AUTO_MERGE_THRESHOLD_DAYS: 14
 
-      - name: Test
-        run: echo ${{ steps.update_deps.outputs.result }}
       - uses: actions/checkout@v2
         if: steps.update_deps.outputs.result != 'succeeded'
       - name: Set running flag
@@ -47,7 +45,7 @@ jobs:
           fi
       - name: Set running flag
         run: echo "::set-env name=RUNNING::"
-        if: steps.update_deps.outputs.result != 'succeeded'
+        if: steps.update_deps.outputs.result == 'succeeded'
       - name: Get version
         uses: technote-space/get-next-version-action@v1
         with:
