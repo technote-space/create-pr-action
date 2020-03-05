@@ -14,7 +14,6 @@ jobs:
         with:
           PROJECT: Backlog
           COLUMN: To do
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   assignAuthor:
     name: Assign author to issue
@@ -22,5 +21,3 @@ jobs:
     steps:
       - name: Assign author to issue
         uses: technote-space/assign-author@v1
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
