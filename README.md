@@ -74,7 +74,6 @@ jobs:
      - name: Update npm packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
            yarn install
@@ -105,7 +104,6 @@ jobs:
      - name: Update composer packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            rm -f "composer.lock"
            < "composer.json" jq -r '.require | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --no-interaction --prefer-dist --no-suggest
@@ -135,7 +133,6 @@ jobs:
      - name: Update packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
            yarn install
@@ -252,7 +249,7 @@ If you want to trigger actions, use a personal access token instead.
 1. Generate a [personal access token](https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line) with the public_repo or repo scope.  
 (repo is required for private repositories).  
 1. [Save as ACCESS_TOKEN](https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets)
-1. Use `ACCESS_TOKEN` instead of `GITHUB_TOKEN`.  
+1. Add input to use `ACCESS_TOKEN` instead of `GITHUB_TOKEN`.  
    e.g. `.github/workflows/update-packages.yml`
    ```yaml
    on:
@@ -270,7 +267,6 @@ If you want to trigger actions, use a personal access token instead.
          - name: Update npm packages
            uses: technote-space/create-pr-action@v1
            with:
-             # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
              EXECUTE_COMMANDS: |
                npx npm-check-updates -u --packageFile package.json
