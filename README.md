@@ -48,13 +48,6 @@ It also has a management function that resolves conflicts and closes pull reques
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## Screenshots
-### Run commands
-![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
-
-### Created Pull Request
-![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
-
 ## Installation
 ### e.g. Update npm packages
 e.g. `.github/workflows/update-npm-packages.yml`
@@ -149,6 +142,13 @@ jobs:
 ```
 
 [More details of target event](#action-event-details)
+
+## Screenshots
+### Run commands
+![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+
+### Created Pull Request
+![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
 
 ## Options
 | name | description | default | required | e.g. |

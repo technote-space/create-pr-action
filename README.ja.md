@@ -48,13 +48,6 @@
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## スクリーンショット
-### コマンドの実行
-![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
-
-### 作成されたプルリクエスト
-![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
-
 ## インストール
 ### 例：Update npm packages
 例：`.github/workflows/update-npm-packages.yml`
@@ -149,6 +142,13 @@ jobs:
 ```
 
 [More details of target event](#action-event-details)
+
+## スクリーンショット
+### コマンドの実行
+![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+
+### 作成されたプルリクエスト
+![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
 
 ## オプション
 | name | description | default | required | e.g. |
