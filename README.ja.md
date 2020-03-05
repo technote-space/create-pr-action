@@ -48,13 +48,6 @@
 </details>
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-## スクリーンショット
-### コマンドの実行
-![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
-
-### 作成されたプルリクエスト
-![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
-
 ## インストール
 ### 例：Update npm packages
 例：`.github/workflows/update-npm-packages.yml`
@@ -74,7 +67,6 @@ jobs:
      - name: Update npm packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
            yarn install
@@ -105,7 +97,6 @@ jobs:
      - name: Update composer packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            rm -f "composer.lock"
            < "composer.json" jq -r '.require | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --no-interaction --prefer-dist --no-suggest
@@ -135,7 +126,6 @@ jobs:
      - name: Update packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
            yarn install
@@ -153,60 +143,29 @@ jobs:
 
 [More details of target event](#action-event-details)
 
+## スクリーンショット
+### コマンドの実行
+![run command](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-1.png)
+
+### 作成されたプルリクエスト
+![pull request](https://raw.githubusercontent.com/technote-space/create-pr-action/images/screenshot-2.png)
+
 ## オプション
-### GLOBAL_INSTALL_PACKAGES
-グローバルにインストールするパッケージ  
-default: `''`
-
-### EXECUTE_COMMANDS
-実行するコマンド
-
-### COMMIT_MESSAGE
-コミットメッセージ
-
-### COMMIT_NAME
-コミット時に設定する名前  
-default: `'${github.actor}'`  
-[About Github Context](https://help.github.com/ja/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)
-
-### COMMIT_EMAIL
-コミット時に設定するメールアドレス  
-default: `'${github.actor}@users.noreply.github.com'`  
-[About Github Context](https://help.github.com/ja/actions/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context)
-
-### PR_BRANCH_PREFIX
-ブランチ名のプリフィックス  
-default: `'create-pr-action/'`
-
-### PR_BRANCH_NAME
-ブランチ名  
-いくつかの変数が使用可能です ([variables1](#variables1))
-
-### PR_TITLE
-プルリクエストのタイトル  
-いくつかの変数が使用可能です ([variables1](#variables1))
-
-### PR_BODY
-プルリクエストの本文  
-いくつかの変数が使用可能です ([variables2](#variables2))
-
-### CHECK_DEFAULT_BRANCH
-デフォルトブランチをチェックするかどうか  
-default: `'true'`
-
-### ONLY_DEFAULT_BRANCH
-デフォルトブランチ以外をチェックしないかどうか  
-default: `'false'`
-
-### AUTO_MERGE_THRESHOLD_DAYS
-自動マージを行う日数しきい値  
-default: `''`
-
-* PRを作成してからこの値の日数が経っている
-* すべてのチェックがSuccess
-* マージ可能
-
-な場合にマージを行います。
+| name | description | default | required | e.g. |
+|:---:|:---|:---:|:---:|:---:|
+|GLOBAL_INSTALL_PACKAGES|グローバルにインストールするパッケージ| | |`imagemin-cli`|
+|EXECUTE_COMMANDS|実行するコマンド| | | |
+|COMMIT_MESSAGE|コミットメッセージ| | | |
+|COMMIT_NAME|コミット時に設定する名前|`${github.actor}`| | |
+|COMMIT_EMAIL|コミット時に設定するメールアドレス|`${github.actor}@users.noreply.github.com`| | |
+|PR_BRANCH_PREFIX|ブランチ名のプリフィックス|`create-pr-action/`|true|`imagemin/`|
+|PR_BRANCH_NAME|ブランチ名<br>いくつかの変数が使用可能です ([variables1](#variables1))| |true|`imagemin-${PR_ID}`|
+|PR_TITLE|プルリクエストのタイトル<br>いくつかの変数が使用可能です ([variables1](#variables1))| |true|`chore: minify images`|
+|PR_BODY|プルリクエストの本文<br>いくつかの変数が使用可能です ([variables2](#variables2))| |true| |
+|CHECK_DEFAULT_BRANCH|デフォルトブランチをチェックするかどうか|`true`| |`false`|
+|ONLY_DEFAULT_BRANCH|デフォルトブランチ以外をチェックしないかどうか|`false`| |`true`|
+|AUTO_MERGE_THRESHOLD_DAYS|自動マージを行う日数しきい値<br>[詳細](#auto-merge)| | |`30`|
+|GITHUB_TOKEN|アクセストークン|`${{github.token}}`|true|`${{secrets.ACCESS_TOKEN}}`|
 
 ## Action イベント詳細
 ### 対象イベント
@@ -244,6 +203,7 @@ default: `''`
 | FILES | 変更されたファイル一覧 |
 
 ## 補足
+### GITHUB_TOKEN
 GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作成する権限がありません。  
 したがって、プッシュによってトリガーされるビルドアクションなどは実行されません。  
 これはブランチプロテクションを設定していると問題になる場合があります。  
@@ -252,7 +212,7 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
 1. public_repo または repo の権限で [Personal access token](https://help.github.com/ja/articles/creating-a-personal-access-token-for-the-command-line) を生成  
 (repo はプライベートリポジトリで必要です)  
 1. [ACCESS_TOKENとして保存](https://help.github.com/ja/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets)
-1. `GITHUB_TOKEN`の代わりに`ACCESS_TOKEN`を使用  
+1. `GITHUB_TOKEN`の代わりに`ACCESS_TOKEN`を使用するように設定  
    例：`.github/workflows/update-packages.yml`
    ```yaml
    on:
@@ -270,7 +230,6 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
          - name: Update npm packages
            uses: technote-space/create-pr-action@v1
            with:
-             # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
              EXECUTE_COMMANDS: |
                npx npm-check-updates -u --packageFile package.json
@@ -283,6 +242,15 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
              PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
              PR_TITLE: 'chore: update npm dependencies'
    ```
+
+### Auto merge
+以下の条件を満たす場合、自動でマージを行います。
+
+* `AUTO_MERGE_THRESHOLD_DAYS` が設定されている
+* 今回の実行で変更がない
+* PRを作成してからこの値の日数が経っている
+* すべてのチェックがSuccess
+* マージ可能
 
 ## Author
 [GitHub (Technote)](https://github.com/technote-space)  
