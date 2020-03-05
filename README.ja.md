@@ -74,7 +74,6 @@ jobs:
      - name: Update npm packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
            yarn install
@@ -105,7 +104,6 @@ jobs:
      - name: Update composer packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            rm -f "composer.lock"
            < "composer.json" jq -r '.require | to_entries[] | select(.value | startswith("^")) | select(.key | contains("/")) | .key' | tr '\n' ' ' | xargs -r php -d memory_limit=2G "$(command -v composer)" require --no-interaction --prefer-dist --no-suggest
@@ -135,7 +133,6 @@ jobs:
      - name: Update packages
        uses: technote-space/create-pr-action@v1
        with:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
            yarn install
@@ -252,7 +249,7 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
 1. public_repo または repo の権限で [Personal access token](https://help.github.com/ja/articles/creating-a-personal-access-token-for-the-command-line) を生成  
 (repo はプライベートリポジトリで必要です)  
 1. [ACCESS_TOKENとして保存](https://help.github.com/ja/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets)
-1. `GITHUB_TOKEN`の代わりに`ACCESS_TOKEN`を使用  
+1. `GITHUB_TOKEN`の代わりに`ACCESS_TOKEN`を使用するように設定  
    例：`.github/workflows/update-packages.yml`
    ```yaml
    on:
@@ -270,7 +267,6 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
          - name: Update npm packages
            uses: technote-space/create-pr-action@v1
            with:
-             # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
              GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
              EXECUTE_COMMANDS: |
                npx npm-check-updates -u --packageFile package.json
