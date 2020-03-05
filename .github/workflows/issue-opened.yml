@@ -9,8 +9,7 @@ jobs:
     name: Assign issues to project
     runs-on: ubuntu-latest
     steps:
-      - name: Assign issues to project
-        uses: technote-space/create-project-card-action@v1
+      - uses: technote-space/create-project-card-action@v1
         with:
           PROJECT: Backlog
           COLUMN: To do
@@ -19,5 +18,4 @@ jobs:
     name: Assign author to issue
     runs-on: ubuntu-latest
     steps:
-      - name: Assign author to issue
-        uses: technote-space/assign-author@v1
+      - uses: technote-space/assign-author@v1
