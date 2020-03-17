@@ -658,16 +658,6 @@
     "@actions/core" "^1.2.2"
     "@actions/github" "^2.1.1"
 
-"@technote-space/github-action-helper@^1.2.2":
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-1.3.2.tgz#2ee72fd7b7b6ed9d1771539e8a5a330b8da07420"
-  integrity sha512-otArVHfH/v8m/5F/0/F2khV2bQ5a2LsTXncRCH4VZ2+jUludN2UWHbp7dPbqTvqMQpALx78gYNtYkqDrQ8zp8w==
-  dependencies:
-    "@actions/core" "^1.2.3"
-    "@actions/github" "^2.1.1"
-    shell-escape "^0.2.0"
-    sprintf-js "^1.1.2"
-
 "@technote-space/github-action-helper@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-2.0.0.tgz#5010294ddee09356bff8f4f745add3b11861c81a"
@@ -678,10 +668,10 @@
     shell-escape "^0.2.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.5.3.tgz#802ccd78ccdea88495d6d5126d47158bd0b7cd08"
-  integrity sha512-Cdqk3ic7P2V+utDORePQVCd8uXh7bAjjkC3mRc26skQLsBTE5+XOdXVdndTcQXNXf7rvTuzm3+V1fz0UJwa+Ew==
+"@technote-space/github-action-pr-helper@^1.5.4":
+  version "1.5.4"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.5.4.tgz#f3b18f66f12461bd81a5c038043733674c62f0dd"
+  integrity sha512-aEBrRyMU0Rkm/S+kJGNp45sBWi7DQ6LF5Mc46pm7XOJM3xo4Lh3zYPZ62dYYCEn6L93pTtfpCk4z0nzK2NqEOw==
   dependencies:
     "@actions/core" "^1.2.3"
     "@actions/github" "^2.1.1"
@@ -697,27 +687,27 @@
     "@actions/github" "^2.1.1"
     js-yaml "^3.13.1"
 
-"@technote-space/release-github-actions-cli@^1.5.0":
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/@technote-space/release-github-actions-cli/-/release-github-actions-cli-1.5.0.tgz#1cec512dd5d7b06ebcfc71bee1ddb977d2b34fda"
-  integrity sha512-b+lD2u0BED9Ehb3agjZoiD9dOC9bwvkDJN4/1D0U5yZ56WI0+x02xQsJv0uCWVKDMbwl5N2NVQX0cgb7+Eq0qg==
+"@technote-space/release-github-actions-cli@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@technote-space/release-github-actions-cli/-/release-github-actions-cli-1.5.1.tgz#da6dba45201e2aa7273fffee340d30e9d906e292"
+  integrity sha512-j+yxXoasseBzN/CRIFrfHbc6yG3Ra7eMGnX5qWtY4n3g/KGxwtQ9P1ZtPbY32ZNPcas/rypZJadzWAUDtXasEQ==
   dependencies:
-    "@technote-space/release-github-actions" "^4.0.0"
-    commander "^4.1.1"
+    "@technote-space/release-github-actions" "^4.1.1"
+    commander "^5.0.0"
     cosmiconfig "^6.0.0"
     dotenv "^8.2.0"
     js-yaml "^3.13.1"
 
-"@technote-space/release-github-actions@^4.0.0":
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@technote-space/release-github-actions/-/release-github-actions-4.1.0.tgz#dba4a946c53a4ce78dc59e6afe392d5da1b1b576"
-  integrity sha512-c56KzLImU0kvZ9FrmGG8zmYSuZPNzsQ3MMk4VLbFMpL5CezZ/CB3/HP/Ef0Ku3gZO7EnFPpknO+XlglqUKO2mA==
+"@technote-space/release-github-actions@^4.1.1":
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/@technote-space/release-github-actions/-/release-github-actions-4.1.1.tgz#4ef1e1181e1ebe071b197f6d00a020b685ea1ce6"
+  integrity sha512-AlNNiOddFjc4MndvybAHlIYh479J0MWTHnFdFkFELIkBeklO2iJWqqUdYwgvSZHHf+HaAmf4BVKeSBct8LokQQ==
   dependencies:
     "@actions/core" "^1.2.3"
     "@actions/github" "^2.1.1"
     "@technote-space/filter-github-action" "^0.2.5"
-    "@technote-space/github-action-helper" "^1.2.2"
-    memize "^1.0.5"
+    "@technote-space/github-action-helper" "^2.0.0"
+    memize "^1.1.0"
 
 "@tootallnate/once@1":
   version "1.0.0"
@@ -1589,6 +1579,11 @@ commander@^4.0.1, commander@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+
+commander@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-5.0.0.tgz#dbf1909b49e5044f8fdaf0adc809f0c0722bdfd0"
+  integrity sha512-JrDGPAKjMGSP1G0DUoaceEJ3DZgAfr/q6X7FVk4+U5KxUSKviYGM2k6zWkfyyBHy5rAtzgYJFa1ro2O9PtoxwQ==
 
 compare-func@^1.3.1:
   version "1.3.2"
@@ -4024,7 +4019,7 @@ map-visit@^1.0.0:
   dependencies:
     object-visit "^1.0.0"
 
-memize@^1.0.5:
+memize@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/memize/-/memize-1.1.0.tgz#4a5a684ac6992a13b1299043f3e49b1af6a0b0d3"
   integrity sha512-K4FcPETOMTwe7KL2LK0orMhpOmWD2wRGwWWpbZy0fyArwsyIKR8YJVz8+efBAh3BO4zPqlSICu4vsLTRRqtFAg==
