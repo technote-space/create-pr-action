@@ -1,5 +1,6 @@
 import path from 'path';
-import { Utils } from '@technote-space/github-action-helper';
+import { Context } from '@actions/github/lib/context';
+import { Utils, ContextHelper } from '@technote-space/github-action-helper';
 import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput, addPath } from '@actions/core' ;
 import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH } from '../constant';
@@ -21,7 +22,16 @@ const getAddPathCommand = (): ExecuteTask => async(): Promise<CommandOutput> => 
 
 export const replaceNcuCommands = (commands: Array<string>): Array<string> => commands.map(replaceNcuCommand);
 
-export const getRunnerArguments = (): MainArguments => ({
+export const getOnlyDefaultBranchFlag = (context: Context): boolean => {
+	const input = getInput('ONLY_DEFAULT_BRANCH');
+	if ('' === input) {
+		return !ContextHelper.isPr(context);
+	}
+
+	return getBoolValue(input);
+};
+
+export const getRunnerArguments = (context: Context): MainArguments => ({
 	rootDir: path.resolve(__dirname, '../..'),
 	actionName: ACTION_NAME,
 	actionOwner: ACTION_OWNER,
@@ -50,6 +60,6 @@ export const getRunnerArguments = (): MainArguments => ({
 	deletePackage: getBoolValue(getInput('DELETE_PACKAGE')),
 	includeLabels: getArrayInput('INCLUDE_LABELS'),
 	checkDefaultBranch: getBoolValue(getInput('CHECK_DEFAULT_BRANCH')),
-	checkOnlyDefaultBranch: getBoolValue(getInput('ONLY_DEFAULT_BRANCH')),
+	checkOnlyDefaultBranch: getOnlyDefaultBranchFlag(context),
 	autoMergeThresholdDays: getInput('AUTO_MERGE_THRESHOLD_DAYS'),
 });

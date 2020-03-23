@@ -55,7 +55,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Update npm packages
-       uses: technote-space/create-pr-action@v1
+       uses: technote-space/create-pr-action@v2
        with:
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
@@ -85,7 +85,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Update composer packages
-       uses: technote-space/create-pr-action@v1
+       uses: technote-space/create-pr-action@v2
        with:
          EXECUTE_COMMANDS: |
            rm -f "composer.lock"
@@ -114,7 +114,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Update packages
-       uses: technote-space/create-pr-action@v1
+       uses: technote-space/create-pr-action@v2
        with:
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
@@ -153,7 +153,7 @@ jobs:
 |PR_TITLE|プルリクエストのタイトル<br>いくつかの変数が使用可能です ([variables1](#variables1))| |true|`chore: minify images`|
 |PR_BODY|プルリクエストの本文<br>いくつかの変数が使用可能です ([variables2](#variables2))| |true| |
 |CHECK_DEFAULT_BRANCH|デフォルトブランチをチェックするかどうか|`true`| |`false`|
-|ONLY_DEFAULT_BRANCH|デフォルトブランチ以外をチェックしないかどうか|`false`| |`true`|
+|ONLY_DEFAULT_BRANCH|デフォルトブランチ以外をチェックしないかどうか|`pull_request: false` <br> `else: true`| |`true`|
 |AUTO_MERGE_THRESHOLD_DAYS|自動マージを行う日数しきい値<br>[詳細](#auto-merge)| | |`30`|
 |GITHUB_TOKEN|アクセストークン|`${{github.token}}`|true|`${{secrets.ACCESS_TOKEN}}`|
 
@@ -218,7 +218,7 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
        runs-on: ubuntu-latest
        steps:
          - name: Update npm packages
-           uses: technote-space/create-pr-action@v1
+           uses: technote-space/create-pr-action@v2
            with:
              GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
              EXECUTE_COMMANDS: |

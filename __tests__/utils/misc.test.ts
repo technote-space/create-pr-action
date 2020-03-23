@@ -1,13 +1,35 @@
 /* eslint-disable no-magic-numbers */
 import path from 'path';
-import { stdoutCalledWith, spyOnStdout, testEnv } from '@technote-space/github-action-test-helper';
-import { getRunnerArguments } from '../../src/utils/misc';
+import { stdoutCalledWith, spyOnStdout, testEnv, generateContext } from '@technote-space/github-action-test-helper';
+import { getOnlyDefaultBranchFlag, getRunnerArguments } from '../../src/utils/misc';
+
+describe('getOnlyDefaultBranchFlag', () => {
+	testEnv(path.resolve(__dirname, '../..'));
+
+	it('should return true 1', () => {
+		process.env.INPUT_ONLY_DEFAULT_BRANCH = 'true';
+		expect(getOnlyDefaultBranchFlag(generateContext({}))).toBe(true);
+	});
+
+	it('should return true 2', () => {
+		expect(getOnlyDefaultBranchFlag(generateContext({event: 'schedule'}))).toBe(true);
+	});
+
+	it('should return false 1', () => {
+		process.env.INPUT_ONLY_DEFAULT_BRANCH = 'false';
+		expect(getOnlyDefaultBranchFlag(generateContext({}))).toBe(false);
+	});
+
+	it('should return false 2', () => {
+		expect(getOnlyDefaultBranchFlag(generateContext({event: 'pull_request'}))).toBe(false);
+	});
+});
 
 describe('getRunnerArguments', () => {
 	testEnv(path.resolve(__dirname, '../..'));
 
 	it('should return args', () => {
-		const args = getRunnerArguments();
+		const args = getRunnerArguments(generateContext({event: 'pull_request'}));
 		expect(args).toHaveProperty('executeCommands');
 		expect(args.executeCommands).toHaveLength(1);
 		delete args.executeCommands;
@@ -119,7 +141,7 @@ describe('getRunnerArguments', () => {
 		process.env.INPUT_ONLY_DEFAULT_BRANCH       = 'true';
 		process.env.INPUT_AUTO_MERGE_THRESHOLD_DAYS = '30';
 
-		const args = getRunnerArguments();
+		const args = getRunnerArguments(generateContext({event: 'pull_request'}));
 		expect(args).toHaveProperty('executeCommands');
 		expect(args.executeCommands).toHaveLength(6);
 		// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
