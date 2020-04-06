@@ -6,6 +6,7 @@ jobs:
   triage:
     name: Pull Request Labeler
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     if: "! startsWith(github.head_ref, 'release/')"
     steps:
       - uses: actions/labeler@v2
@@ -15,6 +16,7 @@ jobs:
   history:
     name: Pull Request Body
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     if: github.event.pull_request.head.user.id == github.event.pull_request.base.user.id
     steps:
       - uses: technote-space/load-config-action@v1
@@ -30,6 +32,7 @@ jobs:
   manageRelease:
     name: Manage release
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     if: "github.event.pull_request.head.user.id == github.event.pull_request.base.user.id && startsWith(github.head_ref, 'release/') && ! startsWith(github.head_ref, 'release/v')"
     steps:
       - uses: technote-space/load-config-action@v1
@@ -43,6 +46,7 @@ jobs:
   checkVersion:
     name: Check package version
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     if: "github.event.action == 'synchronize' && github.event.pull_request.head.user.id == github.event.pull_request.base.user.id && startsWith(github.head_ref, 'release/') && ! startsWith(github.head_ref, 'release/v')"
     steps:
       - uses: technote-space/load-config-action@v1
@@ -73,6 +77,7 @@ jobs:
   checkPublish:
     name: Check publish
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     if: "github.event.pull_request.head.user.id == github.event.pull_request.base.user.id && startsWith(github.head_ref, 'release/')"
     steps:
       - name: Set running flag
