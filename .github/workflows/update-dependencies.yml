@@ -25,7 +25,7 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           EXECUTE_COMMANDS: |
-            npx npm-check-updates -u --packageFile package.json
+            npx npm-check-updates -u
             yarn install
             yarn upgrade
             yarn audit
