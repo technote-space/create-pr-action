@@ -55,7 +55,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Update npm packages
-       uses: technote-space/create-pr-action@v2
+       uses: technote-space/create-pr-action@v1
        with:
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
@@ -85,7 +85,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Update composer packages
-       uses: technote-space/create-pr-action@v2
+       uses: technote-space/create-pr-action@v1
        with:
          EXECUTE_COMMANDS: |
            rm -f "composer.lock"
@@ -114,7 +114,7 @@ jobs:
    runs-on: ubuntu-latest
    steps:
      - name: Update packages
-       uses: technote-space/create-pr-action@v2
+       uses: technote-space/create-pr-action@v1
        with:
          EXECUTE_COMMANDS: |
            npx npm-check-updates -u --packageFile package.json
@@ -153,7 +153,7 @@ jobs:
 |PR_TITLE|PullRequest title<br>Several variables are available ([variables1](#variables1))| |true|`chore: minify images`|
 |PR_BODY|PullRequest body<br>Several variables are available ([variables2](#variables2))| |true| |
 |CHECK_DEFAULT_BRANCH|Whether to check default branch|`true`| |`false`|
-|ONLY_DEFAULT_BRANCH|Whether not to check other than default branch|`pull_request: false` <br> `else: true`| |`true`|
+|ONLY_DEFAULT_BRANCH|Whether not to check other than default branch|`false`| |`true`|
 |AUTO_MERGE_THRESHOLD_DAYS|Threshold days to auto merge<br>[Detail](#auto-merge)| | |`30`|
 |GITHUB_TOKEN|アクセストークン|`${{github.token}}`|true|`${{secrets.ACCESS_TOKEN}}`|
 
@@ -224,7 +224,7 @@ If you want to trigger actions, use a personal access token instead.
        runs-on: ubuntu-latest
        steps:
          - name: Update npm packages
-           uses: technote-space/create-pr-action@v2
+           uses: technote-space/create-pr-action@v1
            with:
              GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
              EXECUTE_COMMANDS: |
