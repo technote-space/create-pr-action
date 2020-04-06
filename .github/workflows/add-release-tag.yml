@@ -2,6 +2,7 @@ on:
   pull_request:
     branches:
       - master
+      - develop/v*
     types: [closed]
 
 name: Add release tag
