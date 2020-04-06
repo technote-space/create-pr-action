@@ -8,14 +8,19 @@ jobs:
   assign:
     name: Assign issues to project
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
+      - uses: technote-space/load-config-action@v1
+        with:
+          CONFIG_FILENAME: workflow-settings.json
       - uses: technote-space/create-project-card-action@v1
         with:
-          PROJECT: Backlog
-          COLUMN: To do
+          PROJECT: ${{ env.PROJECT }}
+          COLUMN: ${{ env.ISSUE_COLUMN }}
 
   assignAuthor:
     name: Assign author to issue
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
       - uses: technote-space/assign-author@v1
