@@ -1,6 +1,6 @@
 {
     "name": "moment",
-    "version": "2.25.1",
+    "version": "2.25.3",
     "description": "Parse, validate, manipulate, and display dates",
     "homepage": "https://momentjs.com",
     "author": "Iskren Ivov Chernev <iskren.chernev@gmail.com> (https://github.com/ichernev)",
@@ -23,8 +23,7 @@
         "ender"
     ],
     "main": "./moment.js",
-    "jsnext:main": "./src/moment.js",
-    "module": "./src/moment.js",
+    "jsnext:main": "./dist/moment.js",
     "typings": "./moment.d.ts",
     "typesVersions": {
         ">=3.1": {
