@@ -165,8 +165,8 @@ describe('getRunnerArguments', () => {
       ],
       executeCommands: [
         'ls -lat',
-        'ncu -u',
-        'ncu -u --packageFile package.json',
+        'ncu.js -u',
+        'ncu.js -u --packageFile package.json',
         'yarn upgrade',
         'ls -lat',
       ],
