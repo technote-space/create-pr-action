@@ -165,8 +165,8 @@ describe('getRunnerArguments', () => {
       ],
       executeCommands: [
         'ls -lat',
-        'ncu -u',
-        'ncu -u --packageFile package.json',
+        'ncu.js -u',
+        'ncu.js -u --packageFile package.json',
         'yarn upgrade',
         'ls -lat',
       ],
@@ -212,12 +212,12 @@ describe('getRunnerArguments', () => {
     expect(await task()).toEqual({
       command: 'add path',
       stdout: [
-        path.resolve(__dirname, '../../node_modules/.bin'),
+        path.resolve(__dirname, '../../node_modules/npm-check-updates/bin'),
       ],
       stderr: [],
     });
     stdoutCalledWith(mockStdout, [
-      `::add-path::${path.resolve(__dirname, '../../node_modules/.bin')}`,
+      `::add-path::${path.resolve(__dirname, '../../node_modules/npm-check-updates/bin')}`,
     ]);
   });
 });
