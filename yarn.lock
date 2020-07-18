@@ -726,7 +726,7 @@
   dependencies:
     "@octokit/types" "^5.0.0"
 
-"@octokit/plugin-rest-endpoint-methods@^4.0.0":
+"@octokit/plugin-rest-endpoint-methods@^4.0.0", "@octokit/plugin-rest-endpoint-methods@^4.1.0":
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-4.1.0.tgz#338c568177c4d4d753f9525af88b29cd0f091734"
   integrity sha512-zbRTjm+xplSNlixotTVMvLJe8aRogUXS+r37wZK5EjLsNYH4j02K5XLMOWyYaSS4AJEZtPmzCcOcui4VzVGq+A==
@@ -798,26 +798,26 @@
     "@actions/core" "^1.2.4"
     "@actions/github" "^4.0.0"
 
-"@technote-space/github-action-helper@^3.0.3", "@technote-space/github-action-helper@^3.0.4":
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-3.0.4.tgz#c53c4776e0e34d6cda04e9d5b4f081eee536f2d4"
-  integrity sha512-sG0XFP70oSWmSYrZVxvhtysqrjlowEFqPuFokv2XCXSlYYO2Kc/KUrbt1TGMHAs4WFWc2c1VjY7C8VJPxzKcRw==
+"@technote-space/github-action-helper@^3.0.3", "@technote-space/github-action-helper@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-helper/-/github-action-helper-3.1.0.tgz#1f75e2053b23b6e541a90abfeb452e50abb9d890"
+  integrity sha512-hGJrvNO1ZpH9dFnMF1K8lPlWjwauXtGoTx6Z3Bvkv0VSA3C0GaVD+iI81XvhePZTtVShv53WCuu5M12Lc5p4Xg==
   dependencies:
     "@actions/core" "^1.2.4"
     "@actions/github" "^4.0.0"
-    "@octokit/plugin-rest-endpoint-methods" "^4.0.0"
+    "@octokit/plugin-rest-endpoint-methods" "^4.1.0"
     shell-escape "^0.2.0"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^1.8.4":
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.8.4.tgz#66e5c65d0f25200ae45c00f90cf50e7515a6d716"
-  integrity sha512-cguUHFHkc/bbZnRnmcQanZHhFYdLfpt6SvPnV9oFTrduUJYd9T/06W9Jqi6EbWdfzg/mOXXi4bpZxrChA9XWFA==
+"@technote-space/github-action-pr-helper@^1.8.5":
+  version "1.8.5"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.8.5.tgz#7a9322de14569749e6bb01b207b349a3419b5dad"
+  integrity sha512-VznMzemF6OOhVqcMGeL8rhtLIqpIzmffxHJwt2NfYhWF/qW5lZxKOdf3GAQjFQTVKyWtSS2tru7927ruVFZH3g==
   dependencies:
     "@actions/core" "^1.2.4"
     "@actions/github" "^4.0.0"
     "@technote-space/filter-github-action" "^0.2.20"
-    "@technote-space/github-action-helper" "^3.0.4"
+    "@technote-space/github-action-helper" "^3.1.0"
     moment "^2.27.0"
 
 "@technote-space/github-action-test-helper@^0.5.3":
