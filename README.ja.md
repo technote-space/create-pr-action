@@ -163,7 +163,7 @@ jobs:
 |:---:|:---:|
 |pull_request|opened, synchronize, reopened, labeled, unlabeled|
 |pull_request|closed|
-|schedule|*|
+|schedule, repository_dispatch, workflow_dispatch|*|
 
 - 次のアクティビティタイプは明示的に指定する必要があります ([detail](https://help.github.com/ja/github/automating-your-workflow-with-github-actions/events-that-trigger-workflows#pull-request-event-pull_request))
   - `labeled`, `unlabeled`, `closed`
