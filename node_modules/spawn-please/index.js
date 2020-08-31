@@ -31,10 +31,12 @@ function spawnPlease(command, args, stdin, options) {
 
     child.stdout.on('data', function (data) {
       stdout += data
+      if (options.stdout) options.stdout(data)
     })
 
     child.stderr.on('data', function (data) {
       stderr += data
+      if (options.stderr) options.stderr(data)
     })
 
     if(options.rejectOnError) {
