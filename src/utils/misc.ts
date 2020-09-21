@@ -9,7 +9,7 @@ import {ExecuteTask, CommandOutput} from '@technote-space/github-action-pr-helpe
 const {getArrayInput, getBoolValue} = Utils;
 
 // ^npx npm-check-updates ⇒ ncu
-const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), 'ncu.js '), command);
+const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), 'cli.js '), command);
 
 const getAddPathCommand = (): ExecuteTask => async(): Promise<CommandOutput> => {
   addPath(BIN_PATH);
