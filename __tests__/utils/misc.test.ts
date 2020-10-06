@@ -1,6 +1,11 @@
 /* eslint-disable no-magic-numbers */
 import path from 'path';
-import {stdoutCalledWith, spyOnStdout, testEnv, generateContext} from '@technote-space/github-action-test-helper';
+import {
+  spyOnAddPath,
+  addPathCalledWith,
+  testEnv,
+  generateContext,
+} from '@technote-space/github-action-test-helper';
 import {getOnlyDefaultBranchFlag, getRunnerArguments} from '../../src/utils/misc';
 
 describe('getOnlyDefaultBranchFlag', () => {
@@ -206,7 +211,7 @@ describe('getRunnerArguments', () => {
       autoMergeThresholdDays: '30',
     });
 
-    const mockStdout = spyOnStdout();
+    const mockAddPath = spyOnAddPath();
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(await task()).toEqual({
@@ -216,8 +221,6 @@ describe('getRunnerArguments', () => {
       ],
       stderr: [],
     });
-    stdoutCalledWith(mockStdout, [
-      `::add-path::${path.resolve(__dirname, '../../node_modules/npm-check-updates/bin')}`,
-    ]);
+    addPathCalledWith(mockAddPath, [path.resolve(__dirname, '../../node_modules/npm-check-updates/bin')]);
   });
 });
