@@ -37,7 +37,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@technote-space/github-action-helper": "^4.0.3",
-    "@technote-space/github-action-pr-helper": "^1.10.0",
+    "@technote-space/github-action-pr-helper": "^1.10.1",
     "npm-check-updates": "^9.0.4"
   },
   "devDependencies": {
