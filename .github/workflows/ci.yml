@@ -57,7 +57,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-16.04, macos-latest]
+        os: [ubuntu-16.04, ubuntu-latest, ubuntu-20.04, macos-latest]
     steps:
       - name: Set running flag
         run: echo "RUNNING=1" >> $GITHUB_ENV
@@ -260,7 +260,7 @@ jobs:
     timeout-minutes: 3
     if: always()
     steps:
-      - uses: technote-space/workflow-conclusion-action@v1
+      - uses: technote-space/workflow-conclusion-action@v2
       - uses: 8398a7/action-slack@v3
         with:
           status: failure
