@@ -865,10 +865,10 @@
     "@actions/core" "^1.2.6"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^1.11.2":
-  version "1.11.2"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.11.2.tgz#0ee6f04af2a3c19a35c8e864ede265f383f93473"
-  integrity sha512-3qox2ZvLqm/zItnMe9bpKkIUnrlgcdE3ZoMRU4OXyiSrvM/OelVcgz+PYz5r/fLMP8YvXg8qxYvtKvIIhtsiaw==
+"@technote-space/github-action-pr-helper@^1.11.4":
+  version "1.11.4"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.11.4.tgz#b3bf838e6cbd12841dc95cdf642c899a4a2185a2"
+  integrity sha512-YYOunKJLqEjZw9FjPGhoLW29Zl7YrvRH24GToEgsC/wOERmrqxdxzws5nb2MFH1TXpgvp0h8mVUhWmEHmxE5+Q==
   dependencies:
     "@actions/core" "^1.2.6"
     "@actions/github" "^4.0.0"

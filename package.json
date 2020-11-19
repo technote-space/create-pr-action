@@ -1,6 +1,6 @@
 {
   "name": "@technote-space/create-pr-action",
-  "version": "2.0.20",
+  "version": "2.0.21",
   "description": "This is a GitHub Actions that executes an arbitrary command and commits the changes to the new pull request.",
   "keywords": [
     "github",
@@ -37,7 +37,7 @@
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
     "@technote-space/github-action-helper": "^4.2.7",
-    "@technote-space/github-action-pr-helper": "^1.11.2",
+    "@technote-space/github-action-pr-helper": "^1.11.4",
     "npm-check-updates": "^10.2.1"
   },
   "devDependencies": {
