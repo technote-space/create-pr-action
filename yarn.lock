@@ -865,10 +865,10 @@
     "@actions/core" "^1.2.6"
     sprintf-js "^1.1.2"
 
-"@technote-space/github-action-pr-helper@^1.11.0":
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.11.0.tgz#487e90e81dcce4674a61a4660a2e65d4cf3a53f9"
-  integrity sha512-4FcQoiMlTaBg0eszOXHykO4Wl9eai0vYDGzmu7kyxLeFOS4dxMNnNVVN4wlho03toTKU9vJw9O4r10c4J27sbA==
+"@technote-space/github-action-pr-helper@^1.11.1":
+  version "1.11.1"
+  resolved "https://registry.yarnpkg.com/@technote-space/github-action-pr-helper/-/github-action-pr-helper-1.11.1.tgz#c911eebdd0b601a20cc89ad274a452408c4c14f3"
+  integrity sha512-dAFpZUMR6EjUekF5i6rNsiiV2mmNyBds+KRbJ+1O3Qv/cl8iaOjHmXCBL/zcDPXubg8N5spToWmhqKWH0Pk8Rg==
   dependencies:
     "@actions/core" "^1.2.6"
     "@actions/github" "^4.0.0"
@@ -1947,9 +1947,9 @@ data-urls@^2.0.0:
     whatwg-url "^8.0.0"
 
 debug@4, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1, debug@^4.2.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.0.tgz#efa41cbf14fc9448075367fdaaddf82376da211e"
-  integrity sha512-jjO6JD2rKfiZQnBoRzhRTbXjHLGLfH+UtGkWLc/UXAh/rzZMyjbgn0NcfFpqT8nd1kTtFnDiJcrIFkq4UKeJVg==
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-4.3.1.tgz#f0d229c505e0c6d8c49ac553d1b13dc183f6b2ee"
+  integrity sha512-doEwdvm4PCeK4K3RQN2ZC2BYUBaxwLARCqZmMjtF8a51J2Rb0xpVloFRnCODwqjpwnAoao4pelN8l3RJdv3gRQ==
   dependencies:
     ms "2.1.2"
 
