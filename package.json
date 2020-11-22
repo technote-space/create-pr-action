@@ -36,8 +36,8 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/github": "^4.0.0",
-    "@technote-space/github-action-helper": "^4.3.0",
-    "@technote-space/github-action-pr-helper": "^1.11.5",
+    "@technote-space/github-action-helper": "^4.3.1",
+    "@technote-space/github-action-pr-helper": "^1.11.6",
     "npm-check-updates": "^10.2.2"
   },
   "devDependencies": {
