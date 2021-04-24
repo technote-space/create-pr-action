@@ -4,7 +4,7 @@
   "description": "This is a GitHub Actions that executes an arbitrary command and commits the changes to the new pull request.",
   "keywords": [
     "github",
-    "github actions"
+    "github actions" 
   ],
   "homepage": "https://github.com/technote-space/create-pr-action",
   "bugs": {
