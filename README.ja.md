@@ -1,4 +1,4 @@
-# Create PR Action
+# Create PR Action 
 
 [![CI Status](https://github.com/technote-space/create-pr-action/workflows/CI/badge.svg)](https://github.com/technote-space/create-pr-action/actions)
 [![codecov](https://codecov.io/gh/technote-space/create-pr-action/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/create-pr-action)
