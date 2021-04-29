@@ -39,14 +39,14 @@
   "dependencies": {
     "@actions/core": "^1.2.7",
     "@actions/github": "^4.0.0",
-    "@technote-space/github-action-helper": "^5.2.5",
-    "@technote-space/github-action-pr-helper": "^2.2.5",
+    "@technote-space/github-action-helper": "^5.2.6",
+    "@technote-space/github-action-pr-helper": "^2.2.6",
     "npm-check-updates": "^11.5.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.1.1",
-    "@technote-space/github-action-test-helper": "^0.7.6",
+    "@technote-space/github-action-test-helper": "^0.7.8",
     "@technote-space/release-github-actions-cli": "^1.8.4",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",
