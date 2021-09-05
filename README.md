@@ -1,9 +1,9 @@
 # Create PR Action
 
 [![CI Status](https://github.com/technote-space/create-pr-action/workflows/CI/badge.svg)](https://github.com/technote-space/create-pr-action/actions)
-[![codecov](https://codecov.io/gh/technote-space/create-pr-action/branch/master/graph/badge.svg)](https://codecov.io/gh/technote-space/create-pr-action)
+[![codecov](https://codecov.io/gh/technote-space/create-pr-action/branch/main/graph/badge.svg)](https://codecov.io/gh/technote-space/create-pr-action)
 [![CodeFactor](https://www.codefactor.io/repository/github/technote-space/create-pr-action/badge)](https://www.codefactor.io/repository/github/technote-space/create-pr-action)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/create-pr-action/blob/master/LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/technote-space/create-pr-action/blob/main/LICENSE)
 
 *Read this in other languages: [English](README.md), [日本語](README.ja.md).*
 
@@ -182,7 +182,7 @@ Perform an automatic merge under the following conditions:
 | PR_NUMBER_REF | `#${pull_request.number}` (e.g. `#11`) |
 | PR_ID | pull_request.id (e.g. `21031067`) |
 | PR_HEAD_REF | pull_request.head.ref (e.g. `change`) |
-| PR_BASE_REF | pull_request.base.ref (e.g. `master`) |
+| PR_BASE_REF | pull_request.base.ref (e.g. `main`) |
 | PR_TITLE | pull_request.title (e.g. `Update the README with new information.`) |
 | PATCH_VERSION | new patch version (e.g. `v1.2.4`) |
 | MINOR_VERSION | new minor version (e.g. `v1.3.0`) |
