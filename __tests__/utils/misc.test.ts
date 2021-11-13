@@ -217,10 +217,10 @@ describe('getRunnerArguments', () => {
     expect(await task()).toEqual({
       command: 'add path',
       stdout: [
-        path.resolve(__dirname, '../../node_modules/npm-check-updates/bin'),
+        path.resolve(__dirname, '../../node_modules/npm-check-updates/build/src/bin'),
       ],
       stderr: [],
     });
-    addPathCalledWith(mockAddPath, [path.resolve(__dirname, '../../node_modules/npm-check-updates/bin')]);
+    addPathCalledWith(mockAddPath, [path.resolve(__dirname, '../../node_modules/npm-check-updates/build/src/bin')]);
   });
 });
