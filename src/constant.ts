@@ -9,4 +9,4 @@ export const TARGET_NCU_COMMANDS = [
   'npm-check-updates ',
   'ncu ',
 ];
-export const BIN_PATH            = resolve(__dirname, '../node_modules/npm-check-updates/bin');
+export const BIN_PATH            = resolve(__dirname, '../node_modules/npm-check-updates/build/src/bin');
