@@ -10,3 +10,4 @@ export const TARGET_NCU_COMMANDS = [
   'ncu ',
 ];
 export const BIN_PATH            = resolve(__dirname, '../node_modules/npm-check-updates/build/src/bin');
+export const BIN_FILE            = 'cli.js';
