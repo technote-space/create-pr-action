@@ -3,13 +3,13 @@ import {Context} from '@actions/github/lib/context';
 import {Utils, ContextHelper} from '@technote-space/github-action-helper';
 import {MainArguments} from '@technote-space/github-action-pr-helper/dist/types';
 import {getInput, addPath} from '@actions/core' ;
-import {ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH} from '../constant';
+import {ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH, BIN_FILE} from '../constant';
 import {ExecuteTask, CommandOutput} from '@technote-space/github-action-pr-helper/dist/types';
 
 const {getArrayInput, getBoolValue} = Utils;
 
 // ^npx npm-check-updates ⇒ ncu
-const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), 'cli.js '), command);
+const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), `${BIN_FILE} `), command);
 
 const getAddPathCommand = (): ExecuteTask => async(): Promise<CommandOutput> => {
   addPath(BIN_PATH);
