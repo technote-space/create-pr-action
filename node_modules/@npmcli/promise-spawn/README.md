@@ -4,12 +4,6 @@ Spawn processes the way the npm cli likes to do.  Give it some options,
 it'll give you a Promise that resolves or rejects based on the results of
 the execution.
 
-Note: When the current user is root, this will use
-[`infer-owner`](http://npm.im/infer-owner) to find the owner of the current
-working directory, and run with that effective uid/gid.  Otherwise, it runs
-as the current user always.  (This helps prevent doing git checkouts and
-such, and leaving root-owned files lying around in user-owned locations.)
-
 ## USAGE
 
 ```js
@@ -20,7 +14,6 @@ promiseSpawn('ls', [ '-laF', 'some/dir/*.js' ], {
   stdioString: false, // stdout/stderr as strings rather than buffers
   stdio: 'pipe', // any node spawn stdio arg is valid here
   // any other arguments to node child_process.spawn can go here as well,
-  // but uid/gid will be ignored and set by infer-owner if relevant.
 }, {
   extra: 'things',
   to: 'decorate',
@@ -61,6 +54,4 @@ spawned process.
 - `cwd` String, default `process.cwd()`.  Current working directory for
   running the script.  Also the argument to `infer-owner` to determine
   effective uid/gid when run as root on Unix systems.
-- Any other options for `child_process.spawn` can be passed as well, but
-  note that `uid` and `gid` will be overridden by the owner of the cwd when
-  run as root on Unix systems, or `null` otherwise.
+- Any other options for `child_process.spawn` can be passed as well.

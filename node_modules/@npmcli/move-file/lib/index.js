@@ -6,8 +6,6 @@ const {
   accessSync,
   copyFile: copyFile_,
   copyFileSync,
-  unlink: unlink_,
-  unlinkSync,
   readdir: readdir_,
   readdirSync,
   rename: rename_,
@@ -19,12 +17,11 @@ const {
   symlink: symlink_,
   symlinkSync,
   readlink: readlink_,
-  readlinkSync
+  readlinkSync,
 } = require('fs')
 
 const access = promisify(access_)
 const copyFile = promisify(copyFile_)
-const unlink = promisify(unlink_)
 const readdir = promisify(readdir_)
 const rename = promisify(rename_)
 const stat = promisify(stat_)
@@ -61,7 +58,7 @@ const moveFile = async (source, destination, options = {}, root = true, symlinks
 
   options = {
     overwrite: true,
-    ...options
+    ...options,
   }
 
   if (!options.overwrite && await pathExists(destination)) {
@@ -77,7 +74,9 @@ const moveFile = async (source, destination, options = {}, root = true, symlinks
       const sourceStat = await lstat(source)
       if (sourceStat.isDirectory()) {
         const files = await readdir(source)
-        await Promise.all(files.map((file) => moveFile(join(source, file), join(destination, file), options, false, symlinks)))
+        await Promise.all(files.map((file) =>
+          moveFile(join(source, file), join(destination, file), options, false, symlinks)
+        ))
       } else if (sourceStat.isSymbolicLink()) {
         symlinks.push({ source, destination })
       } else {
@@ -89,17 +88,24 @@ const moveFile = async (source, destination, options = {}, root = true, symlinks
   }
 
   if (root) {
-    await Promise.all(symlinks.map(async ({ source, destination }) => {
-      let target = await readlink(source)
-      // junction symlinks in windows will be absolute paths, so we need to make sure they point to the destination
-      if (isAbsolute(target))
-        target = resolve(destination, relative(source, target))
-      // try to determine what the actual file is so we can create the correct type of symlink in windows
+    await Promise.all(symlinks.map(async ({ source: symSource, destination: symDestination }) => {
+      let target = await readlink(symSource)
+      // junction symlinks in windows will be absolute paths, so we need to
+      // make sure they point to the symlink destination
+      if (isAbsolute(target)) {
+        target = resolve(symDestination, relative(symSource, target))
+      }
+      // try to determine what the actual file is so we can create the correct
+      // type of symlink in windows
       let targetStat
       try {
-        targetStat = await stat(resolve(dirname(source), target))
+        targetStat = await stat(resolve(dirname(symSource), target))
       } catch (err) {}
-      await symlink(target, destination, targetStat && targetStat.isDirectory() ? 'junction' : 'file')
+      await symlink(
+        target,
+        symDestination,
+        targetStat && targetStat.isDirectory() ? 'junction' : 'file'
+      )
     }))
     await rimraf(source)
   }
@@ -112,7 +118,7 @@ const moveFileSync = (source, destination, options = {}, root = true, symlinks =
 
   options = {
     overwrite: true,
-    ...options
+    ...options,
   }
 
   if (!options.overwrite && pathExistsSync(destination)) {
@@ -142,17 +148,24 @@ const moveFileSync = (source, destination, options = {}, root = true, symlinks =
   }
 
   if (root) {
-    for (const { source, destination } of symlinks) {
-      let target = readlinkSync(source)
-      // junction symlinks in windows will be absolute paths, so we need to make sure they point to the destination
-      if (isAbsolute(target))
-        target = resolve(destination, relative(source, target))
-      // try to determine what the actual file is so we can create the correct type of symlink in windows
+    for (const { source: symSource, destination: symDestination } of symlinks) {
+      let target = readlinkSync(symSource)
+      // junction symlinks in windows will be absolute paths, so we need to
+      // make sure they point to the symlink destination
+      if (isAbsolute(target)) {
+        target = resolve(symDestination, relative(symSource, target))
+      }
+      // try to determine what the actual file is so we can create the correct
+      // type of symlink in windows
       let targetStat
       try {
-        targetStat = statSync(resolve(dirname(source), target))
+        targetStat = statSync(resolve(dirname(symSource), target))
       } catch (err) {}
-      symlinkSync(target, destination, targetStat && targetStat.isDirectory() ? 'junction' : 'file')
+      symlinkSync(
+        target,
+        symDestination,
+        targetStat && targetStat.isDirectory() ? 'junction' : 'file'
+      )
     }
     rimrafSync(source)
   }
