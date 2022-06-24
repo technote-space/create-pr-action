@@ -1,5 +1,4 @@
 /* eslint-disable no-magic-numbers */
-import { describe, expect, it } from 'vitest';
 import path from 'path';
 import {
   spyOnAddPath,
@@ -7,6 +6,7 @@ import {
   testEnv,
   generateContext,
 } from '@technote-space/github-action-test-helper';
+import { describe, expect, it } from 'vitest';
 import { getOnlyDefaultBranchFlag, getRunnerArguments } from './misc';
 
 describe('getOnlyDefaultBranchFlag', () => {
