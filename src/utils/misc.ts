@@ -1,12 +1,12 @@
+import type { Context } from '@actions/github/lib/context';
+import type { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
+import type { ExecuteTask, CommandOutput } from '@technote-space/github-action-pr-helper/dist/types';
 import path from 'path';
-import {Context} from '@actions/github/lib/context';
-import {Utils, ContextHelper} from '@technote-space/github-action-helper';
-import {MainArguments} from '@technote-space/github-action-pr-helper/dist/types';
-import {getInput, addPath} from '@actions/core' ;
-import {ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH, BIN_FILE} from '../constant';
-import {ExecuteTask, CommandOutput} from '@technote-space/github-action-pr-helper/dist/types';
+import { getInput, addPath } from '@actions/core' ;
+import { Utils, ContextHelper } from '@technote-space/github-action-helper';
+import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH, BIN_FILE } from '../constant';
 
-const {getArrayInput, getBoolValue} = Utils;
+const { getArrayInput, getBoolValue } = Utils;
 
 // ^npx npm-check-updates ⇒ ncu
 const replaceNcuCommand = (command: string): string => TARGET_NCU_COMMANDS.reduce((command, target) => command.replace(Utils.getPrefixRegExp(target), `${BIN_FILE} `), command);
