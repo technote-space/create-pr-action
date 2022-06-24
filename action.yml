@@ -8,7 +8,7 @@ inputs:
   GITHUB_TOKEN:
     description: Secret GitHub API token used to make API requests or git authentication.
     default: ${{ github.token }}
-    required: true
+    required: false
   API_TOKEN:
     description: Secret GitHub API token used to make API requests.
     required: false
@@ -52,7 +52,7 @@ inputs:
   PR_BRANCH_PREFIX:
     description: PullRequest branch prefix.
     default: 'create-pr-action/'
-    required: true
+    required: false
   PR_BRANCH_NAME:
     description: PullRequest branch name.
     required: true
@@ -61,7 +61,7 @@ inputs:
     required: true
   PR_BODY:
     description: PullRequest body.
-    required: true
+    required: false
     default: |
       <!-- START pr-commits -->
       <!-- END pr-commits -->
