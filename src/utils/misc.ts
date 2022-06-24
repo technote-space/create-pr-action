@@ -1,10 +1,10 @@
 import path from 'path';
-import { Context } from '@actions/github/lib/context';
+import type { Context } from '@actions/github/lib/context';
 import { Utils, ContextHelper } from '@technote-space/github-action-helper';
-import { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
+import type { MainArguments } from '@technote-space/github-action-pr-helper/dist/types';
 import { getInput, addPath } from '@actions/core' ;
 import { ACTION_NAME, ACTION_OWNER, ACTION_REPO, TARGET_NCU_COMMANDS, BIN_PATH, BIN_FILE } from '../constant';
-import { ExecuteTask, CommandOutput } from '@technote-space/github-action-pr-helper/dist/types';
+import type { ExecuteTask, CommandOutput } from '@technote-space/github-action-pr-helper/dist/types';
 
 const { getArrayInput, getBoolValue } = Utils;
 
