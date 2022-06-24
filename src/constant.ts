@@ -1,4 +1,4 @@
-import {resolve} from 'path';
+import { resolve } from 'path';
 
 export const ACTION_NAME         = 'Create PR Action';
 export const ACTION_OWNER        = 'technote-space';
