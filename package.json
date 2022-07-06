@@ -38,13 +38,13 @@
     "update": "npm_config_yes=true npx npm-check-updates -u --timeout 100000 && yarn install && yarn upgrade && yarn audit"
   },
   "dependencies": {
-    "npm-check-updates": "^14.1.1"
+    "npm-check-updates": "^15.0.3"
   },
   "devDependencies": {
     "@actions/core": "^1.9.0",
     "@actions/github": "^5.0.3",
-    "@commitlint/cli": "^17.0.2",
-    "@commitlint/config-conventional": "^17.0.2",
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
     "@rollup/plugin-commonjs": "^22.0.1",
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
@@ -54,19 +54,19 @@
     "@technote-space/github-action-pr-helper": "^2.3.3",
     "@technote-space/github-action-test-helper": "^0.9.8",
     "@technote-space/release-github-actions-cli": "^1.9.0",
-    "@types/node": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.29.0",
-    "@typescript-eslint/parser": "^5.29.0",
+    "@types/node": "^18.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
     "c8": "^7.11.3",
-    "eslint": "^8.18.0",
+    "eslint": "^8.19.0",
     "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.1",
     "lint-staged": "^13.0.3",
-    "nock": "^13.2.7",
+    "nock": "^13.2.8",
     "pinst": "^3.0.0",
     "rollup": "^2.75.7",
     "typescript": "^4.7.4",
-    "vitest": "^0.16.0"
+    "vitest": "^0.17.0"
   },
   "publishConfig": {
     "access": "public"
