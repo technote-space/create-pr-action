@@ -41,7 +41,11 @@ class Conf extends ConfigChain {
 			const contents = fs.readFileSync(file, 'utf8');
 			this.addString(contents, file, 'ini', marker);
 		} catch (error) {
-			this.add({}, marker);
+			if (error.code === 'ENOENT') {
+				this.add({}, marker);
+			} else {
+				throw error;
+			}
 		}
 
 		return this;
