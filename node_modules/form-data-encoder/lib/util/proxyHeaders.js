@@ -9,7 +9,7 @@ function getProperty(target, prop) {
     }
     return undefined;
 }
-export const proxyHeaders = (target) => new Proxy(target, {
+export const proxyHeaders = (object) => new Proxy(object, {
     get: (target, prop) => getProperty(target, prop),
     has: (target, prop) => getProperty(target, prop) !== undefined
 });

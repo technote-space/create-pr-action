@@ -58,11 +58,15 @@ export class FormDataEncoder {
         this.boundary = `form-data-boundary-${boundary}`;
         this.contentType = `multipart/form-data; boundary=${this.boundary}`;
         __classPrivateFieldSet(this, _FormDataEncoder_footer, __classPrivateFieldGet(this, _FormDataEncoder_encoder, "f").encode(`${__classPrivateFieldGet(this, _FormDataEncoder_DASHES, "f")}${this.boundary}${__classPrivateFieldGet(this, _FormDataEncoder_DASHES, "f")}${__classPrivateFieldGet(this, _FormDataEncoder_CRLF, "f").repeat(2)}`), "f");
-        this.contentLength = __classPrivateFieldGet(this, _FormDataEncoder_instances, "m", _FormDataEncoder_getContentLength).call(this);
-        this.headers = proxyHeaders(Object.freeze({
-            "Content-Type": this.contentType,
-            "Content-Length": this.contentLength
-        }));
+        const headers = {
+            "Content-Type": this.contentType
+        };
+        const contentLength = __classPrivateFieldGet(this, _FormDataEncoder_instances, "m", _FormDataEncoder_getContentLength).call(this);
+        if (contentLength) {
+            this.contentLength = contentLength;
+            headers["Content-Length"] = contentLength;
+        }
+        this.headers = proxyHeaders(Object.freeze(headers));
         Object.defineProperties(this, {
             boundary: readonlyProp,
             contentType: readonlyProp,
@@ -71,7 +75,7 @@ export class FormDataEncoder {
         });
     }
     getContentLength() {
-        return Number(this.contentLength);
+        return this.contentLength == null ? undefined : Number(this.contentLength);
     }
     *values() {
         for (const [name, raw] of __classPrivateFieldGet(this, _FormDataEncoder_form, "f")) {
@@ -100,7 +104,10 @@ export class FormDataEncoder {
             header += `; filename="${escapeName(value.name)}"${__classPrivateFieldGet(this, _FormDataEncoder_CRLF, "f")}`;
             header += `Content-Type: ${value.type || "application/octet-stream"}`;
         }
-        if (__classPrivateFieldGet(this, _FormDataEncoder_options, "f").enableAdditionalHeaders === true) {
+        const size = isFile(value) ? value.size : value.byteLength;
+        if (__classPrivateFieldGet(this, _FormDataEncoder_options, "f").enableAdditionalHeaders === true
+            && size != null
+            && !isNaN(size)) {
             header += `${__classPrivateFieldGet(this, _FormDataEncoder_CRLF, "f")}Content-Length: ${isFile(value) ? value.size : value.byteLength}`;
         }
         return __classPrivateFieldGet(this, _FormDataEncoder_encoder, "f").encode(`${header}${__classPrivateFieldGet(this, _FormDataEncoder_CRLF, "f").repeat(2)}`);
@@ -108,8 +115,12 @@ export class FormDataEncoder {
         let length = 0;
         for (const [name, raw] of __classPrivateFieldGet(this, _FormDataEncoder_form, "f")) {
             const value = isFile(raw) ? raw : __classPrivateFieldGet(this, _FormDataEncoder_encoder, "f").encode(normalizeValue(raw));
+            const size = isFile(value) ? value.size : value.byteLength;
+            if (size == null || isNaN(size)) {
+                return undefined;
+            }
             length += __classPrivateFieldGet(this, _FormDataEncoder_instances, "m", _FormDataEncoder_getFieldHeader).call(this, name, value).byteLength;
-            length += isFile(value) ? value.size : value.byteLength;
+            length += size;
             length += __classPrivateFieldGet(this, _FormDataEncoder_CRLF_BYTES_LENGTH, "f");
         }
         return String(length + __classPrivateFieldGet(this, _FormDataEncoder_footer, "f").byteLength);

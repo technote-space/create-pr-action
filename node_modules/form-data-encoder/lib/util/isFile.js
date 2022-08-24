@@ -4,7 +4,5 @@ export const isFile = (value) => Boolean(value
     && isFunction(value.constructor)
     && value[Symbol.toStringTag] === "File"
     && isFunction(value.stream)
-    && value.name != null
-    && value.size != null
-    && value.lastModified != null);
+    && value.name != null);
 export const isFileLike = isFile;

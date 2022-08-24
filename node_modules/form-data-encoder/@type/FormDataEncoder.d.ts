@@ -1,11 +1,11 @@
 import type { LowercaseObjectKeys } from "./util/LowercaseObjectKeys.js";
 import type { FormDataLike } from "./FormDataLike.js";
 import type { FileLike } from "./FileLike.js";
-declare type RawHeaders = Readonly<{
+interface RawHeaders {
     "Content-Type": string;
-    "Content-Length": string;
-}>;
-export declare type FormDataEncoderHeaders = RawHeaders & LowercaseObjectKeys<RawHeaders>;
+    "Content-Length"?: string;
+}
+export declare type FormDataEncoderHeaders = Readonly<RawHeaders> & Readonly<LowercaseObjectKeys<RawHeaders>>;
 export interface FormDataEncoderOptions {
     /**
      * When enabled, the encoder will emit additional per part headers, such as `Content-Length`.
@@ -33,7 +33,7 @@ export declare class FormDataEncoder {
     /**
      * Returns Content-Length header
      */
-    readonly contentLength: string;
+    readonly contentLength: string | undefined;
     /**
      * Returns headers object with Content-Type and Content-Length header
      */
@@ -80,7 +80,7 @@ export declare class FormDataEncoder {
      *
      * @deprecated Use FormDataEncoder.contentLength or FormDataEncoder.headers["Content-Length"] instead
      */
-    getContentLength(): number;
+    getContentLength(): number | undefined;
     /**
      * Creates an iterator allowing to go through form-data parts (with metadata).
      * This method **will not** read the files.
