@@ -32,7 +32,6 @@ It also has a management function that resolves conflicts and closes pull reques
   - [Variables2](#variables2)
 - [Addition](#addition)
   - [GITHUB_TOKEN](#github_token)
-  - [Auto merge](#auto-merge)
 - [Author](#author)
 
 </details>
@@ -154,14 +153,7 @@ jobs:
 |PR_BODY|PullRequest body<br>Several variables are available ([variables2](#variables2))| |true| |
 |CHECK_DEFAULT_BRANCH|Whether to check default branch|`true`| |`false`|
 |ONLY_DEFAULT_BRANCH|Whether not to check other than default branch|`pull_request: false` <br> `else: true`| |`true`|
-|AUTO_MERGE_THRESHOLD_DAYS|Threshold days to auto merge<br>[Detail](#auto-merge)| | |`30`|
 |GITHUB_TOKEN|アクセストークン|`${{github.token}}`|true|`${{secrets.ACCESS_TOKEN}}`|
-
-Perform an automatic merge under the following conditions:
-
-* The number of days has passed since the PR was created
-* All checks are Success
-* Mergeable
 
 ## Action event details
 ### Target event
@@ -238,15 +230,6 @@ If you want to trigger actions, use a personal access token instead.
              PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
              PR_TITLE: 'chore: update npm dependencies'
    ```
-
-### Auto merge
-Perform an automatic merge under the following conditions:
-
-* `AUTO_MERGE_THRESHOLD_DAYS` option is set
-* No changes in this run
-* The number of days has passed since the PR was created
-* All checks are Success
-* Mergeable
 
 ## Author
 [GitHub (Technote)](https://github.com/technote-space)  
