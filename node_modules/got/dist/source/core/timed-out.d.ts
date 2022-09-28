@@ -1,11 +1,11 @@
-import { ClientRequest } from 'node:http';
+import type { ClientRequest } from 'node:http';
 declare const reentry: unique symbol;
-interface TimedOutOptions {
+declare type TimedOutOptions = {
     host?: string;
     hostname?: string;
     protocol?: string;
-}
-export interface Delays {
+};
+export declare type Delays = {
     lookup?: number;
     socket?: number;
     connect?: number;
@@ -14,7 +14,7 @@ export interface Delays {
     response?: number;
     read?: number;
     request?: number;
-}
+};
 export declare type ErrorCode = 'ETIMEDOUT' | 'ECONNRESET' | 'EADDRINUSE' | 'ECONNREFUSED' | 'EPIPE' | 'ENOTFOUND' | 'ENETUNREACH' | 'EAI_AGAIN';
 export declare class TimeoutError extends Error {
     event: string;

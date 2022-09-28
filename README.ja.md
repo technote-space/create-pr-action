@@ -154,7 +154,6 @@ jobs:
 |PR_BODY|プルリクエストの本文<br>いくつかの変数が使用可能です ([variables2](#variables2))| |true| |
 |CHECK_DEFAULT_BRANCH|デフォルトブランチをチェックするかどうか|`true`| |`false`|
 |ONLY_DEFAULT_BRANCH|デフォルトブランチ以外をチェックしないかどうか|`pull_request: false` <br> `else: true`| |`true`|
-|AUTO_MERGE_THRESHOLD_DAYS|自動マージを行う日数しきい値<br>[詳細](#auto-merge)| | |`30`|
 |GITHUB_TOKEN|アクセストークン|`${{github.token}}`|true|`${{secrets.ACCESS_TOKEN}}`|
 
 ## Action イベント詳細
@@ -232,15 +231,6 @@ GitHub Actions で提供される`GITHUB_TOKEN`は連続するイベントを作
              PR_BRANCH_NAME: 'chore-npm-update-${PR_ID}'
              PR_TITLE: 'chore: update npm dependencies'
    ```
-
-### Auto merge
-以下の条件を満たす場合、自動でマージを行います。
-
-* `AUTO_MERGE_THRESHOLD_DAYS` が設定されている
-* 今回の実行で変更がない
-* PRを作成してからこの値の日数が経っている
-* すべてのチェックがSuccess
-* マージ可能
 
 ## Author
 [GitHub (Technote)](https://github.com/technote-space)  
