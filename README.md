@@ -32,7 +32,6 @@ It also has a management function that resolves conflicts and closes pull reques
   - [Variables2](#variables2)
 - [Addition](#addition)
   - [GITHUB_TOKEN](#github_token)
-  - [Auto merge](#auto-merge)
 - [Author](#author)
 
 </details>
