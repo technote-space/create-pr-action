@@ -32,7 +32,7 @@ export const getOnlyDefaultBranchFlag = (context: Context): boolean => {
 };
 
 export const getRunnerArguments = (context: Context): MainArguments => ({
-  rootDir: path.resolve(__dirname, '../..'),
+  rootDir: path.resolve(__dirname, '..'),
   actionName: ACTION_NAME,
   actionOwner: ACTION_OWNER,
   actionRepo: ACTION_REPO,
