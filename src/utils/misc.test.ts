@@ -40,7 +40,7 @@ describe('getRunnerArguments', () => {
     expect(args.executeCommands).toHaveLength(1);
     delete args.executeCommands;
     expect(args).toEqual({
-      rootDir: path.resolve(__dirname, '../..'),
+      rootDir: path.resolve(__dirname, '..'),
       actionName: 'Create PR Action',
       actionOwner: 'technote-space',
       actionRepo: 'create-pr-action',
@@ -155,7 +155,7 @@ describe('getRunnerArguments', () => {
     const task = args.executeCommands.shift();
     expect(typeof task === 'function').toBe(true);
     expect(args).toEqual({
-      rootDir: path.resolve(__dirname, '../..'),
+      rootDir: path.resolve(__dirname, '..'),
       actionName: 'Create PR Action',
       actionOwner: 'technote-space',
       actionRepo: 'create-pr-action',
