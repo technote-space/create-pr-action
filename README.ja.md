@@ -32,7 +32,6 @@
   - [Variables2](#variables2)
 - [補足](#%E8%A3%9C%E8%B6%B3)
   - [GITHUB_TOKEN](#github_token)
-  - [Auto merge](#auto-merge)
 - [Author](#author)
 
 </details>
