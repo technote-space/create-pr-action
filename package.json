@@ -38,7 +38,7 @@
     "update": "npm_config_yes=true npx npm-check-updates -u --timeout 100000 && yarn install && yarn upgrade && yarn audit"
   },
   "dependencies": {
-    "npm-check-updates": "^16.3.16"
+    "npm-check-updates": "^16.3.18"
   },
   "devDependencies": {
     "@actions/core": "^1.10.0",
@@ -51,21 +51,21 @@
     "@rollup/plugin-typescript": "^9.0.2",
     "@sindresorhus/tsconfig": "^3.0.1",
     "@technote-space/github-action-helper": "^5.3.9",
-    "@technote-space/github-action-pr-helper": "^2.3.5",
+    "@technote-space/github-action-pr-helper": "^2.3.6",
     "@technote-space/github-action-test-helper": "^0.11.0",
     "@technote-space/release-github-actions-cli": "^1.9.3",
     "@types/node": "^18.11.9",
-    "@typescript-eslint/eslint-plugin": "^5.42.0",
-    "@typescript-eslint/parser": "^5.42.0",
-    "@vitest/coverage-c8": "^0.24.5",
-    "eslint": "^8.26.0",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "@vitest/coverage-c8": "^0.25.1",
+    "eslint": "^8.27.0",
     "eslint-plugin-import": "^2.26.0",
-    "husky": "^8.0.1",
+    "husky": "^8.0.2",
     "lint-staged": "^13.0.3",
     "pinst": "^3.0.0",
     "rollup": "^3.2.5",
     "typescript": "^4.8.4",
-    "vitest": "^0.24.5"
+    "vitest": "^0.25.1"
   },
   "publishConfig": {
     "access": "public"
