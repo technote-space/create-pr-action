@@ -1,5 +1,5 @@
 import { RequestFn, StorageAdapter, CacheResponse, CacheValue, CacheableOptions, Emitter } from './types.js';
-declare type Func = (...args: any[]) => any;
+type Func = (...args: any[]) => any;
 declare class CacheableRequest {
     cache: StorageAdapter;
     cacheRequest: RequestFn;

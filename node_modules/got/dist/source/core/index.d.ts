@@ -109,6 +109,7 @@ export default class Request extends Duplex implements RequestEvents<Request> {
     private _triggerRead;
     private _jobs;
     private _cancelTimeouts;
+    private readonly _removeListeners;
     private _nativeResponse?;
     private _flushed;
     private _aborted;

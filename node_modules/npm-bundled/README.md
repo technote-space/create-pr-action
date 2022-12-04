@@ -29,7 +29,7 @@ bundled({ path: '/path/to/pkg/defaults/to/cwd'}).then(list => {
 })
 
 // sync version, throws if there's an error
-const list = bundled({ path: '/path/to/pkg/defaults/to/cwd'})
+const list = bundled.sync({ path: '/path/to/pkg/defaults/to/cwd'})
 ```
 
 That's basically all you need to know.  If you care to dig into it,
