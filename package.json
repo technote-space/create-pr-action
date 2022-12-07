@@ -38,7 +38,7 @@
     "update": "npm_config_yes=true npx npm-check-updates -u --timeout 100000 && yarn install && yarn upgrade && yarn audit"
   },
   "dependencies": {
-    "npm-check-updates": "^16.4.3"
+    "npm-check-updates": "^16.5.0"
   },
   "devDependencies": {
     "@actions/core": "^1.10.0",
@@ -54,18 +54,18 @@
     "@technote-space/github-action-pr-helper": "^2.3.7",
     "@technote-space/github-action-test-helper": "^0.11.1",
     "@technote-space/release-github-actions-cli": "^1.9.3",
-    "@types/node": "^18.11.10",
-    "@typescript-eslint/eslint-plugin": "^5.45.0",
-    "@typescript-eslint/parser": "^5.45.0",
-    "@vitest/coverage-c8": "^0.25.3",
+    "@types/node": "^18.11.11",
+    "@typescript-eslint/eslint-plugin": "^5.45.1",
+    "@typescript-eslint/parser": "^5.45.1",
+    "@vitest/coverage-c8": "^0.25.5",
     "eslint": "^8.29.0",
     "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.2",
     "lint-staged": "^13.1.0",
     "pinst": "^3.0.0",
-    "rollup": "^3.5.1",
+    "rollup": "^3.6.0",
     "typescript": "^4.9.3",
-    "vitest": "^0.25.3"
+    "vitest": "^0.25.5"
   },
   "publishConfig": {
     "access": "public"
