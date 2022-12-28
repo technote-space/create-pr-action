@@ -5,10 +5,10 @@ declare class CacheableRequest {
     cacheRequest: RequestFn;
     hooks: Map<string, Func>;
     constructor(cacheRequest: RequestFn, cacheAdapter?: StorageAdapter | string);
-    request: () => (options: CacheableOptions, cb?: ((response: CacheResponse) => void) | undefined) => Emitter;
+    request: () => (options: CacheableOptions, cb?: (response: CacheResponse) => void) => Emitter;
     addHook: (name: string, fn: Func) => void;
     removeHook: (name: string) => boolean;
-    getHook: (name: string) => Func | undefined;
+    getHook: (name: string) => Func;
     runHook: (name: string, ...args: any[]) => Promise<CacheValue>;
 }
 export default CacheableRequest;

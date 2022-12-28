@@ -50,7 +50,6 @@ const cacheableRequest = new CacheableRequest(electron.net);
 ### Usage After v10.1.0
 ```js
 
-```js
 import CacheableRequest from 'cacheable-request';
 
 // Now You can do
