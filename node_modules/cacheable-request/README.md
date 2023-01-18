@@ -263,7 +263,7 @@ cacheableRequest('example.com', cb)
 
 
 ## Using Hooks
-Hooks have been implemented since version `v9` and are very useful to modify response before saving it in cache. You can use hooks to modify response before saving it in cache. You can also use hooks to modify response before returning it to user.
+Hooks have been implemented since version `v9` and are very useful to modify response before saving it in cache. You can use hooks to modify response before saving it in cache.
 
 ### Add Hooks
 
