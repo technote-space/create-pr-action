@@ -192,6 +192,7 @@ class CacheableRequest {
                     const cachek = this.cache;
                     cachek.once('error', errorHandler);
                     ee.on('error', () => cachek.removeListener('error', errorHandler));
+                    ee.on('response', () => cachek.removeListener('error', errorHandler));
                 }
                 try {
                     await get(options);
